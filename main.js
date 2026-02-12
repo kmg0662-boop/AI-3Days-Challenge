@@ -1602,8 +1602,10 @@ function switchDay(dayNum) {
     if (dayNum === 1) {
         content.innerHTML = renderDay1Content();
         setTimeout(() => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }, 100);
+            window.scrollTo(0, 0);
+            document.documentElement.scrollTop = 0;
+            document.body.scrollTop = 0;
+        }, 50);
     } else if (dayNum === 2) {
         // Day 2 비밀번호 체크
         const message = 'DAY 1을 완료하면 비밀번호를 받을 수 있습니다!\n\n비밀번호를 받으셨다면 아래에 입력하세요:';
@@ -1622,10 +1624,16 @@ function switchDay(dayNum) {
         closeDay2Popup();
         content.innerHTML = renderDay2Content();
         
-        // DOM 렌더링 후 페이지 최상단으로 스크롤
+        // 페이지 최상단으로 스크롤 (여러 방법 동시 사용)
         setTimeout(() => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }, 100);
+            window.scrollTo(0, 0);
+            document.documentElement.scrollTop = 0;
+            document.body.scrollTop = 0;
+            const contentArea = document.querySelector('.content-area');
+            if (contentArea) {
+                contentArea.scrollTop = 0;
+            }
+        }, 50);
     }
     // Day 3은 추후 구현
 }
