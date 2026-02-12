@@ -1531,7 +1531,7 @@ function showDay2Password() {
                     letter-spacing: 3px;
                     margin-bottom: 0.5rem;
                 ">cjsworlaalsrb</p>
-                <button onclick="copyDay2Password()" style="
+                <button onclick="copyDay2Password(this)" style="
                     background: linear-gradient(135deg, #06b6d4, #0891b2);
                     color: white;
                     border: none;
@@ -1571,11 +1571,11 @@ function showDay2Password() {
 /**
  * Day 2 비밀번호 복사
  */
-function copyDay2Password() {
+function copyDay2Password(btn) {
     navigator.clipboard.writeText('cjsworlaalsrb').then(() => {
-        event.target.textContent = '✅ 복사 완료!';
+        btn.textContent = '✅ 복사 완료!';
         setTimeout(() => {
-            event.target.textContent = '📋 복사하기';
+            btn.textContent = '📋 복사하기';
         }, 2000);
     });
 }
@@ -1614,6 +1614,9 @@ function switchDay(dayNum) {
             alert('❌ 비밀번호가 틀렸습니다!\n\nDAY 1의 모든 Part를 완료하면 비밀번호를 받을 수 있습니다.');
             return;
         }
+        
+        // 비밀번호 맞으면 팝업 닫고 Day 2로 이동
+        closeDay2Popup();
         content.innerHTML = renderDay2Content();
     }
     // Day 3은 추후 구현
