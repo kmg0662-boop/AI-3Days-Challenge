@@ -1397,7 +1397,7 @@ function markComplete(partNum) {
     btn.disabled = true;
     
     // 진행률 업데이트
-    const progress = (completedParts.size / 10) * 100; // Day 1: 5개, Day 2: 5개 = 총 10개
+    const progress = (completedParts.size / 11) * 100; // Day 1: 5개, Day 2: 6개 = 총 11개
     const progressBar = document.getElementById('overall-progress');
     const progressText = document.querySelector('.progress-text');
     
