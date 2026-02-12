@@ -1395,14 +1395,6 @@ function markComplete(partNum) {
     btn.textContent = '✅ 완료!';
     btn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
     btn.disabled = true;
-    
-    // Day 1 Part 5 완료 시 Day 2 비밀번호 공개
-    if (partNum === 5 && completedParts.has(1) && completedParts.has(2) && 
-        completedParts.has(3) && completedParts.has(4) && completedParts.has(5)) {
-        setTimeout(() => {
-            showDay2Password();
-        }, 500);
-    }
 }
 
 /**
@@ -1607,21 +1599,7 @@ function switchDay(dayNum) {
             document.body.scrollTop = 0;
         }, 50);
     } else if (dayNum === 2) {
-        // Day 2 비밀번호 체크
-        const message = 'DAY 1을 완료하면 비밀번호를 받을 수 있습니다!\n\n비밀번호를 받으셨다면 아래에 입력하세요:';
-        const day2Password = prompt('🔐 ' + message);
-        
-        if (!day2Password) {
-            return; // 취소 클릭
-        }
-        
-        if (day2Password !== 'cjsworlaalsrb') {
-            alert('❌ 비밀번호가 틀렸습니다!\n\nDAY 1의 모든 Part를 완료하면 비밀번호를 받을 수 있습니다.');
-            return;
-        }
-        
-        // 비밀번호 맞으면 팝업 닫고 Day 2로 이동
-        closeDay2Popup();
+        // Day 2로 바로 이동
         content.innerHTML = renderDay2Content();
         
         // 페이지 최상단으로 스크롤 (여러 방법 동시 사용)
