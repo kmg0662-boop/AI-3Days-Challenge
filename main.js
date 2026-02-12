@@ -63,8 +63,8 @@ function renderSidebar() {
         <aside class="sidebar slide-in">
             <div class="logo">AI 3-DAYS</div>
             <nav>
-                <div class="nav-item active" onclick="loadDay(1)">📚 DAY 1: Basics</div>
-                <div class="nav-item" onclick="switchDay(2)">🚀 DAY 2: Action</div>
+                <div class="nav-item" id="nav-day1" onclick="switchDay(1)">📚 DAY 1: Basics</div>
+                <div class="nav-item" id="nav-day2" onclick="switchDay(2)">🚀 DAY 2: Action</div>
                 <div class="nav-item locked">👑 DAY 3: Master 🔒</div>
             </nav>
             <div class="progress-box">
@@ -1591,8 +1591,17 @@ function closeDay2Popup() {
 function switchDay(dayNum) {
     const content = document.getElementById('main-content');
     
+    // 모든 nav-item에서 active 제거
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active');
+    });
+    
     if (dayNum === 1) {
         content.innerHTML = renderDay1Content();
+        // Day 1 active 표시
+        const day1Nav = document.getElementById('nav-day1');
+        if (day1Nav) day1Nav.classList.add('active');
+        
         setTimeout(() => {
             window.scrollTo(0, 0);
             document.documentElement.scrollTop = 0;
@@ -1601,6 +1610,9 @@ function switchDay(dayNum) {
     } else if (dayNum === 2) {
         // Day 2로 바로 이동
         content.innerHTML = renderDay2Content();
+        // Day 2 active 표시
+        const day2Nav = document.getElementById('nav-day2');
+        if (day2Nav) day2Nav.classList.add('active');
         
         // 페이지 최상단으로 스크롤 (여러 방법 동시 사용)
         setTimeout(() => {
