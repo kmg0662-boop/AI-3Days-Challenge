@@ -1464,6 +1464,8 @@ function loadDay(dayNum) {
         // 이미 DAY 1이므로 아무것도 하지 않음
         return;
     }
+    alert(`DAY ${dayNum}은 곧 오픈됩니다! 🚀`);
+}
 
 /**
  * Day 2 비밀번호 공개 팝업
@@ -1615,7 +1617,4 @@ function switchDay(dayNum) {
         content.innerHTML = renderDay2Content();
     }
     // Day 3은 추후 구현
-}
-
-    alert(`DAY ${dayNum}은 곧 오픈됩니다! 🚀`);
 }
