@@ -963,3 +963,43 @@ h3 {
         margin-right: auto;
     }
 }
+
+
+/* CTA 버튼 강화 */
+.pulse-button {
+    animation: pulse 2s infinite;
+    box-shadow: 0 0 30px rgba(139, 92, 246, 0.6);
+    font-size: 1.3rem !important;
+    padding: 1.2rem 2.5rem !important;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 30px rgba(139, 92, 246, 0.6);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 50px rgba(139, 92, 246, 0.9);
+    }
+}
+
+/* Day 2 이동 버튼 */
+.next-day-btn {
+    background: linear-gradient(135deg, #06b6d4, #0891b2);
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(6, 182, 212, 0.3);
+}
+
+.next-day-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(6, 182, 212, 0.5);
+}

@@ -64,7 +64,7 @@ function renderSidebar() {
             <div class="logo">AI 3-DAYS</div>
             <nav>
                 <div class="nav-item active" onclick="loadDay(1)">📚 DAY 1: Basics</div>
-                <div class="nav-item locked">🚀 DAY 2: Action 🔒</div>
+                <div class="nav-item" onclick="switchDay(2)">🚀 DAY 2: Action</div>
                 <div class="nav-item locked">👑 DAY 3: Master 🔒</div>
             </nav>
             <div class="progress-box">
@@ -832,13 +832,15 @@ function renderPart5_Quiz() {
  */
 function renderDay1Footer() {
     return `
-        <footer class="content-footer">
-            <div class="completion-badge" id="completion-badge" style="display: none;">
-                <h3>🎉 DAY 1 완료!</h3>
-                <p>완전 럭키비키! 2시간 꽉 채웠다! 폼 미쳤다!</p>
+        <div class="day-footer">
+            <div class="completion-badge">
+                <h3>🎉 DAY 1 완료 예정!</h3>
+                <p>모든 Part를 완료하면 DAY 2로 넘어갈 수 있습니다!</p>
+                <button class="next-day-btn" onclick="switchDay(2)">
+                    🚀 DAY 2로 이동하기
+                </button>
             </div>
-            <button class="btn-primary" onclick="alert('DAY 2는 곧 오픈됩니다! 🚀')">다음: DAY 2로 →</button>
-        </footer>
+        </div>
     `;
 }
 
