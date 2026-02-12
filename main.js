@@ -1395,6 +1395,18 @@ function markComplete(partNum) {
     btn.textContent = '✅ 완료!';
     btn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
     btn.disabled = true;
+    
+    // 진행률 업데이트
+    const progress = (completedParts.size / 10) * 100; // Day 1: 5개, Day 2: 5개 = 총 10개
+    const progressBar = document.getElementById('overall-progress');
+    const progressText = document.querySelector('.progress-text');
+    
+    if (progressBar) {
+        progressBar.style.width = progress + '%';
+    }
+    if (progressText) {
+        progressText.textContent = Math.round(progress) + '%';
+    }
 }
 
 /**
