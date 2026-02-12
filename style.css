@@ -851,3 +851,115 @@ h3 {
 .warning-box p:last-child {
   margin-bottom: 0;
 }
+
+
+/* ============================================================
+   반응형 디자인 (Mobile First)
+   ============================================================ */
+
+/* 태블릿 (768px 이하) */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2.5rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1rem;
+    }
+    
+    .hero-description {
+        font-size: 1rem;
+    }
+    
+    .dashboard {
+        flex-direction: column;
+    }
+    
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+    
+    .content-area {
+        margin-left: 0;
+        padding: 1rem;
+    }
+    
+    .day-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .tools-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .comparison-box {
+        flex-direction: column;
+    }
+    
+    .vs-divider {
+        transform: rotate(90deg);
+        margin: 1rem 0;
+    }
+    
+    .rtf-formula {
+        flex-direction: column;
+    }
+    
+    .rtf-arrow {
+        transform: rotate(90deg);
+        margin: 1rem 0;
+    }
+}
+
+/* 모바일 (480px 이하) */
+@media (max-width: 480px) {
+    .hero-title {
+        font-size: 2rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 0.9rem;
+        letter-spacing: 1px;
+    }
+    
+    .hero-description {
+        font-size: 0.9rem;
+    }
+    
+    .cta-button {
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+    }
+    
+    .lesson-section {
+        padding: 1rem;
+    }
+    
+    h2 {
+        font-size: 1.5rem;
+    }
+    
+    h3 {
+        font-size: 1.25rem;
+    }
+    
+    .code-box code {
+        font-size: 0.75rem;
+    }
+    
+    .quiz-input {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+}
+
+/* 대형 화면 (1200px 이상) */
+@media (min-width: 1200px) {
+    .content-area {
+        max-width: 1200px;
+        margin-left: 280px;
+        margin-right: auto;
+    }
+}

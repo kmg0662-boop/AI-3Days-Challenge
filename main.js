@@ -15,6 +15,15 @@ let completedParts = new Set();
  * 랜딩 페이지에서 대시보드로 전환
  */
 function startChallenge() {
+    // 암호 인증
+    const validPasswords = ['qkrtldncksqkqh', 'rlaalsrbWKdWKdaos', 'min9man9'];
+    const userPassword = prompt('🔐 암호를 입력하세요:');
+    
+    if (!userPassword || !validPasswords.includes(userPassword)) {
+        alert('❌ 암호가 틀렸습니다!');
+        return;
+    }
+    
     const app = document.querySelector('#app');
     
     // 화면 페이드 아웃 효과
