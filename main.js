@@ -181,24 +181,6 @@ function renderPart1_Terms() {
                     <p class="term-desc">AI의 뇌 (단어 맞히기 천재)</p>
                     <div class="term-value">💡 AI의 사고 수준을 판단하는 기준</div>
                     <button class="detail-toggle" onclick="toggleDetail('llm-detail')">📖 자세히 보기</button>
-                    <div class="detail-content" id="llm-detail" style="display: none;">
-                        <h4>🧠 LLM이란? (Large Language Model)</h4>
-                        <p><strong>한마디로:</strong> 엄청나게 많은 텍스트를 학습해서 "다음에 올 단어"를 예측하는 초거대 AI 모델입니다.</p>
-                        
-                        <h5>🎯 핵심 원리</h5>
-                        <p>LLM은 마치 <strong>자동완성의 끝판왕</strong>입니다. 여러분이 "오늘 날씨가..."라고 입력하면 "좋네요", "흐리네요" 등을 예측하는 것처럼, LLM은 수십억 개의 단어 패턴을 학습해서 문맥에 맞는 다음 단어를 예측합니다.</p>
-                        
-                        <h5>📊 크기가 왜 중요한가?</h5>
-                        <ul>
-                            <li><strong>GPT-3:</strong> 1,750억 개의 파라미터 (뇌의 시냅스 같은 것)</li>
-                            <li><strong>GPT-4:</strong> 추정 1조 개 이상</li>
-                            <li><strong>Gemini 1.5 Pro:</strong> 수조 개 규모</li>
-                        </ul>
-                        <p>파라미터가 많을수록 더 복잡한 패턴을 학습하고, 더 정교한 답변이 가능합니다.</p>
-                        
-                        <h5>🎓 실전 활용</h5>
-                        <p>LLM의 성능을 판단할 때는 <strong>파라미터 수</strong>와 <strong>학습 데이터의 질</strong>을 함께 봐야 합니다. 크다고 무조건 좋은 게 아니라, 어떤 데이터로 학습했느냐가 더 중요할 수 있습니다.</p>
-                    </div>
                 </div>
 
                 <!-- RAG 카드 -->
@@ -210,30 +192,6 @@ function renderPart1_Terms() {
                     <p class="term-desc">오픈북 커닝 기술</p>
                     <div class="term-value">💡 내 문서/메일을 읽고 대답하게 만드는 핵심!</div>
                     <button class="detail-toggle" onclick="toggleDetail('rag-detail')">📖 자세히 보기</button>
-                    <div class="detail-content" id="rag-detail" style="display: none;">
-                        <h4>📚 RAG란? (Retrieval-Augmented Generation)</h4>
-                        <p><strong>한마디로:</strong> AI가 답변하기 전에 관련 자료를 먼저 찾아보게 하는 기술입니다.</p>
-                        
-                        <h5>🎯 왜 필요한가?</h5>
-                        <p>LLM은 학습 데이터에만 의존합니다. 즉, <strong>2023년 이후 정보</strong>나 <strong>여러분 회사의 내부 문서</strong>는 모릅니다. RAG는 이 문제를 해결합니다!</p>
-                        
-                        <h5>⚙️ 작동 원리 (3단계)</h5>
-                        <ol>
-                            <li><strong>검색 (Retrieval):</strong> 질문과 관련된 문서를 데이터베이스에서 찾습니다.</li>
-                            <li><strong>컨텍스트 주입:</strong> 찾은 문서를 AI에게 "이 자료를 참고해서 답해"라고 전달합니다.</li>
-                            <li><strong>생성 (Generation):</strong> AI가 참고 자료를 바탕으로 답변을 생성합니다.</li>
-                        </ol>
-                        
-                        <h5>🔥 실전 예시</h5>
-                        <div class="example-box">
-                            <p><strong>질문:</strong> "우리 회사의 2024년 휴가 정책은?"</p>
-                            <p><strong>RAG 없이:</strong> "죄송합니다. 회사 내부 정보는 모릅니다."</p>
-                            <p><strong>RAG 사용:</strong> "2024년 휴가 정책 문서에 따르면, 연차는 15일이며 반차 사용이 가능합니다..."</p>
-                        </div>
-                        
-                        <h5>💼 비즈니스 활용</h5>
-                        <p>RAG를 사용하면 <strong>사내 문서, 고객 데이터, 최신 뉴스</strong> 등을 AI가 참고할 수 있어, 훨씬 더 정확하고 맞춤화된 답변이 가능합니다.</p>
-                    </div>
                 </div>
 
                 <!-- Hallucination 카드 -->
@@ -245,31 +203,6 @@ function renderPart1_Terms() {
                     <p class="term-desc">그럴듯한 거짓말 (환각)</p>
                     <div class="term-value">💡 AI가 아는 척할 때 '팩트체크'를 시키게 함</div>
                     <button class="detail-toggle" onclick="toggleDetail('hallucination-detail')">📖 자세히 보기</button>
-                    <div class="detail-content" id="hallucination-detail" style="display: none;">
-                        <h4>🎭 Hallucination이란?</h4>
-                        <p><strong>한마디로:</strong> AI가 자신 있게 거짓 정보를 만들어내는 현상입니다.</p>
-                        
-                        <h5>🎯 왜 발생하는가?</h5>
-                        <p>LLM은 <strong>"그럴듯한 다음 단어"</strong>를 예측하도록 학습되었지, <strong>"사실인 정보"</strong>를 찾도록 학습된 게 아닙니다. 마치 소설가가 이야기를 지어내듯, AI도 문맥에 맞는 답변을 "창작"할 수 있습니다.</p>
-                        
-                        <h5>⚠️ 위험한 예시</h5>
-                        <div class="warning-box">
-                            <p><strong>질문:</strong> "2024년 노벨 물리학상 수상자는?"</p>
-                            <p><strong>AI 답변:</strong> "김철수 박사가 양자컴퓨팅 연구로 수상했습니다."</p>
-                            <p><strong>실제:</strong> 완전히 지어낸 이야기! (2024년 수상자는 다른 사람)</p>
-                        </div>
-                        
-                        <h5>🛡️ 방어 전략</h5>
-                        <ol>
-                            <li><strong>출처 요구:</strong> "어디서 확인할 수 있나요?" 라고 물어보세요.</li>
-                            <li><strong>교차 검증:</strong> 중요한 정보는 반드시 다른 소스로 확인하세요.</li>
-                            <li><strong>RAG 활용:</strong> 신뢰할 수 있는 문서를 참고하게 만드세요.</li>
-                            <li><strong>프롬프트 개선:</strong> "확실하지 않으면 모른다고 말해"라고 명시하세요.</li>
-                        </ol>
-                        
-                        <h5>💡 프로 팁</h5>
-                        <p>AI에게 <strong>"답변에 대한 확신도를 1-10점으로 표현해줘"</strong>라고 요청하면, AI가 스스로 불확실성을 인지하게 만들 수 있습니다.</p>
-                    </div>
                 </div>
 
                 <!-- Token 카드 -->
@@ -281,45 +214,118 @@ function renderPart1_Terms() {
                     <p class="term-desc">AI의 글자 연산 단위</p>
                     <div class="term-value">💡 사용료와 답변 속도를 결정하는 숨은 변수</div>
                     <button class="detail-toggle" onclick="toggleDetail('token-detail')">📖 자세히 보기</button>
-                    <div class="detail-content" id="token-detail" style="display: none;">
-                        <h4>🪙 Token이란?</h4>
-                        <p><strong>한마디로:</strong> AI가 텍스트를 처리할 때 사용하는 최소 단위입니다. 글자도 아니고 단어도 아닌, 그 중간쯤 되는 개념입니다.</p>
-                        
-                        <h5>🎯 토큰 계산 예시</h5>
-                        <div class="example-box">
-                            <p><strong>영어:</strong> "Hello, world!" = 약 3 토큰 (Hello, , world, !)</p>
-                            <p><strong>한글:</strong> "안녕하세요!" = 약 5-7 토큰 (한글은 영어보다 토큰이 많이 필요)</p>
-                            <p><strong>코드:</strong> "function test() {}" = 약 6 토큰</p>
-                        </div>
-                        
-                        <h5>💰 왜 중요한가?</h5>
-                        <p>대부분의 AI API는 <strong>토큰 단위로 과금</strong>합니다!</p>
-                        <ul>
-                            <li><strong>GPT-4:</strong> 입력 1,000토큰당 $0.03, 출력 1,000토큰당 $0.06</li>
-                            <li><strong>GPT-3.5:</strong> 입력 1,000토큰당 $0.0015, 출력 1,000토큰당 $0.002</li>
-                        </ul>
-                        
-                        <h5>⚡ 속도에도 영향</h5>
-                        <p>토큰이 많을수록 처리 시간이 길어집니다. 10,000 토큰 답변은 100 토큰 답변보다 100배 느립니다!</p>
-                        
-                        <h5>🎓 실전 최적화 팁</h5>
-                        <ol>
-                            <li><strong>간결한 프롬프트:</strong> 불필요한 설명은 빼세요.</li>
-                            <li><strong>답변 길이 제한:</strong> "200자 이내로 요약해줘"</li>
-                            <li><strong>스트리밍 활용:</strong> 답변을 실시간으로 받아 필요한 부분만 사용</li>
-                            <li><strong>캐싱:</strong> 같은 질문은 저장해두고 재사용</li>
-                        </ol>
-                        
-                        <h5>📊 컨텍스트 윈도우</h5>
-                        <p>AI가 한 번에 처리할 수 있는 최대 토큰 수를 <strong>컨텍스트 윈도우</strong>라고 합니다:</p>
-                        <ul>
-                            <li><strong>GPT-4:</strong> 8K, 32K, 128K 버전</li>
-                            <li><strong>Gemini 1.5 Pro:</strong> 최대 2M (200만!) 토큰</li>
-                        </ul>
-                        <p>큰 컨텍스트 윈도우는 긴 문서를 한 번에 분석할 수 있다는 뜻입니다!</p>
-                    </div>
                 </div>
             </div>
+
+            <!-- 상세 설명 영역 (카드 외부로 분리) -->
+            <div class="detail-content" id="llm-detail" style="display: none;">
+                <h4>🧠 LLM이란? (Large Language Model)</h4>
+                <p><strong>한마디로:</strong> 엄청나게 많은 텍스트를 학습해서 "다음에 올 단어"를 예측하는 초거대 AI 모델입니다.</p>
+                
+                <h5>🎯 핵심 원리</h5>
+                <p>LLM은 마치 <strong>자동완성의 끝판왕</strong>입니다. 여러분이 "오늘 날씨가..."라고 입력하면 "좋네요", "흐리네요" 등을 예측하는 것처럼, LLM은 수십억 개의 단어 패턴을 학습해서 문맥에 맞는 다음 단어를 예측합니다.</p>
+                
+                <h5>📊 크기가 왜 중요한가?</h5>
+                <ul>
+                    <li><strong>GPT-3:</strong> 1,750억 개의 파라미터 (뇌의 시냅스 같은 것)</li>
+                    <li><strong>GPT-4:</strong> 추정 1조 개 이상</li>
+                    <li><strong>Gemini 1.5 Pro:</strong> 수조 개 규모</li>
+                </ul>
+                <p>파라미터가 많을수록 더 복잡한 패턴을 학습하고, 더 정교한 답변이 가능합니다.</p>
+                
+                <h5>🎓 실전 활용</h5>
+                <p>LLM의 성능을 판단할 때는 <strong>파라미터 수</strong>와 <strong>학습 데이터의 질</strong>을 함께 봐야 합니다. 크다고 무조건 좋은 게 아니라, 어떤 데이터로 학습했느냐가 더 중요할 수 있습니다.</p>
+            </div>
+
+            <div class="detail-content" id="rag-detail" style="display: none;">
+                <h4>📚 RAG란? (Retrieval-Augmented Generation)</h4>
+                <p><strong>한마디로:</strong> AI가 답변하기 전에 관련 자료를 먼저 찾아보게 하는 기술입니다.</p>
+                
+                <h5>🎯 왜 필요한가?</h5>
+                <p>LLM은 학습 데이터에만 의존합니다. 즉, <strong>2023년 이후 정보</strong>나 <strong>여러분 회사의 내부 문서</strong>는 모릅니다. RAG는 이 문제를 해결합니다!</p>
+                
+                <h5>⚙️ 작동 원리 (3단계)</h5>
+                <ol>
+                    <li><strong>검색 (Retrieval):</strong> 질문과 관련된 문서를 데이터베이스에서 찾습니다.</li>
+                    <li><strong>컨텍스트 주입:</strong> 찾은 문서를 AI에게 "이 자료를 참고해서 답해"라고 전달합니다.</li>
+                    <li><strong>생성 (Generation):</strong> AI가 참고 자료를 바탕으로 답변을 생성합니다.</li>
+                </ol>
+                
+                <h5>🔥 실전 예시</h5>
+                <div class="example-box">
+                    <p><strong>질문:</strong> "우리 회사의 2024년 휴가 정책은?"</p>
+                    <p><strong>RAG 없이:</strong> "죄송합니다. 회사 내부 정보는 모릅니다."</p>
+                    <p><strong>RAG 사용:</strong> "2024년 휴가 정책 문서에 따르면, 연차는 15일이며 반차 사용이 가능합니다..."</p>
+                </div>
+                
+                <h5>💼 비즈니스 활용</h5>
+                <p>RAG를 사용하면 <strong>사내 문서, 고객 데이터, 최신 뉴스</strong> 등을 AI가 참고할 수 있어, 훨씬 더 정확하고 맞춤화된 답변이 가능합니다.</p>
+            </div>
+
+            <div class="detail-content" id="hallucination-detail" style="display: none;">
+                <h4>🎭 Hallucination이란?</h4>
+                <p><strong>한마디로:</strong> AI가 자신 있게 거짓 정보를 만들어내는 현상입니다.</p>
+                
+                <h5>🎯 왜 발생하는가?</h5>
+                <p>LLM은 <strong>"그럴듯한 다음 단어"</strong>를 예측하도록 학습되었지, <strong>"사실인 정보"</strong>를 찾도록 학습된 게 아닙니다. 마치 소설가가 이야기를 지어내듯, AI도 문맥에 맞는 답변을 "창작"할 수 있습니다.</p>
+                
+                <h5>⚠️ 위험한 예시</h5>
+                <div class="warning-box">
+                    <p><strong>질문:</strong> "2024년 노벨 물리학상 수상자는?"</p>
+                    <p><strong>AI 답변:</strong> "김철수 박사가 양자컴퓨팅 연구로 수상했습니다."</p>
+                    <p><strong>실제:</strong> 완전히 지어낸 이야기! (2024년 수상자는 다른 사람)</p>
+                </div>
+                
+                <h5>🛡️ 방어 전략</h5>
+                <ol>
+                    <li><strong>출처 요구:</strong> "어디서 확인할 수 있나요?" 라고 물어보세요.</li>
+                    <li><strong>교차 검증:</strong> 중요한 정보는 반드시 다른 소스로 확인하세요.</li>
+                    <li><strong>RAG 활용:</strong> 신뢰할 수 있는 문서를 참고하게 만드세요.</li>
+                    <li><strong>프롬프트 개선:</strong> "확실하지 않으면 모른다고 말해"라고 명시하세요.</li>
+                </ol>
+                
+                <h5>💡 프로 팁</h5>
+                <p>AI에게 <strong>"답변에 대한 확신도를 1-10점으로 표현해줘"</strong>라고 요청하면, AI가 스스로 불확실성을 인지하게 만들 수 있습니다.</p>
+            </div>
+
+            <div class="detail-content" id="token-detail" style="display: none;">
+                <h4>🪙 Token이란?</h4>
+                <p><strong>한마디로:</strong> AI가 텍스트를 처리할 때 사용하는 최소 단위입니다. 글자도 아니고 단어도 아닌, 그 중간쯤 되는 개념입니다.</p>
+                
+                <h5>🎯 토큰 계산 예시</h5>
+                <div class="example-box">
+                    <p><strong>영어:</strong> "Hello, world!" = 약 3 토큰 (Hello, , world, !)</p>
+                    <p><strong>한글:</strong> "안녕하세요!" = 약 5-7 토큰 (한글은 영어보다 토큰이 많이 필요)</p>
+                    <p><strong>코드:</strong> "function test() {}" = 약 6 토큰</p>
+                </div>
+                
+                <h5>💰 왜 중요한가?</h5>
+                <p>대부분의 AI API는 <strong>토큰 단위로 과금</strong>합니다!</p>
+                <ul>
+                    <li><strong>GPT-4:</strong> 입력 1,000토큰당 $0.03, 출력 1,000토큰당 $0.06</li>
+                    <li><strong>GPT-3.5:</strong> 입력 1,000토큰당 $0.0015, 출력 1,000토큰당 $0.002</li>
+                </ul>
+                
+                <h5>⚡ 속도에도 영향</h5>
+                <p>토큰이 많을수록 처리 시간이 길어집니다. 10,000 토큰 답변은 100 토큰 답변보다 100배 느립니다!</p>
+                
+                <h5>🎓 실전 최적화 팁</h5>
+                <ol>
+                    <li><strong>간결한 프롬프트:</strong> 불필요한 설명은 빼세요.</li>
+                    <li><strong>답변 길이 제한:</strong> "200자 이내로 요약해줘"</li>
+                    <li><strong>스트리밍 활용:</strong> 답변을 실시간으로 받아 필요한 부분만 사용</li>
+                    <li><strong>캐싱:</strong> 같은 질문은 저장해두고 재사용</li>
+                </ol>
+                
+                <h5>📊 컨텍스트 윈도우</h5>
+                <p>AI가 한 번에 처리할 수 있는 최대 토큰 수를 <strong>컨텍스트 윈도우</strong>라고 합니다:</p>
+                <ul>
+                    <li><strong>GPT-4:</strong> 8K, 32K, 128K 버전</li>
+                    <li><strong>Gemini 1.5 Pro:</strong> 최대 2M (200만!) 토큰</li>
+                </ul>
+                <p>큰 컨텍스트 윈도우는 긴 문서를 한 번에 분석할 수 있다는 뜻입니다!</p>
+            </div>
+
             <button class="check-btn" onclick="markComplete(1)">✅ Part 1 완료</button>
         </section>
     `;
