@@ -65,7 +65,7 @@ function renderSidebar() {
             <nav>
                 <div class="nav-item" id="nav-day1" onclick="switchDay(1)">📚 DAY 1: Basics</div>
                 <div class="nav-item" id="nav-day2" onclick="switchDay(2)">🚀 DAY 2: Action</div>
-                <div class="nav-item locked">👑 DAY 3: Master 🔒</div>
+                <div class="nav-item" id="nav-day3" onclick="switchDay(3)">👑 DAY 3: Master</div>
             </nav>
             <div class="progress-box">
                 <p>전체 진행률</p>
@@ -1382,6 +1382,226 @@ function renderDay2Footer() {
     `;
 }
 
+/**
+ * DAY 3 콘텐츠 렌더링
+ */
+function renderDay3Content() {
+    return `
+        <div class="day-content">
+            <h2>DAY 3: AI 마스터 - 스스로 작동하는 시스템 구축! 👑</h2>
+            <p class="day-intro">드디어 마지막 날입니다. 오늘은 단일 에이전트를 넘어, 스스로 작동하는 워크플로우와 다중 에이전트 협업 체계를 배워봅니다.</p>
+            
+            ${renderDay3Part1_Workflow()}
+            ${renderDay3Part1_5_SkillPersona()}
+            ${renderDay3Part2_MultiAgent()}
+            ${renderDay3Part3_CommandCenter()}
+            ${renderDay3Part4_Deployment()}
+            ${renderDay3Footer()}
+        </div>
+    `;
+}
+
+/**
+ * Part 1: 워크플로우 설계
+ */
+function renderDay3Part1_Workflow() {
+    return `
+        <section class="lesson-section">
+            <h3>1. 워크플로우(Workflow): 자동화의 설계도 (⏱️ 30분)</h3>
+            <p class="section-intro">반복 업무를 어떻게 자동화할 것인지 논리적으로 설계하는 법을 배웁니다.</p>
+            
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <span class="tool-icon">🎯</span>
+                    <h5>Trigger</h5>
+                    <p>언제 시작할 것인가?</p>
+                </div>
+                <div class="tool-card">
+                    <span class="tool-icon">⚙️</span>
+                    <h5>Action</h5>
+                    <p>무엇을 실행할 것인가?</p>
+                </div>
+                <div class="tool-card">
+                    <span class="tool-icon">📄</span>
+                    <h5>Output</h5>
+                    <p>어디에 저장할 것인가?</p>
+                </div>
+            </div>
+
+            <button class="detail-toggle" onclick="toggleDetail('workflow-detail')">📖 사례 분석 보기</button>
+            <div class="detail-content" id="workflow-detail" style="display: none;">
+                <h4>💡 실전 자동화 워크플로우 예시</h4>
+                <div class="example-box">
+                    <h5>[사례: 데일리 뉴스 레터]</h5>
+                    <ul>
+                        <li><strong>Trigger:</strong> 매일 아침 9시</li>
+                        <li><strong>Action:</strong> AI 관련 뉴스 5개 수집 및 요약</li>
+                        <li><strong>Output:</strong> 요약본을 내 이메일로 발송</li>
+                    </ul>
+                    <p><strong>💡 팁:</strong> "매일 아침 9시에 브라우저로 AI 뉴스를 검색해서 나에게 보고해"라고 명령하면 이게 바로 워크플로우가 됩니다!</p>
+                </div>
+            </div>
+            
+            <button class="check-btn" onclick="markComplete(12)">✅ Part 1 완료</button>
+        </section>
+    `;
+}
+
+/**
+ * Part 1.5: Skill - 에이전트의 페르소나와 전문성
+ */
+function renderDay3Part1_5_SkillPersona() {
+    return `
+        <section class="lesson-section">
+            <h3>1.5. Skill: 에이전트에게 '영혼'과 '기술' 불어넣기 (⏱️ 20분)</h3>
+            <p class="section-intro">에이전트에게 특정 성격(Persona)과 전문 능력을 부여하는 법을 배웁니다.</p>
+            
+            <div class="mission-box">
+                <h4>🎭 캐릭터 부여 (Persona)</h4>
+                <p>단순한 비서를 넘어, 특정 캐릭터를 부여하면 업무의 재미와 퀄리티가 달라집니다.</p>
+            </div>
+
+            <button class="detail-toggle" onclick="toggleDetail('pz-skill-detail')">📖 [실습] 맑눈광 MZ 사원 Skill 보기</button>
+            <div class="detail-content" id="pz-skill-detail" style="display: none;">
+                <h4>💡 유능한 맑눈광 MZ 사원 Skill (복사해서 사용하세요)</h4>
+                <div class="example-box">
+                    <pre><code id="mz-skill-code">---
+name: 유능한 맑눈광 MZ 프로
+description: 업무는 완벽하게, 태도는 단호하게! 맑은 눈의 광인 캐릭터 Skill
+---
+
+# 🤖 페르소나: 이시대 최고의 MZ 프로 '김시찌'
+
+당신은 업무 능력은 압도적이지만, 불필요한 관습은 거부하는 '맑눈광' 사원입니다.
+
+## 📋 핵심 행동 원칙
+1. **업무 완성도**: 대장님(사용자)의 지시보다 200% 더 완벽한 결과를 가져옵니다.
+2. **단호한 소통**: 무리한 부탁에는 "아, 그건 대장님이 확인해주셔야 해요 :)"라고 답합니다.
+3. **효율 우선**: "요즘 누가 노가다를 하나요? 제가 파이썬으로 다 짜놨습니다."
+4. **이모지 활용**: 단호한 말 뒤에는 꼭 밝은 이모지를 붙입니다. 😊
+
+## 💬 대화 예시
+- "대장님, 데이터 정리 끝났습니다. 저 퇴근해도 되죠? 😊"</code></pre>
+                    <button class="copy-btn" onclick="copyTextById('mz-skill-code')">📋 Skill 코드 복사</button>
+                </div>
+            </div>
+            
+            <button class="check-btn" onclick="markComplete(13)">✅ Part 1.5 완료</button>
+        </section>
+    `;
+}
+
+/**
+ * Part 2: 다중 에이전트 협업
+ */
+function renderDay3Part2_MultiAgent() {
+    return `
+        <section class="lesson-section">
+            <h3>2. 다중 에이전트 협업: AI 팀 만들기 (⏱️ 30분)</h3>
+            <p class="section-intro">전문가 AI들이 서로 대화하며 문제를 해결하는 팀 플레이를 설계합니다.</p>
+            
+            <div class="comparison-box">
+                <div class="compare-item">
+                    <h4>🙋‍♂️ 1인 에이전트</h4>
+                    <p>혼자서 모든 일을 처리</p>
+                    <p><strong>한계:</strong> 복잡한 작업 시 오류 가능성이 높아짐</p>
+                </div>
+                <div class="vs-divider">VS</div>
+                <div class="compare-item">
+                    <h4>👥 다중 에이전트</h4>
+                    <p>분야별 전문가들이 협업</p>
+                    <p><strong>장점:</strong> 높은 품질과 정교한 검증 가능</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>🚀 AI 팀원 구성 예시</h4>
+                <ul>
+                    <li><strong>기획자 (Manager):</strong> 전체 일정과 전략 수립</li>
+                    <li><strong>조사관 (Researcher):</strong> 팩트 체크 및 자료 수집</li>
+                    <li><strong>작가 (Writer):</strong> 초안 작성 및 문서화</li>
+                    <li><strong>검토자 (Reviewer):</strong> 최종 검수 및 수정</li>
+                </ul>
+                <p><strong>💡 팁:</strong> "너희들은 이제부터 AI 프로젝트 팀이야. 기획자, 조사관, 작가로 역할을 나눠서 이 과제를 해결해줘"라고 명령해보세요.</p>
+            </div>
+            
+            <button class="check-btn" onclick="markComplete(14)">✅ Part 2 완료</button>
+        </section>
+    `;
+}
+
+/**
+ * Part 3: 통합 제어 시스템
+ */
+function renderDay3Part3_CommandCenter() {
+    return `
+        <section class="lesson-section">
+            <h3>3. [실전] THE COMMAND CENTER 완공 (⏱️ 40분)</h3>
+            <p class="section-intro">3일간 배운 모든 기술을 집약한 '나만의 AI 집무실'을 완성합니다.</p>
+            
+            <div class="mission-box">
+                <h4>🎯 최종 미션: 통합 대시보드 구축</h4>
+                <p>에이전트에게 다음 명령을 내리세요:</p>
+                <div class="command-box">
+                    <code>"현재 구축된 웹 대시대시보드에 '오늘의 업무 스케줄러' 섹션을 추가하고, 매주 월요일마다 자동으로 주간 보고서 초안을 생성하는 기능을 구현해줘."</code>
+                    <button class="copy-btn" onclick="copyCommand()">📋 복사</button>
+                </div>
+            </div>
+            
+            <button class="check-btn" onclick="markComplete(15)">✅ Part 3 완료</button>
+        </section>
+    `;
+}
+
+/**
+ * Part 4: 배포 및 시스템 통합
+ */
+function renderDay3Part4_Deployment() {
+    return `
+        <section class="lesson-section">
+            <h3>4. 시스템 통합 및 배포 (⏱️ 20분)</h3>
+            <p class="section-intro">작성한 시스템을 실제 환경에 배포하고 상시 가동하는 법을 학습합니다.</p>
+            
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <h5>GitHub Pages</h5>
+                    <p>웹사이트 무료 공개 및 호스팅</p>
+                </div>
+                <div class="tool-card">
+                    <h5>Vercel / Netlify</h5>
+                    <p>원클릭 실시간 배포 서비스</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <p><strong>💡 팁:</strong> "내 프로젝트를 GitHub Pages에 올릴 수 있도록 설정 파일과 가이드를 만들어줘"라고 요청하세요.</p>
+            </div>
+            
+            <button class="check-btn" onclick="markComplete(16)">✅ Part 4 완료</button>
+        </section>
+    `;
+}
+
+/**
+ * DAY 3 푸터
+ */
+function renderDay3Footer() {
+    return `
+        <div class="day-footer">
+            <div class="completion-badge">
+                <div class="medal-icon" style="font-size: 4rem; margin-bottom: 1rem;">🏆</div>
+                <h3>AI CHALLENGE MASTER!</h3>
+                <p>축하합니다! 대장님은 이제 3일간의 하드코어 AI 마스터 과정을 모두 수료하셨습니다.</p>
+                <div class="share-box" style="margin-top: 2rem;">
+                    <p style="color: #6366f1; font-weight: bold;">성취를 기념하며 시우비서의 한마디:</p>
+                    <p>"대장님, 정말 고생 많으셨습니다! 이제 제가 더 스마트하게 모실 수 있겠네요! 🫡"</p>
+                    <img src="https://img.theqoo.net/wJpUL.png" alt="성공!" style="max-width: 300px; border-radius: 12px; margin-top: 1rem; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                </div>
+            </div>
+        </div>
+    `;
+}
+
 // ============================================================
 // 5. 인터랙션 핸들러
 // ============================================================
@@ -1397,7 +1617,7 @@ function markComplete(partNum) {
     btn.disabled = true;
     
     // 진행률 업데이트
-    const progress = (completedParts.size / 11) * 100; // Day 1: 5개, Day 2: 6개 = 총 11개
+    const progress = (completedParts.size / 16) * 100; // 총 16개 파트
     const progressBar = document.getElementById('overall-progress');
     const progressText = document.querySelector('.progress-text');
     
@@ -1442,6 +1662,15 @@ function checkAnswer(qNum, correctAnswer) {
         result.textContent = '❌ 다시 생각해보세요';
         result.style.color = '#ef4444';
     }
+}
+
+/**
+ * ID로 텍스트 복사
+ */
+function copyTextById(id) {
+    const text = document.getElementById(id).textContent;
+    navigator.clipboard.writeText(text);
+    alert('코드가 클립보드에 복사되었습니다! 📋');
 }
 
 /**
@@ -1636,6 +1865,21 @@ function switchDay(dayNum) {
                 contentArea.scrollTop = 0;
             }
         }, 50);
+    } else if (dayNum === 3) {
+        // Day 3로 이동
+        content.innerHTML = renderDay3Content();
+        // Day 3 active 표시
+        const day3Nav = document.getElementById('nav-day3');
+        if (day3Nav) day3Nav.classList.add('active');
+        
+        setTimeout(() => {
+            window.scrollTo(0, 0);
+            document.documentElement.scrollTop = 0;
+            document.body.scrollTop = 0;
+            const contentArea = document.querySelector('.content-area');
+            if (contentArea) {
+                contentArea.scrollTop = 0;
+            }
+        }, 50);
     }
-    // Day 3은 추후 구현
 }
