@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KMG COMMAND CENTER | ELITE AI HUB v2.0</title>
+    <title>KMG COMMAND CENTER | ELITE AI HUB v3.0 FINAL</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary-cyan: #00f2fe;
             --primary-blue: #0ea5e9;
             --accent-purple: #8b5cf6;
-            --danger-red: #ef4444;
+            --danger-red: #f43f5e;
             --success-green: #10b981;
-            --bg-deep: #050505;
+            --bg-deep: #030303;
             --glass: rgba(255, 255, 255, 0.03);
             --border: rgba(255, 255, 255, 0.1);
-            --text-muted: #64748b;
+            --text-muted: #475569;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -30,241 +30,255 @@
             height: 100vh;
             overflow: hidden;
             display: flex;
+            user-select: none;
         }
 
-        /* --- Background / Ambience --- */
+        /* --- Ambient Background --- */
         .ambient-bg {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             background: 
-                radial-gradient(circle at 20% 30%, rgba(139, 92, 246, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(14, 165, 233, 0.05) 0%, transparent 50%);
+                radial-gradient(circle at 15% 15%, rgba(139, 92, 246, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 85% 85%, rgba(14, 165, 233, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 1) 0%, transparent 100%);
             z-index: -1;
         }
 
         .grid-plane {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
+            background-image: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
             background-size: 50px 50px;
-            opacity: 0.1;
+            opacity: 0.15;
             z-index: -1;
-            mask-image: radial-gradient(circle at center, black 0%, transparent 80%);
+            mask-image: radial-gradient(circle at center, black 0%, transparent 90%);
         }
 
-        /* --- Global Layout --- */
+        /* --- Layout --- */
         #app {
             display: grid;
-            grid-template-columns: 350px 1fr 350px;
+            grid-template-columns: 380px 1fr 380px;
             width: 100%;
             height: 100vh;
-            padding: 20px;
-            gap: 20px;
+            padding: 25px;
+            gap: 25px;
+            filter: drop-shadow(0 0 50px rgba(0,0,0,1));
         }
 
-        /* --- Left Side: Captain's Schedule & Mission --- */
-        .sidebar-left {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
+        /* --- Panels --- */
         .panel {
             background: var(--glass);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(20px);
             border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 20px;
+            border-radius: 24px;
+            padding: 25px;
             display: flex;
             flex-direction: column;
-            transition: all 0.3s ease;
+            box-shadow: inset 0 0 20px rgba(255,255,255,0.02);
+            transition: transform 0.3s ease, border-color 0.3s ease;
         }
 
         .panel:hover {
-            border-color: rgba(255,255,255,0.2);
-            background: rgba(255,255,255,0.05);
+            border-color: rgba(0, 242, 254, 0.3);
+            transform: translateY(-2px);
         }
 
         .panel-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             border-left: 4px solid var(--primary-cyan);
             padding-left: 15px;
         }
 
         .panel-header h3 {
             font-family: 'Orbitron', sans-serif;
-            font-size: 0.9rem;
-            letter-spacing: 2px;
+            font-size: 0.85rem;
+            letter-spacing: 3px;
             color: var(--primary-cyan);
+            text-transform: uppercase;
         }
 
+        /* --- Schedule System --- */
         .schedule-list {
             list-style: none;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 15px;
             overflow-y: auto;
-            padding-right: 5px;
+            flex-grow: 1;
+            padding-right: 10px;
         }
 
         .schedule-item {
             background: rgba(255,255,255,0.02);
             border: 1px solid var(--border);
-            padding: 15px;
-            border-radius: 12px;
-            transition: all 0.3s ease;
+            padding: 18px;
+            border-radius: 16px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
-            overflow: hidden;
             cursor: pointer;
         }
 
         .schedule-item:hover {
             border-color: var(--primary-cyan);
-            background: rgba(0, 242, 254, 0.05);
-            transform: translateX(5px);
+            background: rgba(0, 242, 254, 0.08);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
         }
 
         .schedule-item.completed {
-            opacity: 0.4;
+            opacity: 0.3;
             filter: grayscale(1);
         }
 
-        .schedule-item.completed .schedule-title {
-            text-decoration: line-through;
+        .schedule-item.completed::after {
+            content: "COMPLETE";
+            position: absolute;
+            top: 10px; right: 10px;
+            font-family: 'Space Mono';
+            font-size: 0.6rem;
+            color: var(--success-green);
+            border: 1px solid var(--success-green);
+            padding: 2px 6px;
         }
 
         .schedule-time {
             font-family: 'Space Mono', monospace;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: var(--primary-cyan);
-            margin-bottom: 5px;
+            margin-bottom: 6px;
             display: block;
         }
 
         .schedule-title {
-            font-size: 0.95rem;
-            font-weight: 600;
+            font-size: 0.9rem;
+            font-weight: 500;
+            line-height: 1.4;
         }
 
-        .item-status {
+        .item-status-bar {
             position: absolute;
-            right: 0; top: 0; height: 100%; width: 4px;
+            left: 0; top: 0; height: 100%; width: 4px;
             background: var(--primary-blue);
         }
 
-        .add-task-btn {
-            margin-top: 15px;
-            background: transparent;
+        .add-mission-btn {
+            background: linear-gradient(90deg, transparent, rgba(0, 242, 254, 0.1), transparent);
             border: 1px dashed var(--primary-cyan);
             color: var(--primary-cyan);
-            padding: 10px;
-            border-radius: 10px;
+            padding: 12px;
+            border-radius: 12px;
+            margin-top: 20px;
+            font-family: 'Orbitron';
+            font-size: 0.7rem;
             cursor: pointer;
-            font-size: 0.8rem;
-            font-family: 'Space Mono';
-            transition: all 0.3s ease;
+            transition: 0.3s;
         }
 
-        .add-task-btn:hover {
-            background: rgba(0, 242, 254, 0.1);
+        .add-mission-btn:hover {
+            background: rgba(0, 242, 254, 0.15);
             border-style: solid;
         }
 
-        /* --- Center Hub: Main Branding & HUD --- */
-        .main-hub {
+        /* --- Center Hub --- */
+        .hub-center {
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             align-items: center;
-            padding-bottom: 30px;
+            padding: 10px 0 40px 0;
         }
 
-        .top-status {
+        .status-strip {
             display: flex;
             width: 100%;
             justify-content: space-between;
             font-family: 'Space Mono', monospace;
-            font-size: 0.75rem;
-            color: var(--text-muted);
+            font-size: 0.7rem;
+            color: #444;
+            letter-spacing: 2px;
         }
 
-        .hero-branding {
+        .status-strip span b { color: var(--primary-cyan); }
+
+        .branding-core {
             text-align: center;
-            margin-top: -50px;
+            margin-top: -60px;
         }
 
-        .captain-tag {
+        .captain-prefix {
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.2rem;
-            background: linear-gradient(to right, var(--primary-blue), var(--accent-purple));
+            font-size: 1.4rem;
+            font-weight: 900;
+            background: linear-gradient(90deg, var(--primary-blue), var(--accent-purple));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            font-weight: 900;
+            letter-spacing: 8px;
+            margin-bottom: -15px;
             display: block;
-            margin-bottom: -10px;
-            letter-spacing: 5px;
         }
 
-        .main-title {
+        .main-hero-title {
             font-family: 'Orbitron', sans-serif;
-            font-size: 5.5rem;
+            font-size: 6.5rem;
             font-weight: 900;
-            line-height: 1;
-            margin-bottom: 20px;
-            background: linear-gradient(to bottom, #fff, var(--primary-cyan));
+            line-height: 0.9;
+            margin-bottom: 25px;
+            background: linear-gradient(180deg, #fff 0%, #a1a1aa 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 30px rgba(14, 165, 233, 0.4));
+            filter: drop-shadow(0 0 40px rgba(14, 165, 233, 0.3));
         }
 
-        .motive-box {
-            background: rgba(255,255,255,0.03);
-            border-radius: 50px;
-            padding: 10px 30px;
+        .dynamic-motive {
+            min-height: 50px;
+            background: rgba(255,255,255,0.02);
             border: 1px solid var(--border);
+            padding: 12px 35px;
+            border-radius: 100px;
             font-style: italic;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             color: var(--primary-cyan);
-            min-height: 44px;
             display: flex;
             align-items: center;
             justify-content: center;
+            cursor: pointer;
+            transition: opacity 0.5s;
         }
 
-        /* --- AI Command Input --- */
-        .command-area {
+        /* --- Functional Terminal & Input --- */
+        .interaction-root {
             width: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 15px;
+            gap: 20px;
         }
 
-        .command-bar {
+        .command-console {
             width: 100%;
-            height: 60px;
-            max-width: 800px;
-            background: rgba(255,255,255,0.05);
+            max-width: 850px;
+            height: 64px;
+            background: rgba(10, 10, 10, 0.8);
             border: 1px solid var(--border);
-            border-radius: 50px;
+            border-radius: 100px;
             display: flex;
             align-items: center;
-            padding: 0 25px;
-            gap: 15px;
-            box-shadow: 0 0 30px rgba(0,0,0,0.5);
-            transition: all 0.3s ease;
+            padding: 0 30px;
+            gap: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
         }
 
-        .command-bar:focus-within {
+        .command-console:focus-within {
             border-color: var(--primary-cyan);
-            background: rgba(255,255,255,0.08);
-            box-shadow: 0 0 40px rgba(0, 242, 254, 0.15);
+            background: rgba(20, 20, 20, 0.9);
+            box-shadow: 0 0 50px rgba(0, 242, 254, 0.2);
+            transform: scale(1.02);
         }
 
-        .command-input {
+        .input-field {
             flex-grow: 1;
             background: transparent;
             border: none;
@@ -274,512 +288,443 @@
             outline: none;
         }
 
-        .btn-send {
+        .exec-btn {
             background: var(--primary-cyan);
             color: #000;
             border: none;
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-weight: 900;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            padding: 8px 22px;
+            border-radius: 100px;
             font-family: 'Orbitron';
-            font-size: 0.8rem;
+            font-weight: 900;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: 0.3s;
         }
 
-        .btn-send:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 15px var(--primary-cyan);
+        .exec-btn:hover {
+            box-shadow: 0 0 20px var(--primary-cyan);
+            filter: brightness(1.1);
         }
 
-        /* --- Right Side: AI Agent Status & Terminal --- */
+        /* --- Right Sidebar: Stats & Console --- */
         .sidebar-right {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 25px;
         }
 
-        .hud-stats {
+        .stats-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 20px;
+            gap: 12px;
         }
 
-        .stat-card {
+        .metric-card {
             background: rgba(255,255,255,0.02);
             border: 1px solid var(--border);
-            padding: 15px;
-            border-radius: 12px;
+            padding: 20px;
+            border-radius: 18px;
             text-align: center;
-            transition: all 0.3s ease;
-        }
-        
-        .stat-card:hover {
-            background: rgba(255,255,255,0.05);
-            border-color: var(--primary-blue);
+            transition: 0.3s;
         }
 
-        .stat-val {
+        .metric-card:hover { background: rgba(255,255,255,0.05); }
+
+        .metric-val {
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.2rem;
-            font-weight: 800;
+            font-size: 1.25rem;
             color: var(--primary-cyan);
+            display: block;
+            font-weight: 800;
+        }
+
+        .metric-label {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 5px;
             display: block;
         }
 
-        .stat-label {
-            font-size: 0.7rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-        }
-
-        .terminal {
+        .log-terminal {
             flex-grow: 1;
-            background: rgba(0,0,0,0.6);
+            background: rgba(0, 0, 0, 0.8);
             border: 1px solid var(--border);
-            border-radius: 15px;
+            border-radius: 20px;
+            padding: 20px;
             font-family: 'Space Mono', monospace;
-            font-size: 0.75rem;
-            padding: 15px;
-            color: #10b981;
-            overflow-y: auto;
+            font-size: 0.78rem;
             position: relative;
             display: flex;
+            flex-grow: 1;
             flex-direction: column;
+            overflow: hidden;
         }
 
-        .terminal-header {
-            color: #64748b;
-            margin-bottom: 10px;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 5px;
+        .term-top {
             display: flex;
             justify-content: space-between;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 15px;
+            color: var(--text-muted);
+            font-size: 0.7rem;
         }
 
-        .log-container {
+        .logs-content {
             flex-grow: 1;
             overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            padding-right: 5px;
         }
 
-        .log-entry { margin-bottom: 5px; line-height: 1.4; }
-        .log-entry span.sys { color: #f43f5e; font-weight: bold; }
-        .log-entry span.ai { color: #0ea5e9; font-weight: bold; }
-        .log-entry span.user { color: #8b5cf6; font-weight: bold; }
+        .log-ln { display: flex; gap: 10px; opacity: 0; animation: logFadeIn 0.3s forwards; }
+        .log-ln .ts { color: #333; min-width: 65px; }
+        .log-ln .tag { font-weight: bold; min-width: 45px; }
+        .log-ln .msg { color: #ccc; word-break: break-all; }
 
-        /* --- Animations --- */
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        
-        .scanner {
+        .tag.sys { color: var(--danger-red); }
+        .tag.ai { color: var(--primary-blue); }
+        .tag.user { color: var(--accent-purple); }
+        .tag.ok { color: var(--success-green); }
+
+        @keyframes logFadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- HUD Elements --- */
+        .scanner-hud {
             position: absolute;
-            top: 0; left: 0; width: 100%;
-            height: 100%;
-            background: linear-gradient(to bottom, transparent, rgba(0, 242, 254, 0.1), transparent);
-            animation: scan 4s linear infinite;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, transparent 0%, rgba(0, 242, 254, 0.05) 50%, transparent 100%);
+            animation: moveScan 5s linear infinite;
             pointer-events: none;
-            z-index: 10;
+            z-index: 5;
         }
 
-        @keyframes scan {
+        @keyframes moveScan {
             0% { transform: translateY(-100%); }
             100% { transform: translateY(100%); }
         }
 
-        /* --- Special Signature Branding --- */
-        .branding-sig {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            text-align: right;
-            opacity: 0.5;
-        }
-
-        .kmg-logo {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.8rem;
-            color: #fff;
-            letter-spacing: 2px;
-        }
-
-        .sig-text {
-            font-size: 0.6rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-        }
-        
-        /* Modal for adding task */
-        .modal {
+        /* --- Modals & Overlay --- */
+        .overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(10px);
+            background: rgba(0,0,0,0.9);
+            backdrop-filter: blur(25px);
             display: none;
             justify-content: center;
             align-items: center;
-            z-index: 1000;
+            z-index: 9999;
         }
-        
-        .modal-content {
+
+        .overlay-card {
             background: var(--bg-deep);
             border: 1px solid var(--primary-cyan);
             padding: 40px;
-            border-radius: 20px;
-            width: 400px;
-            box-shadow: 0 0 50px rgba(0, 242, 254, 0.2);
+            border-radius: 30px;
+            width: 450px;
+            box-shadow: 0 0 100px rgba(0, 242, 254, 0.15);
         }
-        
-        .modal-content h4 {
-            font-family: 'Orbitron';
-            color: var(--primary-cyan);
-            margin-bottom: 20px;
-        }
-        
-        .modal-input {
-            width: 100%;
-            padding: 12px;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            color: #fff;
-            margin-bottom: 15px;
-            outline: none;
-        }
-        
-        .modal-btns {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .btn-modal {
-            flex: 1;
-            padding: 12px;
-            border-radius: 10px;
-            border: none;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        
-        .btn-confirm { background: var(--primary-cyan); color: #000; }
-        .btn-cancel { background: transparent; border: 1px solid var(--border); color: #64748b; }
+
+        .overlay-card h4 { font-family: 'Orbitron'; color: var(--primary-cyan); margin-bottom: 25px; letter-spacing: 2px; }
+        .overlay-input { width: 100%; padding: 15px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 12px; color: #fff; margin-bottom: 20px; outline: none; font-size: 1rem; }
+        .overlay-btns { display: flex; gap: 12px; }
+        .obtn { flex: 1; padding: 15px; border-radius: 12px; cursor: pointer; border: none; font-weight: bold; font-family: 'Orbitron'; font-size: 0.8rem; }
+        .obtn.primary { background: var(--primary-cyan); color: #000; }
+        .obtn.secondary { background: transparent; border: 1px solid var(--border); color: #666; }
 
     </style>
 </head>
-<body>
+<body onload="bootSequence()">
     <div class="ambient-bg"></div>
     <div class="grid-plane"></div>
 
     <main id="app">
-        <!-- Left: Captain's HQ -->
+        <!-- Sidebar Left: Missions -->
         <section class="sidebar-left">
-            <div class="panel" style="flex: 1; overflow: hidden;">
+            <div class="panel" style="flex: 1;">
                 <header class="panel-header">
                     <h3>CAPTAIN'S SCHEDULE</h3>
-                    <span id="task-count" style="font-size: 0.7rem; color: #64748b;">TOTAL: 0</span>
+                    <span id="task-info" style="font-size: 0.65rem; color: #444;">DATA SYNC: OK</span>
                 </header>
-                <div class="schedule-list" id="schedule-container">
-                    <!-- Tasks will be injected here -->
+                <div class="schedule-list" id="task-list">
+                    <!-- Tasks injected by JS -->
                 </div>
-                <button class="add-task-btn" onclick="openAddTaskModal()">+ NEW MISSION</button>
+                <button class="add-mission-btn" onclick="toggleOverlay(true)">+ ASSIGN NEW MISSION</button>
             </div>
 
-            <div class="panel" style="height: 180px;">
+            <div class="panel" style="height: 200px; margin-top: 25px;">
                 <header class="panel-header">
-                    <h3>ELITE MISSION</h3>
+                    <h3>CORE DOCTRINE</h3>
                 </header>
-                <p id="elite-mission-text" style="font-size: 0.9rem; color: #e2e8f0; line-height: 1.6; cursor: pointer;" title="Click to edit">
-                    "대한민국 최고의 AI 에어전트 팀을 구축하라. 코딩은 도구일 뿐, 핵심은 설계다."
+                <p id="core-doctrine" style="font-size: 0.95rem; color: #cbd5e1; line-height: 1.6; font-style: italic; cursor: pointer;" title="Double click to edit">
+                    "코딩의 한계를 넘어서는 비즈니스 임팩트를 설계하라. 우리는 단순한 개발자가 아닌 리더다."
                 </p>
-                <div style="margin-top: auto; font-size: 0.75rem; color: var(--primary-cyan); font-weight: bold;">
-                    LAST UPDATE: <span id="mission-date">2026.02.13</span>
+                <div style="margin-top: auto; display: flex; justify-content: space-between; font-family: 'Space Mono'; font-size: 0.65rem; color: var(--text-muted);">
+                    <span>LEVEL: S-CLASS</span>
+                    <span id="sync-date">2026.02.13.20.55</span>
                 </div>
             </div>
         </section>
 
-        <!-- Center: Core Interface -->
-        <section class="main-hub">
-            <div class="top-status">
-                <span>COORD: 37.5665 N, 126.9780 E</span>
-                <span id="digital-clock">00:00:00</span>
-                <span id="sys-status">SYSTEM: STABLE</span>
+        <!-- Hub Center: Hero Branding -->
+        <section class="hub-center">
+            <div class="status-strip">
+                <span>SYSTEM: <b>V3.0_RELEASE</b></span>
+                <span id="clock-display">00:00:00</span>
+                <span>SECURITY: <b>OMNICRON</b></span>
             </div>
 
-            <div class="hero-branding">
-                <span class="captain-tag">CAPTAIN MIN-GYU</span>
-                <h1 class="main-title">AI BASE<br>ONLINE</h1>
-                <div class="motive-box" id="motive">"진정한 혁신은 실행력에서 나온다."</div>
+            <div class="branding-core">
+                <span class="captain-prefix">KMG_SYSTEMS_PRO</span>
+                <h1 class="main-hero-title">AI BASE<br>ONLINE</h1>
+                <div class="dynamic-motive" id="motive-text" onclick="rotateMotive()">"진정한 혁신은 실행력에서 시작된다."</div>
             </div>
 
-            <div class="command-area">
-                <div class="command-bar">
-                    <span style="color: var(--primary-cyan); font-family: 'Space Mono'; opacity: 0.7;">$</span>
-                    <input type="text" id="cmd-input" class="command-input" placeholder="에이전트에게 명령을 내리세요..." autocomplete="off">
-                    <button class="btn-send" onclick="handleCommand()">EXECUTE</button>
+            <div class="interaction-root">
+                <div class="command-console">
+                    <span style="color: var(--primary-cyan); font-family: 'Space Mono'; font-weight: bold;">[KMG] ></span>
+                    <input type="text" id="main-input" class="input-field" placeholder="대장님, 어떤 작업을 지휘하시겠습니까?" autocomplete="off">
+                    <button class="exec-btn" onclick="fireCommand()">EXECUTE</button>
                 </div>
-                <div style="font-size: 0.7rem; color: var(--text-muted); font-family: 'Space Mono'; opacity: 0.5;">
-                    TRY: /time, /hello, /clear, /todo [msg]
+                <div style="display: flex; gap: 15px; font-family: 'Space Mono'; font-size: 0.65rem; color: #334155; text-transform: uppercase;">
+                    <span>/deploy</span>
+                    <span>/analyze</span>
+                    <span>/clear</span>
+                    <span>/status</span>
                 </div>
             </div>
         </section>
 
-        <!-- Right: AI Intelligence -->
+        <!-- Sidebar Right: Intelligence -->
         <section class="sidebar-right">
             <div class="panel">
                 <header class="panel-header">
-                    <h3>AGENT STATUS</h3>
+                    <h3>LIVE METRICS</h3>
                 </header>
-                <div class="hud-stats">
-                    <div class="stat-card">
-                        <span class="stat-val" id="stat-eff">98%</span>
-                        <span class="stat-label">Efficiency</span>
+                <div class="stats-grid">
+                    <div class="metric-card">
+                        <span class="metric-val" id="val-cpu">2%</span>
+                        <span class="metric-label">CPU LOAD</span>
                     </div>
-                    <div class="stat-card">
-                        <span class="stat-val" id="stat-token">1.2k</span>
-                        <span class="stat-label">Token/Sec</span>
+                    <div class="metric-card">
+                        <span class="metric-val" id="val-mem">12G</span>
+                        <span class="metric-label">MEM POOL</span>
                     </div>
-                    <div class="stat-card">
-                        <span class="stat-val" style="color: var(--success-green);">Online</span>
-                        <span class="stat-label">Neural Link</span>
+                    <div class="metric-card">
+                        <span class="metric-val" style="color: var(--success-green);">SYNC</span>
+                        <span class="metric-label">NETWORK</span>
                     </div>
-                    <div class="stat-card">
-                        <span class="stat-val">ELITE</span>
-                        <span class="stat-label">Mode</span>
+                    <div class="metric-card">
+                        <span class="metric-val" id="val-ping">12ms</span>
+                        <span class="metric-label">LATENCY</span>
                     </div>
                 </div>
             </div>
 
-            <div class="terminal">
-                <div class="scanner"></div>
-                <div class="terminal-header">
-                    <span>KMG-AI LOG CONSOLE</span>
-                    <span id="terminal-status" style="color: #10b981;">● ACTIVE</span>
-                </div>
-                <div class="log-container" id="terminal-logs">
-                    <!-- Logs will be injected here -->
+            <div class="log-terminal">
+                <div class="scanner-hud"></div>
+                <header class="term-top">
+                    <span>TERMINAL_V3.01_STABLE</span>
+                    <span style="color: var(--success-green);">● INTERFACE_UP</span>
+                </header>
+                <div class="logs-content" id="log-dump">
+                    <!-- Logs will stream here -->
                 </div>
             </div>
         </section>
     </main>
 
-    <!-- Modal: Add Task -->
-    <div class="modal" id="add-task-modal">
-        <div class="modal-content">
-            <h4>NEW MISSION</h4>
-            <input type="text" id="new-task-title" class="modal-input" placeholder="미션 내용을 입력하세요...">
-            <input type="text" id="new-task-time" class="modal-input" placeholder="시간 (예: 14:00 - 15:30)">
-            <div class="modal-btns">
-                <button class="btn-modal btn-cancel" onclick="closeAddTaskModal()">CANCEL</button>
-                <button class="btn-modal btn-confirm" onclick="addTask()">CONFIRM</button>
+    <!-- Overlay: Add Mission -->
+    <div class="overlay" id="mission-modal">
+        <div class="overlay-card">
+            <h4>[ NEW_MISSION_PARAM ]</h4>
+            <input type="text" id="m-title" class="overlay-input" placeholder="Mission Objective Name...">
+            <input type="text" id="m-time" class="overlay-input" placeholder="Execution Window (e.g. 15hr - 17hr)">
+            <div class="overlay-btns">
+                <button class="obtn secondary" onclick="toggleOverlay(false)">DISCARD</button>
+                <button class="obtn primary" onclick="commitMission()">DEPLOY</button>
             </div>
         </div>
     </div>
 
-    <div class="branding-sig">
-        <div class="kmg-logo">ANTIGRAVITY SYSTEMS</div>
-        <div class="sig-text">Custom Built by BI-SEO Team v2.0</div>
-    </div>
-
-    <audio id="sound-click" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3" preload="auto"></audio>
-    <audio id="sound-error" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview. mp3" preload="auto"></audio>
+    <!-- UI Audio Elements -->
+    <audio id="snd-boot" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"></audio>
+    <audio id="snd-click" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3"></audio>
 
     <script>
-        // --- State Management ---
-        let tasks = JSON.parse(localStorage.getItem('kmg_tasks')) || [
-            { id: 1, time: "09:00 - 10:30", title: "안티그래비티 신규 워크플로우 설계", completed: true, color: "var(--accent-purple)" },
-            { id: 2, time: "11:00 - 12:30", title: "Elite AI 마스터 클래스 라이브 강의", completed: false, color: "var(--primary-blue)" },
-            { id: 3, time: "14:00 - 16:00", title: "The_Command_Center 인터랙션 고도화", completed: false, color: "var(--primary-cyan)" }
+        // --- Persistence & State ---
+        let missionQueue = JSON.parse(localStorage.getItem('kmg_v3_missions')) || [
+            { id: 1, time: "T-MINUS 2H", title: "Antigravity core engine optimization", done: true },
+            { id: 2, time: "LIVE_STREAM", title: "Elite AI Masterclass Session #4", done: false },
+            { id: 3, time: "PROJECT_GO", title: "Deploy The Command Center v3.0", done: false }
         ];
 
-        let missionText = localStorage.getItem('kmg_mission') || "\"대한민국 최고의 AI 에어전트 팀을 구축하라. 코딩은 도구일 뿐, 핵심은 설계다.\"";
+        const motives = [
+            "진정한 혁신은 실행력에서 시작된다.",
+            "AI는 도구일 뿐, 핵심 가치는 리더의 설계에 있다.",
+            "완벽함이란 더할 것이 없을 때가 아니라, 뺄 것이 없을 때다.",
+            "민규 대장님의 독보적 AI 집구조, 지금 온라인입니다.",
+            "실패하지 않는 유일한 방법은 멈추지 않는 것이다."
+        ];
+        let motiveIndex = 0;
 
-        // --- Core Functions ---
-        function init() {
-            renderTasks();
-            updateClock();
-            setInterval(updateClock, 1000);
-            document.getElementById('elite-mission-text').textContent = missionText;
-            addLog("system", "Initializing core processors...");
-            addLog("ai", "Neural link established with Captain Min-Gyu.");
-            addLog("system", "Welcome back, Captain. All systems operative.");
-            
-            // Random Stat Fluctuation
-            setInterval(fluctuateStats, 3000);
-        }
-
+        // --- Clock & Visuals ---
         function updateClock() {
             const now = new Date();
-            document.getElementById('digital-clock').textContent = now.toTimeString().split(' ')[0];
+            const pad = (n) => String(n).padStart(2, '0');
+            document.getElementById('clock-display').textContent = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+            
+            // Stats Fluctuation
+            document.getElementById('val-cpu').textContent = Math.floor(2 + Math.random() * 8) + "%";
+            document.getElementById('val-ping').textContent = Math.floor(10 + Math.random() * 15) + "ms";
         }
 
-        function fluctuateStats() {
-            const eff = 95 + Math.random() * 4;
-            const token = 1.1 + Math.random() * 0.4;
-            document.getElementById('stat-eff').textContent = eff.toFixed(1) + "%";
-            document.getElementById('stat-token').textContent = token.toFixed(1) + "k";
-        }
-
-        // --- Schedule Functions ---
-        function renderTasks() {
-            const container = document.getElementById('schedule-container');
-            container.innerHTML = '';
-            tasks.forEach(task => {
-                const item = document.createElement('li');
-                item.className = `schedule-item ${task.completed ? 'completed' : ''}`;
-                item.onclick = () => toggleTask(task.id);
-                item.innerHTML = `
-                    <span class="schedule-time">${task.time}</span>
-                    <p class="schedule-title">${task.title}</p>
-                    <div class="item-status" style="background: ${task.color || 'var(--primary-blue)'}"></div>
+        // --- Log Engine (The "Perfect" Log Console) ---
+        function streamLog(tag, msg, delay = 0) {
+            setTimeout(() => {
+                const container = document.getElementById('log-dump');
+                const line = document.createElement('div');
+                line.className = 'log-ln';
+                const time = new Date().toLocaleTimeString([], { hour12:false, hour:'2-digit', minute:'2-digit', second:'2-digit' });
+                
+                line.innerHTML = `
+                    <span class="ts">${time}</span>
+                    <span class="tag ${tag.toLowerCase()}">[${tag.toUpperCase()}]</span>
+                    <span class="msg">${msg}</span>
                 `;
-                container.appendChild(item);
-            });
-            document.getElementById('task-count').textContent = `TOTAL: ${tasks.length}`;
-            localStorage.setItem('kmg_tasks', JSON.stringify(tasks));
+                container.appendChild(line);
+                container.scrollTop = container.scrollHeight;
+                
+                // Cleanup logs
+                if (container.childNodes.length > 50) container.removeChild(container.firstChild);
+            }, delay);
         }
 
-        function toggleTask(id) {
-            tasks = tasks.map(t => t.id === id ? { ...t, completed: !t.completed } : t);
-            playSound('sound-click');
-            renderTasks();
-            addLog("ai", "Task status updated in schedule.");
-        }
-
-        function openAddTaskModal() {
-            document.getElementById('add-task-modal').style.display = 'flex';
-        }
-
-        function closeAddTaskModal() {
-            document.getElementById('add-task-modal').style.display = 'none';
-        }
-
-        function addTask() {
-            const title = document.getElementById('new-task-title').value;
-            const time = document.getElementById('new-task-time').value || "ASAP";
-            if (!title) return;
+        // --- Boot Sequence ---
+        function bootSequence() {
+            setInterval(updateClock, 1000);
+            renderMissions();
             
-            const newTask = {
-                id: Date.now(),
-                time: time,
-                title: title,
-                completed: false,
-                color: "var(--primary-cyan)"
-            };
-            tasks.push(newTask);
-            document.getElementById('new-task-title').value = '';
-            document.getElementById('new-task-time').value = '';
-            closeAddTaskModal();
-            renderTasks();
-            addLog("ai", `New mission assigned: ${title}`);
+            streamLog("sys", "INITIALIZING KMG_OS CORE...", 100);
+            streamLog("sys", "LOADING NEURAL MODULES...", 300);
+            streamLog("ok", "USER_ID: CAPTAIN_MIN_GYU VERIFIED.", 600);
+            streamLog("ai", "Greeting Captain. Command Center v3.0 Final is active.", 900);
+            streamLog("ok", "Connection established with Antigravity Network.", 1200);
         }
 
-        // --- Terminal Functions ---
-        function addLog(type, msg) {
-            const container = document.getElementById('terminal-logs');
-            const entry = document.createElement('div');
-            entry.className = 'log-entry';
-            const time = new Date().toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
-            
-            let label = "";
-            if (type === "system") label = '<span class="sys">[SYS]</span>';
-            else if (type === "ai") label = '<span class="ai">[AI]</span>';
-            else if (type === "user") label = '<span class="user">[USER]</span>';
-
-            entry.innerHTML = `<span style="color:#444">${time}</span> ${label} ${msg}`;
-            container.appendChild(entry);
-            container.scrollTop = container.scrollHeight;
-        }
-
-        function handleCommand() {
-            const input = document.getElementById('cmd-input');
+        // --- Interaction Handlers ---
+        function fireCommand() {
+            const input = document.getElementById('main-input');
             const cmd = input.value.trim();
             if (!cmd) return;
 
-            addLog("user", cmd);
+            streamLog("user", cmd);
             input.value = '';
-            playSound('sound-click');
+            document.getElementById('snd-click').play().catch(() => {});
 
-            // Simple Command Logic
-            const lowercaseCmd = cmd.toLowerCase();
-            
-            if (lowercaseCmd.startsWith('/todo ')) {
-                const todoMsg = cmd.substring(6);
-                tasks.push({ id: Date.now(), time: "SYNCED", title: todoMsg, completed: false, color: "var(--accent-purple)" });
-                renderTasks();
-                addLog("ai", `Got it. Added "${todoMsg}" to your schedule.`);
-            } 
-            else if (lowercaseCmd === '/clear') {
-                document.getElementById('terminal-logs').innerHTML = '';
-                addLog("system", "Console cleared.");
-            }
-            else if (lowercaseCmd === '/time') {
-                addLog("ai", `Current server time is ${new Date().toLocaleString()}`);
-            }
-            else if (lowercaseCmd === '/hello') {
-                addLog("ai", "Hello, Captain. I am at your service. What shall we build today?");
-            }
-            else if (lowercaseCmd === 'hi' || lowercaseCmd === '안녕') {
-                addLog("ai", "반갑습니다 대장님. 오늘도 완벽한 결과물을 만들어보겠습니다.");
-            }
-            else {
-                // Mock AI Response
-                document.getElementById('sys-status').textContent = "SYSTEM: PROCESSING...";
+            const q = cmd.toLowerCase();
+            if (q === '/clear') {
+                document.getElementById('log-dump').innerHTML = '';
+                streamLog("sys", "TERMINAL CONSOLE WIPED.");
+            } else if (q.startsWith('/add ')) {
+                const missionName = cmd.substring(5);
+                addMissionViaCmd(missionName);
+            } else if (q === '/status') {
+                streamLog("ai", "ALL SYSTEMS NOMINAL. UPTIME: 100.0%. CPU_LOAD: 4%. MEM: 12GB.");
+            } else if (q === '/deploy') {
+                streamLog("sys", "COMMENCING DEPLOYMENT PROTOCOL X...");
+                streamLog("ai", "Compiling assets for Project 'Horizon'...", 400);
+                streamLog("ok", "Deployment successful. Link generated: [LOCKED]", 1000);
+            } else if (q === '/hello' || q === 'hi' || q === '안녕') {
+                streamLog("ai", "반갑습니다, 대장님. 오늘도 완벽한 결과를 위해 대기 중입니다.");
+            } else {
+                streamLog("sys", "ANALYZING COMMAND PARAMETERS...");
                 setTimeout(() => {
-                    addLog("ai", `Command understood. Analyzing parameters for: "${cmd}"... Process initiated.`);
-                    document.getElementById('sys-status').textContent = "SYSTEM: STABLE";
-                }, 800);
+                    streamLog("ai", `Successfully processed internal logic for: "${cmd}"`);
+                }, 600);
             }
         }
 
-        // --- Interactivity ---
-        document.getElementById('cmd-input').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') handleCommand();
-        });
-
-        document.getElementById('elite-mission-text').addEventListener('click', () => {
-            const updated = prompt("엘리트 미션 내용을 수정하시겠습니까?", missionText);
-            if (updated) {
-                missionText = updated;
-                document.getElementById('elite-mission-text').textContent = updated;
-                localStorage.setItem('kmg_mission', updated);
-                addLog("system", "Elite Mission objective updated.");
-            }
-        });
-
-        function playSound(id) {
-            const s = document.getElementById(id);
-            if(s) {
-                s.currentTime = 0;
-                s.play().catch(e => console.log("Sound play error"));
-            }
+        // --- Mission System ---
+        function renderMissions() {
+            const list = document.getElementById('task-list');
+            list.innerHTML = '';
+            missionQueue.forEach(m => {
+                const el = document.createElement('div');
+                el.className = `schedule-item ${m.done ? 'completed' : ''}`;
+                el.onclick = () => toggleMission(m.id);
+                el.innerHTML = `
+                    <div class="item-status-bar"></div>
+                    <span class="schedule-time">${m.time}</span>
+                    <p class="schedule-title">${m.title}</p>
+                `;
+                list.appendChild(el);
+            });
+            localStorage.setItem('kmg_v3_missions', JSON.stringify(missionQueue));
         }
 
-        // --- Branding Animation ---
-        const motives = [
-            "진정한 혁신은 실행력에서 나온다.",
-            "AI는 도구일 뿐, 당신이 주인공이다.",
-            "완벽보다 완수가 중요하다.",
-            "오늘의 코딩이 내일의 시스템이 된다.",
-            "김민규 대장님의 AI 특급 열차, 출발합니다."
-        ];
-        let motiveIdx = 0;
-        setInterval(() => {
-            motiveIdx = (motiveIdx + 1) % motives.length;
-            const box = document.getElementById('motive');
-            box.style.opacity = 0;
+        function toggleMission(id) {
+            missionQueue = missionQueue.map(m => m.id === id ? { ...m, done: !m.done } : m);
+            streamLog("ok", `Task ID #${id} updated.`);
+            renderMissions();
+        }
+
+        function toggleOverlay(show) {
+            document.getElementById('mission-modal').style.display = show ? 'flex' : 'none';
+        }
+
+        function commitMission() {
+            const title = document.getElementById('m-title').value;
+            const time = document.getElementById('m-time').value || "T-X";
+            if (!title) return;
+
+            missionQueue.push({ id: Date.now(), time: time, title: title, done: false });
+            document.getElementById('m-title').value = '';
+            document.getElementById('m-time').value = '';
+            toggleOverlay(false);
+            streamLog("ai", `New mission objective received: ${title}`);
+            renderMissions();
+        }
+
+        function addMissionViaCmd(name) {
+            missionQueue.push({ id: Date.now(), time: "SYNC", title: name, done: false });
+            streamLog("ai", `Auto-synced: Adding "${name}" to schedule.`);
+            renderMissions();
+        }
+
+        // --- UI Refinements ---
+        function rotateMotive() {
+            motiveIndex = (motiveIndex + 1) % motives.length;
+            const el = document.getElementById('motive-text');
+            el.style.opacity = 0;
             setTimeout(() => {
-                box.textContent = motives[motiveIdx];
-                box.style.opacity = 1;
-            }, 500);
-        }, 10000);
+                el.textContent = `"${motives[motiveIndex]}"`;
+                el.style.opacity = 1;
+            }, 300);
+        }
 
-        // Motive Box Mouse Interaction
-        document.getElementById('motive').addEventListener('click', () => {
-            motiveIdx = (motiveIdx + 1) % motives.length;
-            document.getElementById('motive').textContent = motives[motiveIdx];
-            playSound('sound-click');
+        document.getElementById('main-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') fireCommand();
         });
 
-        init();
+        document.getElementById('core-doctrine').addEventListener('dblclick', () => {
+            const val = prompt("핵심 철학을 수정하시겠습니까?", document.getElementById('core-doctrine').textContent);
+            if (val) {
+                document.getElementById('core-doctrine').textContent = `"${val}"`;
+                streamLog("sys", "Core Doctrine updated in local vault.");
+            }
+        });
+
+        // Background pulses
+        setInterval(() => {
+            const msgs = ["SYNCHRONIZING WITH ANTIGRAVITY CLOUD...", "SECURITY PROTOCOLS: ACTIVE", "SCANNING FOR OPTIMAL WORKFLOWS...", "AI AGENT BI-SEO: STANDBY"];
+            streamLog("sys", msgs[Math.floor(Math.random() * msgs.length)]);
+        }, 15000);
+
     </script>
 </body>
 </html>
