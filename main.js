@@ -16,7 +16,7 @@ let completedParts = new Set();
  */
 function startChallenge() {
     // 암호 인증
-    const validPasswords = ['qkrtldncksqkqh', 'rlaalsrbWKdWKdaos', 'min9man9'];
+    const validPasswords = ['qkrtldncksqkqh', 'rlaalsrbWKdWKdaos', 'rlaalsrbWkdWkdaos', 'rlaalsrbWkdWKdaos', 'min9man9'];
     const userPassword = prompt('🔐 암호를 입력하세요:');
     
     if (!userPassword || !validPasswords.includes(userPassword)) {
