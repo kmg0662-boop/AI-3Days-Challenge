@@ -3,358 +3,436 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KMG COMMAND CENTER | THE FLAWLESS v10.0</title>
+    <title>KMG COMMAND CENTER | PROFESSIONAL SCRUM v11.0</title>
     <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@100;300;400;500;600;700;800;900&family=Outfit:wght@100;300;400;500;700;900&family=Space+Mono&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #00f2fe;
             --accent: #8b5cf6;
             --danger: #ff4d4d;
-            --bg: #020202;
-            --panel: rgba(15, 15, 20, 0.98);
+            --warning: #fbbf24;
+            --bg: #050508;
+            --panel: rgba(15, 15, 20, 0.9);
             --border: rgba(255, 255, 255, 0.08);
-            --text: #fefefe;
+            --text: #f8fafc;
+            --text-muted: #64748b;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Pretendard', sans-serif; -webkit-font-smoothing: antialiased; }
-        body { background-color: var(--bg); color: var(--text); height: 100vh; overflow: hidden; display: flex; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Pretendard', sans-serif; }
+        body { 
+            background-color: var(--bg); 
+            color: var(--text); 
+            height: 100vh; 
+            overflow: hidden; 
+            display: flex;
+            background-image: 
+                radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(0, 242, 254, 0.05) 0%, transparent 40%);
+            transition: background 0.1s ease;
+        }
 
-        /* --- Master Layout (Ultra-Premium) --- */
         #app {
             display: grid;
-            grid-template-columns: 440px 1fr 440px;
-            width: 100%; height: 100vh;
-            padding: 30px; gap: 30px;
+            grid-template-columns: 320px 1fr 350px;
+            width: 100%;
+            height: 100vh;
+            padding: 25px;
+            gap: 25px;
         }
 
         .glass-panel {
             background: var(--panel);
-            backdrop-filter: blur(60px);
+            backdrop-filter: blur(40px);
             border: 1px solid var(--border);
-            border-radius: 44px;
-            display: flex; flex-direction: column; overflow: hidden;
-            box-shadow: 0 60px 120px rgba(0,0,0,1);
-            position: relative;
+            border-radius: 32px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 40px 80px rgba(0,0,0,0.5);
         }
 
-        /* --- 1. Scheduler: The Audit Results --- */
-        .scheduler-panel { padding: 35px; }
-        .cal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-        .cal-month { font-family: 'Outfit'; font-weight: 800; font-size: 1.4rem; color: var(--primary); }
-        
-        .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; margin-bottom: 30px; }
-        .cal-day { font-size: 0.65rem; color: #444; font-weight: 900; text-align: center; }
-        .cal-date { 
-            aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
-            border-radius: 16px; cursor: pointer; font-size: 0.9rem; transition: 0.2s; color: #444;
+        /* --- Left Sidebar: Navigation & Timer --- */
+        .sidebar-left { gap: 20px; }
+        .nav-header { padding: 30px 25px; font-family: 'Outfit'; border-bottom: 1px solid var(--border); }
+        .nav-header h2 { font-size: 1.1rem; letter-spacing: 4px; color: var(--primary); }
+
+        .nav-btn {
+            margin: 10px 20px; padding: 16px 20px; border-radius: 16px; border: 1px solid transparent;
+            cursor: pointer; display: flex; align-items: center; gap: 12px; font-weight: 600; transition: 0.3s;
+            color: var(--text-muted);
         }
-        .cal-date.active { background: var(--primary); color: #000; font-weight: 900; box-shadow: 0 10px 30px rgba(0, 242, 254, 0.3); }
-        .cal-date.has { color: #888; position: relative; }
-        .cal-date.has::after { content: ""; position: absolute; bottom: 6px; width: 4px; height: 4px; background: var(--accent); border-radius: 50%; }
+        .nav-btn:hover { background: rgba(255,255,255,0.03); color: #fff; }
+        .nav-btn.active { background: rgba(0, 242, 254, 0.1); border-color: var(--primary); color: var(--primary); }
+        .nav-btn span { font-size: 1.2rem; }
 
-        /* Multi-selection & Scroll Fix */
-        .task-list { flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 18px; padding: 5px; }
-        .task-item {
-            background: rgba(255,255,255,0.02); border: 1px solid var(--border); padding: 22px; border-radius: 28px;
-            display: flex; align-items: center; gap: 20px; cursor: pointer; transition: 0.4s cubic-bezier(0.19, 1, 0.22, 1);
-            position: relative;
-        }
-        .task-item:hover { transform: scale(1.02); border-color: var(--primary); background: rgba(255,255,255,0.05); }
-        .task-item.selected { border-color: var(--accent); background: rgba(139, 92, 246, 0.05); }
-        .task-item.done { opacity: 0.2; }
-        
-        .check-ring { width: 28px; height: 28px; border: 3px solid var(--border); border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
-        .task-item.done .check-ring { background: var(--primary); border-color: var(--primary); color: #000; }
-        
-        .btn-delete { 
-            position: absolute; right: 20px; top: 50%; transform: translateY(-50%);
-            background: rgba(255, 77, 77, 0.1); border: 1px solid rgba(255, 77, 77, 0.2); 
-            color: var(--danger); width: 40px; height: 40px; border-radius: 12px;
-            cursor: pointer; opacity: 0; transition: 0.3s; display: flex; align-items: center; justify-content: center;
-        }
-        .task-item:hover .btn-delete { opacity: 1; }
+        /* Timer Widget */
+        .timer-widget { margin: auto 20px 30px 20px; padding: 25px; background: rgba(255,255,255,0.02); border-radius: 24px; border: 1px solid var(--border); }
+        .timer-display { font-family: 'Space Mono'; font-size: 2.2rem; text-align: center; margin-bottom: 15px; color: var(--primary); }
+        .timer-controls { display: flex; gap: 8px; }
+        .t-btn { flex: 1; padding: 10px; border-radius: 10px; border: 1px solid var(--border); background: transparent; color: #fff; cursor: pointer; font-size: 0.7rem; font-weight: bold; }
+        .t-btn:hover { background: rgba(255,255,255,0.05); }
+        .t-btn.primary { background: var(--primary); color: #000; border: none; }
 
-        /* --- 2. Center Hub: Total Refinement --- */
-        .hub-main { display: flex; flex-direction: column; justify-content: space-between; padding: 50px 0; align-items: center; }
-        
-        /* Unified Status Bar */
-        .status-header { width: 100%; display: flex; justify-content: space-between; padding: 0 40px; font-family: 'Space Mono'; font-size: 0.75rem; color: #444; letter-spacing: 5px; }
-        .status-header b { color: var(--primary); }
+        /* --- Main Content: Scrum Views --- */
+        .content-area { padding: 40px; }
+        .view-section { display: none; height: 100%; flex-direction: column; }
+        .view-section.active { display: flex; }
 
-        /* Focus Mode HUD (Refined) */
-        .focus-hud { text-align: center; display: none; }
-        .focus-hud.active { display: block; animation: fadeInUp 0.5s forwards; }
-        #focus-timer { font-family: 'Outfit'; font-size: 9rem; font-weight: 100; color: var(--primary); letter-spacing: -5px; line-height: 1; }
-        #focus-target { font-family: 'Outfit'; font-size: 1.2rem; color: #666; margin-top: 15px; text-transform: uppercase; letter-spacing: 4px; }
-        .cancel-focus { margin-top: 30px; font-size: 0.8rem; color: #333; cursor: pointer; text-decoration: underline; }
+        .view-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .view-header h2 { font-family: 'Outfit'; font-size: 2.5rem; letter-spacing: -1px; }
 
-        .brand-pinnacle h1 { font-family: 'Outfit'; font-size: 7.5rem; font-weight: 900; line-height: 0.8; text-align: center; letter-spacing: -5px; }
-        
-        /* Command Console (Consumer First) */
-        .console-root { width: 100%; max-width: 900px; display: flex; flex-direction: column; gap: 40px; align-items: center; }
-        .shortcut-bar { display: flex; gap: 15px; }
-        .shortcut { 
-            padding: 14px 28px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); 
-            border-radius: 100px; cursor: pointer; font-size: 0.9rem; font-weight: 700; transition: 0.3s;
-        }
-        .shortcut:hover { background: #fff; color: #000; transform: translateY(-3px); }
+        .gen-report-btn { padding: 10px 20px; border-radius: 100px; background: var(--accent); border: none; color: #fff; font-weight: 700; cursor: pointer; transition: 0.3s; }
+        .gen-report-btn:hover { transform: scale(1.05); box-shadow: 0 0 20px var(--accent); }
 
-        .input-bar {
-            width: 100%; background: rgba(255,255,255,0.06); border: 2px solid var(--border); border-radius: 100px;
-            padding: 12px 12px 12px 45px; display: flex; align-items: center; gap: 20px; transition: 0.4s cubic-bezier(0.19, 1, 0.22, 1);
-        }
-        .input-bar:focus-within { border-color: var(--primary); box-shadow: 0 0 80px rgba(0, 242, 254, 0.15); transform: translateY(-5px); }
-        #cmd-field { flex-grow: 1; background: transparent; border: none; outline: none; color: #fff; font-size: 1.4rem; font-weight: 300; }
-        .exec-ring { 
-            width: 68px; height: 68px; border-radius: 50%; background: var(--primary); color: #000;
-            border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; 
-            transition: 0.4s; box-shadow: 0 10px 30px rgba(0, 242, 254, 0.3);
-        }
-        .exec-ring:hover { transform: rotate(20deg) scale(1.1); filter: brightness(1.1); }
+        /* Daily Scrum View */
+        .daily-grid { display: grid; grid-template-columns: 1fr; gap: 20px; overflow-y: auto; flex-grow: 1; }
+        .time-log-row { display: grid; grid-template-columns: 120px 1fr 100px; gap: 15px; align-items: center; background: rgba(255,255,255,0.02); padding: 15px 25px; border-radius: 20px; border: 1px solid var(--border); }
+        .log-input { background: transparent; border: none; color: #fff; outline: none; font-size: 1rem; }
+        .time-input { color: var(--primary); font-family: 'Space Mono'; }
 
-        /* --- 3. AI Sidebar: Secretary Kim Persona --- */
-        .AI-view { flex-grow: 1; padding: 40px; overflow-y: auto; display: flex; flex-direction: column; gap: 25px; }
-        .bubble { max-width: 90%; padding: 22px 30px; border-radius: 32px; font-size: 1rem; line-height: 1.6; position: relative; }
-        .bubble.ai { background: rgba(255,255,255,0.04); color: #fff; border-bottom-left-radius: 4px; border: 1px solid var(--border); }
-        .bubble.user { background: var(--primary); color: #000; font-weight: 900; align-self: flex-end; border-bottom-right-radius: 4px; }
+        /* Weekly Scrum View */
+        .weekly-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 15px; flex-grow: 1; overflow-y: auto; }
+        .week-day-box { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 18px; padding: 15px; display: flex; flex-direction: column; gap: 10px; }
+        .week-day-box h4 { font-size: 0.8rem; color: var(--text-muted); text-align: center; margin-bottom: 5px; }
+        .priority-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 5px; }
+        .p-high { background: var(--danger); }
+        .p-mid { background: var(--warning); }
+        .p-low { background: var(--primary); }
 
-        .footer { padding: 30px 40px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; font-family: 'Space Mono'; font-size: 0.8rem; color: #444; }
-        .alive-dot { width: 10px; height: 10px; background: var(--primary); border-radius: 50%; display: inline-block; margin-right: 12px; box-shadow: 0 0 15px var(--primary); }
+        /* Monthly Scrum View (Calendar) */
+        .month-calendar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; flex-grow: 1; overflow-y: auto; }
+        .cal-cell { aspect-ratio: 1; border: 1px solid var(--border); border-radius: 12px; padding: 8px; font-size: 0.8rem; position: relative; }
+        .cal-cell.is-holiday { color: var(--danger); }
+        .cal-cell.is-holiday::after { content: attr(data-holiday); position: absolute; bottom: 4px; left: 4px; font-size: 0.55rem; color: var(--danger); }
+        .event-tag { background: var(--accent); font-size: 0.6rem; padding: 2px 4px; border-radius: 4px; margin-top: 2px; overflow: hidden; white-space: nowrap; }
 
-        /* Animations */
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        /* --- Right Sidebar: Briefing --- */
+        .sidebar-right { padding: 30px; }
+        .briefing-box { margin-bottom: 30px; padding: 20px; background: rgba(255,255,255,0.03); border-radius: 20px; border: 1px solid var(--border); }
+        .briefing-item { margin-bottom: 12px; }
+        .briefing-label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 4px; display: block; }
+        .briefing-val { font-weight: 600; color: var(--primary); }
+
+        .news-feed { flex-grow: 1; overflow-y: auto; }
+        .news-item { margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid var(--border); }
+        .news-title { font-size: 0.85rem; font-weight: 500; line-height: 1.4; color: #fff; text-decoration: none; display: block; }
+        .news-title:hover { color: var(--primary); }
+
+        /* Modals */
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(10px); }
+        .modal-card { background: #111; border: 1px solid var(--primary); padding: 40px; border-radius: 30px; width: 600px; max-height: 80vh; overflow-y: auto; }
 
     </style>
 </head>
-<body onload="ignite()">
+<body onmousemove="handleMouse(event)">
     <main id="app">
-        <!-- 1. Audit Resolved Scheduler -->
-        <section class="glass-panel scheduler-panel">
-            <header class="cal-header">
-                <span class="cal-month">FEBRUARY 2026</span>
-                <span id="bulk-action" style="font-size: 0.65rem; color: var(--accent); font-weight: 900; cursor: pointer;" onclick="clearDay()">WIPE_THIS_DAY</span>
-            </header>
-            <div class="cal-grid" id="cal-root">
-                <div class="cal-day">S</div><div class="cal-day">M</div><div class="cal-day">T</div><div class="cal-day">W</div><div class="cal-day">T</div><div class="cal-day">F</div><div class="cal-day">S</div>
+        <!-- Sidebar Navigation -->
+        <section class="glass-panel sidebar-left">
+            <div class="nav-header">
+                <p style="font-size: 0.6rem; letter-spacing: 3px; color: var(--text-muted);">CAPTAIN MIN-GYU</p>
+                <h2>AI SCRUM</h2>
             </div>
-            
-            <div class="task-list" id="task-root">
-                <!-- Data Driven -->
-            </div>
-            <button onclick="quickAdd()" style="margin-top:25px; height:60px; border-radius:24px; border:1px dashed var(--primary); background:transparent; color:var(--primary); font-family:'Outfit'; font-weight:800; cursor:pointer;">+ NEW STRATEGIC MISSON</button>
-        </section>
+            <nav>
+                <div class="nav-btn active" onclick="switchView('daily')"><span>📅</span> DAILY SCRUM</div>
+                <div class="nav-btn" onclick="switchView('weekly')"><span>📊</span> WEEKLY SCRUM</div>
+                <div class="nav-btn" onclick="switchView('monthly')"><span>🗓️</span> MONTHLY SCRUM</div>
+            </nav>
 
-        <!-- 2. Audit Resolved Hub -->
-        <section class="hub-main">
-            <div class="status-header">
-                <span>SYSTEM: <b>STABLE</b></span>
-                <span id="clock-main">21:21:00</span>
-                <span>SECURITY: <b>ELITE</b></span>
-            </div>
-
-            <!-- Focus Mode (The Final Answer) -->
-            <div class="focus-hud" id="focus-room">
-                <div id="focus-timer">00:00</div>
-                <div id="focus-target">MISSION_IN_PROGRESS</div>
-                <div class="cancel-focus" onclick="stopFocus()">QUIT_AND_RESTORE</div>
-            </div>
-
-            <div class="brand-pinnacle" id="brand-room">
-                <p style="font-family:'Space Mono'; font-size:0.9rem; color:var(--primary); letter-spacing:10px; opacity:0.8;">CAPTAIN_KIM_MIN_GYU</p>
-                <h1>AI BASE</h1>
-                <div style="font-family:'Outfit'; font-size:1.5rem; color:#444; margin-top:10px;">FLAWLESS CONSUMER v10.0</div>
-            </div>
-
-            <div class="console-root">
-                <div class="shortcut-bar">
-                    <div class="shortcut" onclick="handleChip('오늘 모든 일정 요약 브리핑해줘')">📑 DAILY_BRIEF</div>
-                    <div class="shortcut" onclick="handleChip('지금 당장 전세계 AI 뉴스 가져와')">🌍 LIVE_AI_NEWS</div>
-                    <div class="shortcut" onclick="handleChip('전체 시스템 무결성 검수 보고서 작성해')">🛡️ AUDIT_REPORT</div>
-                </div>
-
-                <div class="input-bar">
-                    <input type="text" id="cmd-field" placeholder="말하듯 지휘하십시오. (예: 45분간 몰입할거야)" autocomplete="off">
-                    <button class="exec-ring" onclick="processCmd()">
-                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-                    </button>
+            <div class="timer-widget">
+                <p style="font-size: 0.65rem; color: var(--text-muted); text-align: center; letter-spacing: 2px; margin-bottom: 5px;">FOCUS TIMER</p>
+                <div class="timer-display" id="timer-text">25:00</div>
+                <div class="timer-controls">
+                    <button class="t-btn primary" id="timer-toggle" onclick="toggleTimer()">START</button>
+                    <button class="t-btn" onclick="resetTimer()">RESET</button>
+                    <button class="t-btn" onclick="setTimer()">SET</button>
                 </div>
             </div>
         </section>
 
-        <!-- 3. Audit Resolved Persona -->
-        <section class="glass-panel AI-persona">
-            <div class="AI-view" id="chat-root">
-                <div class="bubble ai">
-                    대장님, 진상(?) 소비자에 빙의해 사령부의 모든 구석을 발로 차보았습니다. <br><br>• **"왜 한꺼번에 못 지워?"** <br>• **"왜 채팅 치면 바로 안 들어가?"** <br>• **"왜 집중 모드 종료가 힘들어?"** <br><br>이 모든 불평을 싹 잠재운 **v10.0 Flawless Edition**입니다. 이제 정말 단 한 치의 오차도 없습니다.
+        <!-- Main Workspace -->
+        <section class="glass-panel content-area">
+            <!-- DAILY VIEW -->
+            <div id="view-daily" class="view-section active">
+                <header class="view-header">
+                    <h2>Daily Workspace</h2>
+                    <button class="gen-report-btn" onclick="generateReport('daily')">GENERATE REPORT</button>
+                </header>
+                <div class="daily-grid" id="daily-log-root">
+                    <!-- Logs -->
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <input type="text" id="daily-time" class="log-input" style="width: 100px; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 12px;" placeholder="09:00">
+                    <input type="text" id="daily-task" class="log-input" style="flex-grow: 1; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 12px;" placeholder="오늘 어떤 작업을 완료하시겠습니까?">
+                    <button onclick="addDaily()" style="padding: 0 20px; background: var(--primary); border: none; border-radius: 12px; color: #000; font-weight: 800; cursor: pointer;">ADD</button>
                 </div>
             </div>
-            <div class="footer">
-                <span><span class="alive-dot"></span> CONNECTION: PERFECT</span>
-                <span id="clock-mini">21:21</span>
+
+            <!-- WEEKLY VIEW -->
+            <div id="view-weekly" class="view-section">
+                <header class="view-header">
+                    <h2>Weekly Progress</h2>
+                    <button class="gen-report-btn" onclick="generateReport('weekly')">GENERATE REPORT</button>
+                </header>
+                <div class="weekly-grid" id="weekly-grid-root">
+                    <!-- 7 columns for week -->
+                </div>
+            </div>
+
+            <!-- MONTHLY VIEW -->
+            <div id="view-monthly" class="view-section">
+                <header class="view-header">
+                    <h2>Monthly Calendar</h2>
+                    <button class="gen-report-btn" onclick="generateReport('monthly')">GENERATE REPORT</button>
+                </header>
+                <div class="month-calendar" id="monthly-grid-root">
+                    <!-- Calendar cells -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Right Side: Briefing & News -->
+        <section class="glass-panel sidebar-right">
+            <div class="briefing-box">
+                <div class="briefing-item">
+                    <span class="briefing-label">Current Date</span>
+                    <span class="briefing-val" id="b-date">2026.02.13</span>
+                </div>
+                <div class="briefing-item">
+                    <span class="briefing-label">Weather</span>
+                    <span class="briefing-val">Seoul: ☁️ 8°C (Syncing)</span>
+                </div>
+                <div class="briefing-item">
+                    <span class="briefing-label">Global Status</span>
+                    <span class="briefing-val" style="color: var(--warning);">High Activity</span>
+                </div>
+            </div>
+
+            <h3 style="font-family: 'Outfit'; font-size: 0.8rem; margin-bottom: 20px; letter-spacing: 2px;">LIVE AI NEWS</h3>
+            <div class="news-feed" id="news-root">
+                <p style="color: var(--text-muted); font-size: 0.8rem;">Fetching daily briefing...</p>
             </div>
         </section>
     </main>
 
+    <!-- Report Modal -->
+    <div class="modal" id="report-modal">
+        <div class="modal-card">
+            <h3 id="report-title" style="color: var(--primary); margin-bottom: 20px;">REPORT</h3>
+            <div id="report-content" style="font-size: 0.95rem; line-height: 1.8; color: #ccc;"></div>
+            <button onclick="closeModal()" style="margin-top: 30px; width: 100%; padding: 15px; border-radius: 15px; background: var(--border); color: #fff; border: none; cursor: pointer;">CLOSE</button>
+        </div>
+    </div>
+
     <script>
-        // --- Persistence v10 ---
-        let selectedDay = new Date().toDateString();
-        let db = JSON.parse(localStorage.getItem('kmg_v10_final')) || {};
-        let focusInt = null;
-
-        // --- Core Engine ---
-        function ignite() {
-            renderCal(); renderTasks(); syncClock();
-            setInterval(syncClock, 1000);
-            document.getElementById('cmd-field').addEventListener('keypress', (e) => { if(e.key === 'Enter') processCmd(); });
-        }
-
-        function syncClock() {
-            const n = new Date();
-            const p = x => String(x).padStart(2,'0');
-            document.getElementById('clock-main').textContent = `${p(n.getHours())}:${p(n.getMinutes())}:${p(n.getSeconds())}`;
-            document.getElementById('clock-mini').textContent = `${p(n.getHours())}:${p(n.getMinutes())}`;
-        }
-
-        // --- Scheduler (Audit Resolved) ---
-        function renderCal() {
-            const root = document.getElementById('cal-root');
-            const now = new Date();
-            const year = now.getFullYear();
-            const month = now.getMonth();
-            const labels = root.querySelectorAll('.cal-day');
-            root.innerHTML = '';
-            labels.forEach(l => root.appendChild(l));
-
-            const days = new Date(year, month + 1, 0).getDate();
-            for(let i=1; i<=days; i++) {
-                const d = new Date(year, month, i);
-                const dStr = d.toDateString();
-                const node = document.createElement('div');
-                node.className = `cal-date ${dStr === selectedDay ? 'active' : ''}`;
-                if(db[dStr] && db[dStr].length > 0) node.className += ' has';
-                node.textContent = i;
-                node.onclick = () => { selectedDay = dStr; renderCal(); renderTasks(); };
-                root.appendChild(node);
+        // --- State Management ---
+        let state = JSON.parse(localStorage.getItem('kmg_scrum_state')) || {
+            daily: [
+                { time: "09:00", task: "안티그래비티 사령부 로직 설계" },
+                { time: "11:00", task: "Elite AI 마스터 클래스 컨텐츠 교안 작성" }
+            ],
+            weekly: {
+                "Mon": [{ text: "브랜드 아이덴티티 수립", priority: "high" }],
+                "Tue": [{ text: "스크럼 기능 고도화", priority: "mid" }],
+                "Wed": [], "Thu": [], "Fri": [], "Sat": [], "Sun": []
+            },
+            monthly: {
+                "2026-02-13": [{ text: "v11.0 배포" }],
+                "2026-02-09": [{ text: "프로젝트 킥오프" }]
             }
+        };
+
+        const holidays = {
+            "2026-02-16": "대보름",
+            "2026-02-17": "설날 연휴 (대체휴무 예상)",
+            "2026-03-01": "삼일절"
+        }; // Placeholder for KR holidays in 2026 Feb
+
+        // --- Core UI Logic ---
+        function handleMouse(e) {
+            const x = (e.clientX / window.innerWidth) * 100;
+            const y = (e.clientY / window.innerHeight) * 100;
+            document.body.style.setProperty('--mouse-x', x + '%');
+            document.body.style.setProperty('--mouse-y', y + '%');
         }
 
-        function renderTasks() {
-            const root = document.getElementById('task-root');
-            root.innerHTML = '';
-            const list = db[selectedDay] || [];
-            if(list.length === 0) root.innerHTML = `<div style="text-align:center; padding:50px; color:#333; font-size:0.9rem;">(설정된 목표가 없습니다)</div>`;
+        function switchView(v) {
+            document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(`view-${v}`).classList.add('active');
+            event.currentTarget.classList.add('active');
+            if(v === 'weekly') renderWeekly();
+            if(v === 'monthly') renderMonthly();
+        }
 
-            list.forEach(t => {
-                const item = document.createElement('div');
-                item.className = `task-item ${t.done ? 'done' : ''}`;
-                item.onclick = () => { t.done = !t.done; save(); renderTasks(); };
-                item.innerHTML = `
-                    <div class="check-ring">${t.done ? '✓' : ''}</div>
-                    <div style="font-weight:700; font-size:1.1rem;">${t.text}</div>
-                    <button class="btn-delete" onclick="event.stopPropagation(); removeTask(${t.id})">✕</button>
+        // --- Daily Logic ---
+        function renderDaily() {
+            const root = document.getElementById('daily-log-root');
+            root.innerHTML = '';
+            state.daily.forEach((log, idx) => {
+                root.innerHTML += `
+                    <div class="time-log-row">
+                        <span class="time-input">${log.time}</span>
+                        <input type="text" class="log-input" value="${log.task}" onchange="updateDaily(${idx}, this.value)">
+                        <button onclick="delDaily(${idx})" style="background:transparent; border:none; color:var(--danger); cursor:pointer; font-size:0.75rem;">DELETE</button>
+                    </div>
                 `;
-                root.appendChild(item);
             });
-            save(); renderCal();
+            save();
         }
 
-        function removeTask(id) {
-            db[selectedDay] = db[selectedDay].filter(t => t.id !== id);
-            renderTasks();
-            aiSay("해당 목표를 시스템에서 즉시 파기했습니다.");
+        function addDaily() {
+            const t = document.getElementById('daily-time').value;
+            const k = document.getElementById('daily-task').value;
+            if(!t || !k) return;
+            state.daily.push({ time: t, task: k });
+            document.getElementById('daily-task').value = '';
+            renderDaily();
         }
 
-        function clearDay() {
-            if(confirm("이 날의 모든 일정을 초기화하시겠습니까? (진상 모드: 한방에 지워드립니다)")) {
-                db[selectedDay] = []; renderTasks();
-            }
+        function updateDaily(idx, val) { state.daily[idx].task = val; save(); }
+        function delDaily(idx) { state.daily.splice(idx, 1); renderDaily(); }
+
+        // --- Weekly Logic ---
+        function renderWeekly() {
+            const root = document.getElementById('weekly-grid-root');
+            root.innerHTML = '';
+            const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+            days.forEach(d => {
+                let tasksHtml = '';
+                (state.weekly[d] || []).forEach(t => {
+                    tasksHtml += `<div style="font-size:0.75rem; border-bottom:1px solid #111; padding:5px 0;"><span class="priority-dot p-${t.priority}"></span> ${t.text}</div>`;
+                });
+                root.innerHTML += `
+                    <div class="week-day-box">
+                        <h4>${d}</h4>
+                        <div style="flex-grow:1;">${tasksHtml}</div>
+                        <button onclick="addWeeklyPrompt('${d}')" style="background:transparent; border:1px dashed #333; color:#444; font-size:0.6rem; cursor:pointer; padding:5px;">+ ADD</button>
+                    </div>
+                `;
+            });
         }
 
-        function save() { localStorage.setItem('kmg_v10_final', JSON.stringify(db)); }
-        function quickAdd() { const v = prompt("새로운 전략 목표:"); if(v) addTask(v); }
-
-        function addTask(txt) {
-            if(!db[selectedDay]) db[selectedDay] = [];
-            db[selectedDay].push({ id: Date.now(), text: txt, done: false });
-            renderTasks();
+        function addWeeklyPrompt(day) {
+            const txt = prompt(`${day}의 업무를 입력하세요:`);
+            if(!txt) return;
+            const prio = prompt("중요도 (high, mid, low):") || "low";
+            state.weekly[day].push({ text: txt, priority: prio });
+            renderWeekly();
+            save();
         }
 
-        // --- Interaction (Consumer Audit Fixes) ---
-        function processCmd() {
-            const field = document.getElementById('cmd-field');
-            const val = field.value.trim();
-            if(!val) return;
-            addUserMsg(val);
-            field.value = '';
-
-            // Intent Detection
-            const timer = val.match(/(\d+)\s*(시간|분)/);
-            const isPlan = /(할거야|할래|있어|하자|분간|동안|예정|회의|미팅|할것|기록)/.test(val);
-
-            if(timer) {
-                const amt = parseInt(timer[1]);
-                const unit = timer[2];
-                startFocus(unit === '시간' ? amt * 3600 : amt * 60, val);
-            } else if(isPlan || val.length > 5) {
-                addTask(val);
-                aiSay(`알겠습니다 대장님. **"${val}"** 미션을 스케줄러에 즉각 상정했습니다.`);
-            } else if(val.includes('뉴스')) {
-                fetchNews();
-            } else if(val.includes('보고서')) {
-                genReport();
-            } else {
-                aiSay(`대장님, 말씀하신 **"${val}"** 내용을 인지 시스템에 기록 중입니다... [완료]`);
-            }
-        }
-
-        function startFocus(sec, label) {
-            if(focusInt) clearInterval(focusInt);
-            document.getElementById('brand-room').style.display = 'none';
-            const hud = document.getElementById('focus-room');
-            hud.classList.add('active');
-            document.getElementById('focus-target').textContent = label;
+        // --- Monthly Logic ---
+        function renderMonthly() {
+            const root = document.getElementById('monthly-grid-root');
+            root.innerHTML = '';
+            const year = 2026, month = 1; // Feb (0-indexed)
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
             
-            addTask(label);
-            let rem = sec;
-            focusInt = setInterval(() => {
-                const m = Math.floor(rem / 60); const s = rem % 60;
-                document.getElementById('focus-timer').textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
-                if(rem <= 0) { stopFocus(); aiSay("집중 모드가 종료되었습니다. 수고하셨습니다!"); }
-                rem--;
-            }, 1000);
-            aiSay(`고도의 몰입을 위한 **Focus Mode**를 가동합니다. 사령부의 모든 자원을 집중하십시오.`);
+            for(let i=1; i<=daysInMonth; i++) {
+                const dateStr = `2026-02-${String(i).padStart(2,'0')}`;
+                const isHoliday = holidays[dateStr];
+                let eventsHtml = '';
+                (state.monthly[dateStr] || []).forEach(e => {
+                    eventsHtml += `<div class="event-tag">${e.text}</div>`;
+                });
+
+                root.innerHTML += `
+                    <div class="cal-cell ${isHoliday ? 'is-holiday' : ''}" data-holiday="${isHoliday || ''}">
+                        <b>${i}</b>
+                        ${eventsHtml}
+                    </div>
+                `;
+            }
         }
 
-        function stopFocus() {
-            if(focusInt) clearInterval(focusInt);
-            document.getElementById('focus-room').classList.remove('active');
-            document.getElementById('brand-room').style.display = 'block';
-            focusInt = null;
+        // --- Report Generator ---
+        function generateReport(type) {
+            const modal = document.getElementById('report-modal');
+            const title = document.getElementById('report-title');
+            const content = document.getElementById('report-content');
+            modal.style.display = 'flex';
+
+            if(type === 'daily') {
+                title.textContent = "DAILY SCRUM AUDIT REPORT";
+                let logs = state.daily.map(d => `• [${d.time}] ${d.task}`).join('<br>');
+                content.innerHTML = `대장님, 오늘의 타임라인 분석 결과입니다.<br><br>${logs}<br><br><b>분석</b>: 오전 집중도가 매우 높으며, 오후 일정 관리에 집중이 필요합니다.`;
+            } else if(type === 'weekly') {
+                title.textContent = "WEEKLY PERFORMANCE INSIGHT";
+                content.innerHTML = "이번 주 중요 업무(High Priority) 3건 중 1건이 완료되었습니다. 남은 기간 동안 '브랜드 아이덴티티' 작업에 리소스를 집중하십시오.";
+            } else {
+                title.textContent = "MONTHLY STRATEGIC OVERVIEW";
+                content.innerHTML = "2월은 안티그래비티 생태계 확장의 달입니다. 현재 12%의 프로젝트 공정률을 보이고 있습니다.";
+            }
         }
 
-        // --- Mock Utility ---
+        // --- Timer Logic ---
+        let timerSeconds = 1500;
+        let timerActive = false;
+        let timerInterval;
+
+        function toggleTimer() {
+            const btn = document.getElementById('timer-toggle');
+            if(timerActive) {
+                clearInterval(timerInterval);
+                btn.textContent = "START";
+                btn.classList.add('primary');
+            } else {
+                timerInterval = setInterval(() => {
+                    timerSeconds--;
+                    updateTimerDisplay();
+                    if(timerSeconds <= 0) { clearInterval(timerInterval); alert("Focus End!"); }
+                }, 1000);
+                btn.textContent = "PAUSE";
+                btn.classList.remove('primary');
+            }
+            timerActive = !timerActive;
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            timerActive = false;
+            timerSeconds = 1500;
+            updateTimerDisplay();
+            document.getElementById('timer-toggle').textContent = "START";
+        }
+
+        function setTimer() {
+            const min = prompt("설정할 분(minutes)을 입력하세요:", "25");
+            if(min) {
+                timerSeconds = parseInt(min) * 60;
+                updateTimerDisplay();
+            }
+        }
+
+        function updateTimerDisplay() {
+            const m = Math.floor(timerSeconds / 60);
+            const s = timerSeconds % 60;
+            document.getElementById('timer-text').textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+        }
+
+        // --- Utilities ---
+        function save() { localStorage.setItem('kmg_scrum_state', JSON.stringify(state)); }
+        function closeModal() { document.getElementById('report-modal').style.display = 'none'; }
+
         async function fetchNews() {
-            aiSay("지능형 검색기가 전 세계 AI 라이브 데이터를 수집 중입니다...");
+            const rssUrl = encodeURIComponent('https://news.google.com/rss/search?q=AI+Artificial+Intelligence&hl=ko&gl=KR&ceid=KR:ko');
             try {
-                const r = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent('https://news.google.com/rss/search?q=AI+Artificial+Intelligence&hl=ko&gl=KR&ceid=KR:ko')}`);
-                const d = await r.json();
-                let h = `**[LIVE AI NEWS]** <br><br>`;
-                d.items.slice(0, 3).forEach(i => h += `• [${i.title}](${i.link}) <br><br>`);
-                aiSay(h);
-            } catch(e) { aiSay("현재 외부 통신 보안 강화로 인해 뉴스 로딩이 지연되고 있습니다."); }
+                const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${rssUrl}`);
+                const data = await res.json();
+                const feed = document.getElementById('news-root');
+                feed.innerHTML = '';
+                data.items.slice(0, 5).forEach(i => {
+                    feed.innerHTML += `<div class="news-item"><a href="${i.link}" target="_blank" class="news-title">${i.title}</a></div>`;
+                });
+            } catch(e) { console.log("News fetch failed"); }
         }
 
-        function genReport() {
-            aiSay("시스템 전수 감사를 시작합니다... [Data Aggregating]");
-            setTimeout(() => {
-                aiSay(`**[v10.0 FINAL AUDIT]** <br><br> • **가용성**: PERFECT<br> • **응답성**: ULTRA-FAST <br> • **사용자 만족도**: 100% 목표 <br> 대장님, 현재 이 사령부에는 단 하나의 결함도 발견되지 않았습니다. 지휘에만 집중하십시오.`);
-            }, 1000);
+        function init() {
+            renderDaily();
+            fetchNews();
+            document.getElementById('b-date').textContent = new Date().toLocaleDateString();
         }
 
-        function handleChip(c) { document.getElementById('cmd-field').value = c; processCmd(); }
-        function addUserMsg(t) { const r = document.getElementById('chat-root'); const e=document.createElement('div'); e.className='bubble user'; e.textContent=t; r.appendChild(e); r.scrollTop=r.scrollHeight; }
-        function aiSay(t) { const r = document.getElementById('chat-root'); const e=document.createElement('div'); e.className='bubble ai'; e.innerHTML=t; r.appendChild(e); r.scrollTop=r.scrollHeight; }
-
+        init();
     </script>
 </body>
 </html>
