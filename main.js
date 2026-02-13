@@ -1597,6 +1597,19 @@ function renderDay3Footer() {
                     <p>"대장님, 정말 고생 많으셨습니다! 이제 제가 더 스마트하게 모실 수 있겠네요! 🫡"</p>
                     <img src="https://img.theqoo.net/wJpUL.png" alt="성공!" style="max-width: 300px; border-radius: 12px; margin-top: 1rem; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
                 </div>
+                <button onclick="showSpecialClassPassword()" style="
+                    margin-top: 2rem;
+                    background: linear-gradient(135deg, #f472b6, #db2777);
+                    color: white;
+                    border: none;
+                    padding: 1rem 2rem;
+                    border-radius: 12px;
+                    font-size: 1.1rem;
+                    font-weight: bold;
+                    cursor: pointer;
+                    box-shadow: 0 4px 15px rgba(244, 114, 182, 0.4);
+                    transition: all 0.3s ease;
+                ">🔥 특급 보충 수업 시작하기 🔥</button>
             </div>
         </div>
     `;
@@ -1799,6 +1812,128 @@ function showDay2Password() {
     `;
     
     document.body.appendChild(popup);
+}
+
+/**
+ * 특급 보충 수업 비밀번호 팝업
+ */
+function showSpecialClassPassword() {
+    const popup = document.createElement('div');
+    popup.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.85);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 10001;
+        animation: fadeIn 0.3s ease;
+    `;
+    
+    popup.innerHTML = `
+        <div style="
+            background: linear-gradient(135deg, #0f172a 0%, #020617 100%);
+            border: 2px solid #f472b6;
+            border-radius: 20px;
+            padding: 3rem;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(244, 114, 182, 0.2);
+            animation: slideUp 0.5s ease;
+        ">
+            <h2 style="
+                font-size: 2rem;
+                color: #f472b6;
+                margin-bottom: 1rem;
+                text-shadow: 0 0 20px rgba(244, 114, 182, 0.4);
+            ">🔥 특급 보충 수업 🚀</h2>
+            
+            <p style="
+                font-size: 1.1rem;
+                color: #e2e8f0;
+                margin-bottom: 2rem;
+                line-height: 1.6;
+            ">대장님을 위한 시우비서의 엄선된<br>심화 커리큘럼 비밀번호입니다!</p>
+            
+            <div style="
+                background: rgba(244, 114, 182, 0.1);
+                border: 2px dashed #f472b6;
+                border-radius: 10px;
+                padding: 1.5rem;
+                margin-bottom: 2rem;
+                position: relative;
+            ">
+                <p style="
+                    font-size: 0.9rem;
+                    color: #94a3b8;
+                    margin-bottom: 0.5rem;
+                ">🔐 보충 수업 비밀번호</p>
+                <p id="special-pw" style="
+                    font-size: 1.5rem;
+                    color: #f472b6;
+                    font-weight: bold;
+                    font-family: 'Courier New', monospace;
+                    letter-spacing: 1px;
+                    margin-bottom: 0.5rem;
+                    word-break: break-all;
+                ">rlaalsrbWkdWkdaos</p>
+                <button onclick="copySpecialPassword(this)" style="
+                    background: linear-gradient(135deg, #f472b6, #db2777);
+                    color: white;
+                    border: none;
+                    padding: 0.5rem 1.5rem;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    font-size: 0.9rem;
+                    margin-top: 0.5rem;
+                    transition: all 0.3s ease;
+                ">📋 복사하기</button>
+            </div>
+            
+            <button onclick="closeSpecialPopup()" style="
+                background: rgba(255, 255, 255, 0.1);
+                color: white;
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                padding: 0.8rem 2rem;
+                border-radius: 12px;
+                cursor: pointer;
+                font-size: 1rem;
+                transition: all 0.3s ease;
+            ">닫기</button>
+        </div>
+    `;
+    
+    document.body.appendChild(popup);
+}
+
+/**
+ * 특급 보충 수업 비밀번호 복사
+ */
+function copySpecialPassword(btn) {
+    const pw = document.getElementById('special-pw').textContent;
+    navigator.clipboard.writeText(pw).then(() => {
+        btn.textContent = '✅ 복사 완료!';
+        setTimeout(() => {
+            btn.textContent = '📋 복사하기';
+        }, 2000);
+    });
+}
+
+/**
+ * 특급 보충 수업 팝업 닫기
+ */
+function closeSpecialPopup() {
+    const popups = document.querySelectorAll('div[style*="position: fixed"]');
+    const lastPopup = popups[popups.length - 1];
+    if (lastPopup) {
+        lastPopup.style.animation = 'fadeOut 0.3s ease';
+        setTimeout(() => {
+            lastPopup.remove();
+        }, 300);
+    }
 }
 
 /**
