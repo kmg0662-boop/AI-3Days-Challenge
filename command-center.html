@@ -3,494 +3,314 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KMG COMMAND CENTER | THE PINNACLE</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Mono:wght@400;700&family=Outfit:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+    <title>KMG COMMAND CENTER | SMART UTILITY</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@100;300;400;500;600;700;800;900&family=Outfit:wght@100;300;400;500;700;900&family=Space+Mono&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-cyan: #00f2fe;
-            --primary-blue: #0ea5e9;
-            --accent-purple: #8b5cf6;
-            --danger-red: #f43f5e;
-            --success-green: #10b981;
-            --bg-deep: #020202;
-            --glass: rgba(255, 255, 255, 0.03);
-            --border: rgba(255, 255, 255, 0.08);
-            --text-main: #f8fafc;
-            --text-muted: #64748b;
+            --primary: #00f2fe;
+            --primary-rgb: 0, 242, 254;
+            --accent: #8b5cf6;
+            --bg: #0a0a0c;
+            --panel-bg: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.1);
+            --text: #ffffff;
+            --text-muted: #94a3b8;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        ::-webkit-scrollbar { width: 3px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
-
-        body {
-            background-color: var(--bg-deep);
-            color: var(--text-main);
-            font-family: 'Outfit', sans-serif;
-            height: 100vh;
-            overflow: hidden;
-            display: flex;
-            user-select: none;
-        }
-
-        /* --- Master Ambience --- */
-        .master-bg {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: 
-                radial-gradient(circle at 10% 10%, rgba(139, 92, 246, 0.04) 0%, transparent 40%),
-                radial-gradient(circle at 90% 90%, rgba(14, 165, 233, 0.04) 0%, transparent 40%),
-                conic-gradient(from 180deg at 50% 50%, #000 0deg, #050505 360deg);
-            z-index: -1;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Pretendard', 'Outfit', sans-serif; }
+        body { background-color: var(--bg); color: var(--text); height: 100vh; overflow: hidden; display: flex; }
 
         #app {
             display: grid;
-            grid-template-columns: 420px 1fr 420px;
+            grid-template-columns: 380px 1fr 400px;
             width: 100%;
             height: 100vh;
-            padding: 40px;
-            gap: 40px;
-        }
-
-        /* --- Hyper-Premium Panel --- */
-        .panel {
-            background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0) 100%);
-            backdrop-filter: blur(40px);
-            border: 1px solid var(--border);
-            border-radius: 40px;
-            padding: 40px;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 40px 80px rgba(0,0,0,0.8), inset 0 0 40px rgba(255,255,255,0.01);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .panel::before {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 2px;
-            background: linear-gradient(90deg, transparent, var(--primary-cyan), transparent);
-            opacity: 0.3;
-        }
-
-        .panel-header {
-            margin-bottom: 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-        }
-
-        .panel-header h3 {
-            font-family: 'Orbitron';
-            color: var(--text-muted);
-            font-size: 0.75rem;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-        }
-
-        /* --- Left: Smart Operations --- */
-        .task-stack { display: flex; flex-direction: column; gap: 20px; overflow-y: auto; flex-grow: 1; padding-right: 5px; }
-        
-        .task-tile {
-            background: rgba(255,255,255,0.02);
-            border: 1px solid var(--border);
-            border-radius: 24px;
             padding: 24px;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
-        }
-
-        .task-tile:hover { 
-            background: rgba(255,255,255,0.05); 
-            border-color: var(--primary-cyan);
-            transform: scale(1.02) translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-        }
-
-        .task-tile.done { opacity: 0.3; filter: grayscale(1); }
-        .task-tile.done .check-ring { background: var(--primary-cyan); border-color: var(--primary-cyan); }
-
-        .check-ring {
-            width: 28px; height: 28px;
-            border: 2px solid var(--border);
-            border-radius: 50%;
-            transition: 0.3s;
-            flex-shrink: 0;
-            display: flex; align-items: center; justify-content: center;
-        }
-
-        .task-tile:hover .check-ring { border-color: var(--primary-cyan); }
-
-        .task-meta p { font-weight: 500; font-size: 1.05rem; letter-spacing: -0.02em; margin-bottom: 6px; color: var(--text-main); }
-        .task-meta span { font-family: 'Space Mono'; font-size: 0.75rem; color: var(--primary-cyan); opacity: 0.6; }
-
-        .btn-plus {
-            margin-top: 30px;
-            height: 60px;
-            border-radius: 30px;
-            border: 1px dashed var(--border);
-            background: transparent;
-            color: var(--text-muted);
-            font-family: 'Orbitron';
-            font-size: 0.75rem;
-            letter-spacing: 2px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .btn-plus:hover { border-color: var(--primary-cyan); color: var(--primary-cyan); background: rgba(0,242,254,0.05); }
-
-        /* --- Center: The Throne --- */
-        .throne-room {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 0 60px 0;
-        }
-
-        .master-identification {
-            font-family: 'Orbitron';
-            font-size: 0.7rem;
-            letter-spacing: 12px;
-            color: var(--primary-blue);
-            opacity: 0.6;
-            margin-bottom: 20px;
-            text-indent: 12px;
-        }
-
-        .pinnacle-title {
-            font-family: 'Orbitron';
-            font-size: 6.5rem;
-            font-weight: 900;
-            line-height: 0.85;
-            text-align: center;
-            letter-spacing: -4px;
-            margin-bottom: 40px;
-            background: linear-gradient(180deg, #fff 0%, #333 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 60px rgba(14, 165, 233, 0.2));
-        }
-
-        .intent-controller {
-            width: 100%;
-            max-width: 900px;
-            position: relative;
-        }
-
-        .intent-input-group {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid var(--border);
-            border-radius: 100px;
-            padding: 10px 10px 10px 40px;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            box-shadow: 0 40px 100px rgba(0,0,0,0.8);
-            transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1);
-        }
-
-        .intent-input-group:focus-within {
-            background: rgba(255,255,255,0.06);
-            border-color: var(--primary-cyan);
-            transform: scale(1.02);
-            box-shadow: 0 0 80px rgba(0, 242, 254, 0.15);
-        }
-
-        .intent-field {
-            flex-grow: 1;
-            background: transparent;
-            border: none;
-            color: #fff;
-            font-size: 1.3rem;
-            font-weight: 300;
-            outline: none;
-            font-family: 'Outfit';
-        }
-
-        .btn-launch {
-            width: 64px; height: 64px;
-            border-radius: 50%;
-            background: var(--primary-cyan);
-            border: none;
-            cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-            transition: 0.4s;
-        }
-
-        .btn-launch:hover { transform: rotate(15deg) scale(1.1); box-shadow: 0 0 40px var(--primary-cyan); }
-
-        .shortcut-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin-bottom: 50px;
-        }
-
-        .shortcut-item {
-            padding: 18px 35px;
-            background: rgba(255,255,255,0.02);
-            border: 1px solid var(--border);
-            border-radius: 100px;
-            font-weight: 500;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: 0.3s;
-            text-align: center;
-            backdrop-filter: blur(10px);
-        }
-
-        .shortcut-item:hover {
-            background: #fff;
-            color: #000;
-            border-color: #fff;
-            transform: translateY(-3px);
-        }
-
-        /* --- Right: The Mind --- */
-        .assistant-ego { display: flex; flex-direction: column; gap: 30px; }
-        
-        .avatar-aura {
-            width: 80px; height: 80px;
-            background: #fff;
-            border-radius: 28px;
-            display: flex; align-items: center; justify-content: center;
-            font-family: 'Orbitron'; font-weight: 900; color: #000; font-size: 1.5rem;
-            box-shadow: 0 0 40px rgba(255,255,255,0.2);
-            margin-bottom: 10px;
-        }
-
-        .ego-response {
-            font-size: 1.25rem;
-            line-height: 1.5;
-            font-weight: 300;
-            letter-spacing: -0.01em;
-            color: var(--text-main);
-            min-height: 120px;
-        }
-
-        .metrics-glass {
-            background: rgba(255,255,255,0.01);
-            border: 1px solid var(--border);
-            border-radius: 30px;
-            padding: 30px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
             gap: 24px;
         }
 
-        .m-block span { display: block; }
-        .m-val { font-family: 'Orbitron'; font-size: 1.4rem; font-weight: 700; color: var(--primary-cyan); margin-bottom: 4px; }
-        .m-lbl { font-size: 0.65rem; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; }
+        /* --- Global Panel Appearance --- */
+        .glass-panel {
+            background: var(--panel-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
 
-        .live-ticker {
-            flex-grow: 1;
+        /* --- Left: Master Scheduler (Multi-Day Logic) --- */
+        .scheduler-panel { padding: 24px; }
+        .tab-bar { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+        .tab { 
+            padding: 8px 16px; border-radius: 12px; cursor: pointer; font-size: 0.85rem; color: var(--text-muted); transition: 0.3s;
+        }
+        .tab.active { background: var(--primary); color: #000; font-weight: 700; }
+
+        .task-list { flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; padding-right: 5px; }
+        .task-item {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            padding: 16px;
+            border-radius: 18px;
+            display: flex; align-items: center; gap: 14px;
+            transition: 0.2s;
+            cursor: pointer;
+        }
+        .task-item:hover { border-color: var(--primary); background: rgba(0, 242, 254, 0.05); }
+        .task-item.done { opacity: 0.4; }
+        .task-item.done .check { background: var(--primary); color: #000; border-color: var(--primary); }
+        .check { width: 22px; height: 22px; border: 2px solid var(--border); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+
+        .add-btn {
+            background: var(--primary); color: #000; border: none; padding: 14px; border-radius: 16px; font-weight: 700; cursor: pointer; margin-top: 15px; 
+            transition: transform 0.2s;
+        }
+        .add-btn:hover { transform: scale(1.02); }
+
+        /* --- Center: Smart Hub --- */
+        .center-hub { display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding-bottom: 30px; }
+        .branding { text-align: center; margin-top: 20px; }
+        .branding h1 { font-family: 'Outfit'; font-size: 5rem; font-weight: 900; line-height: 1; letter-spacing: -2px; }
+        .branding p { font-size: 0.9rem; color: var(--primary); letter-spacing: 5px; font-family: 'Outfit'; margin-top: 10px; opacity: 0.7; }
+
+        .quick-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; max-width: 600px; margin-bottom: 40px; }
+        .action-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border);
             padding: 20px;
-            background: transparent;
-            font-family: 'Space Mono';
-            font-size: 0.72rem;
-            color: #333;
-            overflow-y: auto;
-            border-top: 1px solid var(--border);
-            mask-image: linear-gradient(to top, black 80%, transparent 100%);
+            border-radius: 20px;
+            cursor: pointer;
+            text-align: center;
+            transition: 0.3s;
+        }
+        .action-card:hover { background: #fff; color: #000; transform: translateY(-3px); }
+        .action-card i { font-size: 1.5rem; display: block; margin-bottom: 8px; font-style: normal; }
+        .action-card span { font-size: 0.9rem; font-weight: 600; }
+
+        .chat-input-wrapper {
+            width: 100%; max-width: 800px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 40px;
+            padding: 8px 8px 8px 24px;
+            display: flex; align-items: center; gap: 12px;
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+        .chat-input-wrapper:focus-within { border-color: var(--primary); }
+        #user-input { flex-grow: 1; background: transparent; border: none; outline: none; color: #fff; font-size: 1.1rem; }
+        .send-btn { width: 48px; height: 48px; border-radius: 50%; background: var(--primary); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
+        .send-btn:hover { box-shadow: 0 0 20px var(--primary); }
+
+        /* --- Right: AI Conversation & Log --- */
+        .ai-panel { padding: 0; }
+        .chat-display { 
+            flex-grow: 1; 
+            padding: 24px;
+            overflow-y: auto; 
+            display: flex; flex-direction: column; gap: 16px;
+            mask-image: linear-gradient(to top, black 90%, transparent 100%);
         }
 
-        .ticker-ln { margin-bottom: 6px; }
-        .ticker-ln b { color: #555; margin-right: 8px; }
+        .bubble { max-width: 85%; padding: 14px 18px; border-radius: 20px; line-height: 1.6; font-size: 0.95rem; position: relative; }
+        .bubble.ai { background: rgba(255,255,255,0.05); color: #fff; border-bottom-left-radius: 4px; border: 1px solid var(--border); }
+        .bubble.user { background: var(--primary); color: #000; font-weight: 600; align-self: flex-end; border-bottom-right-radius: 4px; }
+        
+        .ai-status { padding: 20px 24px; background: rgba(255,255,255,0.02); border-top: 1px solid var(--border); font-size: 0.75rem; color: var(--text-muted); display: flex; justify-content: space-between; }
+        .ai-status .dot { width: 8px; height: 8px; background: var(--primary); border-radius: 50%; display: inline-block; margin-right: 5px; box-shadow: 0 0 10px var(--primary); }
 
-        /* --- Global Audio/Meta --- */
-        .floating-status {
-            position: fixed;
-            top: 40px; right: 40px;
-            font-family: 'Space Mono';
-            font-size: 0.7rem;
-            color: var(--success-green);
-            display: flex; align-items: center; gap: 8px;
-        }
-        .blinker { width: 6px; height: 6px; background: var(--success-green); border-radius: 50%; animation: blink 1s infinite; }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-
-        /* --- Animations --- */
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        .reveal { animation: fadeInUp 1s cubic-bezier(0.19, 1, 0.22, 1) forwards; }
+        /* Animation */
+        @keyframes typing { 0% { opacity: 0.3; } 100% { opacity: 1; } }
+        .typing { animation: typing 0.6s infinite alternate; }
 
     </style>
 </head>
-<body onload="ignite()">
-    <div class="master-bg"></div>
-
-    <div class="floating-status reveal">
-        <div class="blinker"></div>
-        KMG_NETWORK: OPTIMAL
-    </div>
-
+<body onload="init()">
     <main id="app">
-        <!-- Dashboard -->
-        <section class="panel reveal" style="animation-delay: 0.1s;">
-            <div class="panel-header">
-                <h3>OPERATIONS</h3>
-                <span id="date-label" style="font-family: 'Space Mono'; font-size: 0.65rem; color: var(--text-muted);">2026.02.13</span>
+        <!-- Multi-Day Scheduler -->
+        <section class="glass-panel scheduler-panel">
+            <h2 style="font-size: 1.1rem; margin-bottom: 15px; font-family: 'Outfit';">MISSION LOG</h2>
+            <div class="tab-bar">
+                <div class="tab active" onclick="switchDay('오늘')">오늘</div>
+                <div class="tab" onclick="switchDay('내일')">내일</div>
+                <div class="tab" onclick="switchDay('주간')">주간</div>
             </div>
-            <div class="task-stack" id="tiles-root">
-                <!-- Tiles -->
+            <div class="task-list" id="task-list">
+                <!-- Data-driven tasks -->
             </div>
-            <button class="btn-plus" onclick="createMission()">+ DEFINE NEW OBJECTIVE</button>
+            <button class="add-btn" onclick="addNewTask()">새로운 일정 추가</button>
         </section>
 
-        <!-- Command Throne -->
-        <section class="throne-room reveal" style="animation-delay: 0.2s;">
-            <div class="master-identification">CAPTAIN KIM MIN GYU</div>
-            
-            <div style="width: 100%; display: flex; flex-direction: column; align-items: center;">
-                <h1 class="pinnacle-title">COMMAND<br>CENTER</h1>
-                
-                <div class="shortcut-grid">
-                    <div class="shortcut-item" onclick="quickLaunch('오늘의 주요 보고서 작성해')">PROJECT_BRIEF</div>
-                    <div class="shortcut-item" onclick="quickLaunch('커뮤니티 반응 분석해줘')">SOCIAL_ANALYSIS</div>
-                    <div class="shortcut-item" onclick="quickLaunch('오후 일정 최적화해')">TIME_SYNC</div>
-                    <div class="shortcut-item" onclick="quickLaunch('시스템 캐시 및 로그 클리닝')">PURGE_LOGS</div>
-                </div>
+        <!-- Command Hub -->
+        <section class="center-hub">
+            <div class="branding">
+                <p>CAPTAIN KIM MIN GYU</p>
+                <h1>AI BASE</h1>
+            </div>
 
-                <div class="intent-controller">
-                    <div class="intent-input-group">
-                        <input type="text" id="ai-intent" class="intent-field" placeholder="당신의 의도를 말씀하십시오, 대장님.">
-                        <button class="btn-launch" onclick="resolveIntent()">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-                        </button>
+            <div style="width: 100%; display:flex; flex-direction:column; align-items:center;">
+                <div class="quick-actions">
+                    <div class="action-card" onclick="handleQuickAction('일정 브리핑 해줘')">
+                        <i>📅</i><span>일정 브리핑</span>
+                    </div>
+                    <div class="action-card" onclick="handleQuickAction('보고서 작성해주겠니?')">
+                        <i>📝</i><span>보고서 생성</span>
+                    </div>
+                    <div class="action-card" onclick="handleQuickAction('현재 시스템 상태 알려줘')">
+                        <i>⚡</i><span>시스템 상태</span>
+                    </div>
+                    <div class="action-card" onclick="handleQuickAction('오늘의 뉴스 알려줘')">
+                        <i>🌍</i><span>데일리 뉴스</span>
                     </div>
                 </div>
-            </div>
 
-            <div style="font-family: 'Space Mono'; font-size: 0.65rem; color: var(--text-muted); letter-spacing: 2px;">
-                THE PINNACLE EDITION V4.5 // BI-SEO SPECIALIZED NEURAL
+                <div class="chat-input-wrapper">
+                    <input type="text" id="user-input" placeholder="비서에게 말하듯 명령해보세요..." autocomplete="off">
+                    <button class="send-btn" onclick="sendMessage()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                    </button>
+                </div>
             </div>
+            <div style="font-size: 0.75rem; color: var(--text-muted); font-family: 'Space Mono'; opacity:0.5;">KMG_OS STABLE v5.0</div>
         </section>
 
-        <!-- The Mind -->
-        <section class="panel assistant-ego reveal" style="animation-delay: 0.3s;">
-            <div class="avatar-aura">K</div>
-            
-            <div class="ego-response" id="ego-box">
-                반갑습니다, 김민규 대장님. <br>최정상급 성능으로 무장한 사령부가 대장님의 지휘를 기다리고 있습니다.
-            </div>
-
-            <div class="metrics-glass">
-                <div class="m-block">
-                    <span class="m-val" id="cpu-v">1.4%</span>
-                    <span class="m-lbl">NEURAL LOAD</span>
-                </div>
-                <div class="m-block">
-                    <span class="m-val">ELITE</span>
-                    <span class="m-lbl">AUTH_LVL</span>
-                </div>
-                <div class="m-block">
-                    <span class="m-val" id="ping-v">8ms</span>
-                    <span class="m-lbl">SYNC DELAY</span>
-                </div>
-                <div class="m-block">
-                    <span class="m-val" id="time-v">21:03</span>
-                    <span class="m-lbl">BASE TIME</span>
+        <!-- Functional AI Response -->
+        <section class="glass-panel ai-panel">
+            <div class="chat-display" id="chat-display">
+                <div class="bubble ai">
+                    어서오십시오 대장님. 무엇을 도와드릴까요?
                 </div>
             </div>
-
-            <div class="live-ticker" id="ticker">
-                <div class="ticker-ln"><b>[SEC]</b> Neural Firewall bypass check... OK</div>
-                <div class="ticker-ln"><b>[SYS]</b> Memory allocation optimized for KMG_HUB</div>
+            <div class="ai-status">
+                <span><span class="dot"></span> AGENT BI-SEO: ONLINE</span>
+                <span id="timestamp">21:04</span>
             </div>
         </section>
     </main>
 
     <script>
-        let missions = [
-            { id: 1, text: "안티그래비티 대시보드 최종 검수", sub: "Priority: HIGH", done: true },
-            { id: 2, text: "구글/디자이너급 UI 퀄리티 확보", sub: "Status: LIVE", done: false },
-            { id: 3, text: "차세대 에이전트 워크플로우 설계", sub: "ETA: 19:00", done: false }
-        ];
+        // --- Data ---
+        let currentTab = '오늘';
+        let data = JSON.parse(localStorage.getItem('kmg_v5_data')) || {
+            '오늘': [
+                { id: 1, text: "안티그래비티 대시보드 최종 검수", done: true },
+                { id: 2, text: "Elite AI 마스터 클래스 준비", done: false }
+            ],
+            '내일': [
+                { id: 3, text: "브랜드 팀 주간 미팅", done: false }
+            ],
+            '주간': [
+                { id: 4, text: "신규 AI 에이전트 워크플로우 런칭", done: false }
+            ]
+        };
 
-        function ignite() {
-            renderTiles();
-            tick();
-            setInterval(tick, 1000);
-            document.getElementById('ai-intent').addEventListener('keypress', (e) => {
-                if(e.key === 'Enter') resolveIntent();
+        // --- Core Functions ---
+        function init() {
+            renderTasks();
+            setInterval(() => {
+                const now = new Date();
+                document.getElementById('timestamp').textContent = now.getHours() + ":" + String(now.getMinutes()).padStart(2, '0');
+            }, 60000);
+            
+            document.getElementById('user-input').addEventListener('keypress', (e) => {
+                if(e.key === 'Enter') sendMessage();
             });
         }
 
-        function renderTiles() {
-            const root = document.getElementById('tiles-root');
-            root.innerHTML = '';
-            missions.forEach(m => {
-                const tile = document.createElement('div');
-                tile.className = `task-tile ${m.done ? 'done' : ''}`;
-                tile.onclick = () => {
-                    m.done = !m.done;
-                    renderTiles();
-                    addTicker(`Objective ${m.id} state changed.`);
-                };
-                tile.innerHTML = `
-                    <div class="check-ring">${m.done ? '✓' : ''}</div>
-                    <div class="task-meta">
-                        <p>${m.text}</p>
-                        <span>${m.sub}</span>
-                    </div>
+        function switchDay(day) {
+            currentTab = day;
+            document.querySelectorAll('.tab').forEach(t => {
+                t.classList.toggle('active', t.textContent === day);
+            });
+            renderTasks();
+            addAiMessage(`${day} 일정을 불러왔습니다, 대장님.`);
+        }
+
+        function renderTasks() {
+            const list = document.getElementById('task-list');
+            list.innerHTML = '';
+            data[currentTab].forEach(t => {
+                const div = document.createElement('div');
+                div.className = `task-item ${t.done ? 'done' : ''}`;
+                div.onclick = () => toggleTask(t.id);
+                div.innerHTML = `
+                    <div class="check">${t.done ? '✓' : ''}</div>
+                    <span style="font-weight: 500;">${t.text}</span>
                 `;
-                root.appendChild(tile);
+                list.appendChild(div);
             });
+            localStorage.setItem('kmg_v5_data', JSON.stringify(data));
         }
 
-        function tick() {
-            const now = new Date();
-            document.getElementById('time-v').textContent = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
-            document.getElementById('cpu-v').textContent = (1.2 + Math.random() * 0.5).toFixed(1) + "%";
-            document.getElementById('ping-v').textContent = Math.floor(7 + Math.random() * 4) + "ms";
+        function toggleTask(id) {
+            data[currentTab] = data[currentTab].map(t => t.id === id ? {...t, done: !t.done} : t);
+            renderTasks();
         }
 
-        function resolveIntent() {
-            const input = document.getElementById('ai-intent');
-            const val = input.value.trim();
-            if(!val) return;
-
-            addTicker(`KMG Command: "${val}"`);
-            egoSpeak(`명령을 수신했습니다. "${val}"에 대한 데이터를 취합하여 최고 효율의 솔루션을 즉시 도출하겠습니다.`);
-            input.value = '';
-        }
-
-        function egoSpeak(txt) {
-            const box = document.getElementById('ego-box');
-            box.style.opacity = 0;
-            setTimeout(() => {
-                box.innerHTML = txt;
-                box.style.opacity = 1;
-            }, 300);
-        }
-
-        function addTicker(msg) {
-            const ticker = document.getElementById('ticker');
-            const ln = document.createElement('div');
-            ln.className = 'ticker-ln';
-            ln.innerHTML = `<b>[LOG]</b> ${msg}`;
-            ticker.appendChild(ln);
-            ticker.scrollTop = ticker.scrollHeight;
-        }
-
-        function quickLaunch(cmd) {
-            document.getElementById('ai-intent').value = cmd;
-            resolveIntent();
-        }
-
-        function createMission() {
-            const t = prompt("새로운 전략 목표를 입력하십시오:");
-            if(t) {
-                missions.push({ id: Date.now(), text: t, sub: "T-MINUS SYNC", done: false });
-                renderTiles();
-                egoSpeak(`새로운 목표 "${t}"가 전략 지도에 배치되었습니다, 대장님.`);
+        function addNewTask() {
+            const txt = prompt(`${currentTab} 일정을 입력하세요:`);
+            if(txt) {
+                data[currentTab].push({ id: Date.now(), text: txt, done: false });
+                renderTasks();
+                addAiMessage(`새로운 ${currentTab} 일정 "${txt}"를 등록했습니다.`);
             }
+        }
+
+        // --- Chat Logic ---
+        function sendMessage() {
+            const input = document.getElementById('user-input');
+            const msg = input.value.trim();
+            if(!msg) return;
+
+            addUserMessage(msg);
+            input.value = '';
+
+            // AI Logic Simulation
+            setTimeout(() => {
+                respondTo(msg);
+            }, 800);
+        }
+
+        function handleQuickAction(cmd) {
+            addUserMessage(cmd);
+            setTimeout(() => respondTo(cmd), 800);
+        }
+
+        function addUserMessage(msg) {
+            const display = document.getElementById('chat-display');
+            const div = document.createElement('div');
+            div.className = 'bubble user';
+            div.textContent = msg;
+            display.appendChild(div);
+            display.scrollTop = display.scrollHeight;
+        }
+
+        function addAiMessage(msg) {
+            const display = document.getElementById('chat-display');
+            const div = document.createElement('div');
+            div.className = 'bubble ai';
+            div.innerHTML = msg;
+            display.appendChild(div);
+            display.scrollTop = display.scrollHeight;
+        }
+
+        function respondTo(msg) {
+            let response = "";
+            if(msg.includes('일정')) {
+                const pending = data[currentTab].filter(t => !t.done).length;
+                response = `현재 ${currentTab} 일정 중 ${pending}개의 작업이 남아있습니다. 좌측 리스트를 참고해 주십시오.`;
+            } else if(msg.includes('보고서')) {
+                response = "대장님을 위한 주간 성과 보고서 초안 생성을 시작합니다. 잠시만 기다려 주십시오... <br><b>[작업중...]</b>";
+            } else if(msg.includes('상태')) {
+                response = "모든 AI 엔진이 정상 가동 중입니다. (네트워크 지연: 12ms, CPU 부하: 4%)";
+            } else if(msg.includes('뉴스')) {
+                response = "오늘의 핵심 헤드라인입니다: <br>1. AI 에이전트 시장 급성장<br>2. 안티그래비티 신규 업데이트 릴리즈";
+            } else {
+                response = `네, 대장님. "${msg}"에 대한 작업을 즉시 기술팀과 브랜드팀에 인계하여 최상의 결과를 도출하겠습니다.`;
+            }
+            addAiMessage(response);
         }
     </script>
 </body>
