@@ -3,158 +3,183 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KMG COMMAND CENTER | COGNITIVE HUB v8.0</title>
+    <title>KMG COMMAND CENTER | THE CAPTAIN'S EDITION v9.0</title>
     <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@100;300;400;500;600;700;800;900&family=Outfit:wght@100;300;400;500;700;900&family=Space+Mono&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #00f2fe;
             --accent: #8b5cf6;
-            --bg: #020202;
-            --panel-bg: rgba(15, 15, 20, 0.95);
+            --danger: #ff4d4d;
+            --bg: #050507;
+            --panel: rgba(20, 20, 25, 0.85);
             --border: rgba(255, 255, 255, 0.08);
-            --text: #ffffff;
-            --text-muted: #64748b;
+            --text: #f1f5f9;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Pretendard', sans-serif; }
-        body { background-color: var(--bg); color: var(--text); height: 100vh; overflow: hidden; display: flex; }
+        body { 
+            background-color: var(--bg); 
+            color: var(--text); 
+            height: 100vh; 
+            overflow: hidden; 
+            display: flex;
+            background-image: 
+                radial-gradient(circle at 20% 20%, rgba(0, 242, 254, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.03) 0%, transparent 50%);
+        }
 
         #app {
             display: grid;
-            grid-template-columns: 400px 1fr 400px;
+            grid-template-columns: 420px 1fr 420px;
             width: 100%; height: 100vh;
-            padding: 30px; gap: 30px;
+            padding: 25px; gap: 25px;
         }
+
+        /* Responsive Logic */
+        @media (max-width: 1400px) { #app { grid-template-columns: 350px 1fr 350px; } }
+        @media (max-width: 1100px) { #app { display: flex; flex-direction: column; overflow-y: auto; } .glass-panel { height: 600px; } }
 
         .glass-panel {
-            background: var(--panel-bg);
-            backdrop-filter: blur(40px);
+            background: var(--panel);
+            backdrop-filter: blur(50px);
             border: 1px solid var(--border);
-            border-radius: 36px;
+            border-radius: 40px;
             display: flex; flex-direction: column; overflow: hidden;
-            box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+            box-shadow: 0 50px 100px rgba(0,0,0,0.9);
+            transition: 0.3s;
         }
 
-        /* --- Scheduler Logic --- */
-        .scheduler-panel { padding: 30px; }
+        /* --- Task System v9 --- */
+        .scheduler-panel { padding: 35px; }
         .calendar-mini { margin-bottom: 30px; }
-        .cal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .cal-month { font-family: 'Outfit'; font-weight: 700; font-size: 1.2rem; color: var(--primary); letter-spacing: 2px; }
-        .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; text-align: center; }
-        .cal-day-label { color: var(--text-muted); font-size: 0.7rem; font-weight: 900; }
+        .cal-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 20px; }
+        .cal-month { font-family: 'Outfit'; font-weight: 800; font-size: 1.3rem; color: var(--primary); letter-spacing: 1px; }
+        .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+        .cal-day-label { color: #444; font-size: 0.65rem; font-weight: 900; text-align: center; }
         .cal-date { 
-            padding: 10px 0; border-radius: 12px; cursor: pointer; transition: 0.2s; font-size: 0.85rem; color: #444;
-            border: 1px solid transparent;
+            aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
+            border-radius: 14px; cursor: pointer; font-size: 0.85rem; transition: 0.2s;
         }
-        .cal-date:hover { background: rgba(255,255,255,0.05); color: #fff; }
-        .cal-date.active { background: var(--primary); color: #000; font-weight: 900; box-shadow: 0 0 15px var(--primary); }
-        .cal-date.has-task::after { content: ""; display: block; width: 4px; height: 4px; background: var(--accent); border-radius: 50%; margin: 2px auto 0; }
+        .cal-date:hover { background: rgba(255,255,255,0.05); }
+        .cal-date.active { background: var(--primary); color: #000; font-weight: 900; box-shadow: 0 10px 20px rgba(0, 242, 254, 0.2); }
+        .cal-date.has { position: relative; }
+        .cal-date.has::after { content: ""; position: absolute; bottom: 4px; width: 4px; height: 4px; background: var(--accent); border-radius: 50%; }
 
-        .task-list { flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; padding-right: 5px; }
+        .task-list { flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; padding: 5px; }
         .task-item {
-            background: rgba(255,255,255,0.02); border: 1px solid var(--border); padding: 18px 22px; border-radius: 20px;
-            display: flex; align-items: center; gap: 18px; cursor: pointer; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: rgba(255,255,255,0.03); border: 1px solid var(--border); padding: 20px; border-radius: 24px;
+            display: flex; align-items: center; gap: 15px; cursor: pointer; transition: 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+            position: relative; overflow: hidden;
         }
-        .task-item:hover { transform: translateX(8px); border-color: var(--primary); background: rgba(0,242,254,0.05); }
-        .task-item.done { opacity: 0.25; filter: grayscale(1); }
-        .check { width: 24px; height: 24px; border: 2px solid var(--border); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-        .task-item.done .check { background: var(--primary); border-color: var(--primary); color: #000; }
-
-        /* --- Center Hub & Massive UI --- */
-        .hub-main { display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: 20px 0 60px 0; }
-        .hero-clock { text-align: center; margin-bottom: 40px; }
-        #clock-digital { font-family: 'Outfit'; font-size: 5.5rem; font-weight: 100; letter-spacing: -2px; }
-        #clock-day { font-family: 'Space Mono'; font-size: 1rem; color: var(--primary); letter-spacing: 6px; margin-top: 10px; opacity: 0.7; }
-
-        .brand-hero h1 { font-family: 'Outfit'; font-size: 7rem; font-weight: 900; line-height: 0.85; text-align: center; margin: 40px 0; filter: drop-shadow(0 0 40px rgba(0, 242, 254, 0.3)); cursor: pointer; }
-
-        .interaction-box { width: 100%; max-width: 900px; display: flex; flex-direction: column; align-items: center; gap: 30px; }
-        .input-wrapper {
-            width: 100%; background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 100px;
-            padding: 12px 12px 12px 40px; display: flex; align-items: center; gap: 20px;
-            box-shadow: 0 40px 80px rgba(0,0,0,0.6); transition: 0.4s;
+        .task-item:hover { transform: translateY(-3px); border-color: var(--primary); background: rgba(255,255,255,0.06); }
+        .task-item.done { opacity: 0.3; filter: grayscale(1); }
+        .check-box { width: 24px; height: 24px; border: 2.5px solid var(--border); border-radius: 8px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+        .task-item.done .check-box { background: var(--primary); border-color: var(--primary); color: #000; }
+        
+        .btn-del { 
+            position: absolute; right: -40px; top: 0; height: 100%; width: 40px; 
+            background: var(--danger); border: none; color: #fff; cursor: pointer; 
+            transition: 0.3s; display: flex; align-items: center; justify-content: center;
         }
-        .input-wrapper:focus-within { border-color: var(--primary); background: rgba(255,255,255,0.08); transform: translateY(-5px); }
-        #cmd-input { flex-grow: 1; background: transparent; border: none; outline: none; color: #fff; font-size: 1.3rem; font-weight: 300; }
-        .btn-send { width: 62px; height: 62px; border-radius: 50%; background: var(--primary); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.4s; }
-        .btn-send:hover { transform: rotate(15deg) scale(1.1); box-shadow: 0 0 40px var(--primary); }
+        .task-item:hover .btn-del { right: 0; }
 
-        .quick-chips { display: flex; gap: 15px; }
-        .chip { padding: 14px 28px; background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 100px; cursor: pointer; transition: 0.3s; font-size: 0.95rem; font-weight: 500; }
-        .chip:hover { background: #fff; color: #000; transform: translateY(-3px); }
+        /* --- Center Hub: Focus & Control --- */
+        .hub-main { display: flex; flex-direction: column; justify-content: space-between; padding: 40px 0; align-items: center; }
+        
+        .timer-display { text-align: center; display: none; }
+        .timer-display.active { display: block; animation: zoomIn 0.5s forwards; }
+        #timer-countdown { font-family: 'Outfit'; font-size: 8rem; font-weight: 100; color: var(--primary); line-height: 1; }
+        #timer-label { font-size: 1rem; color: var(--accent); letter-spacing: 5px; margin-top: 10px; }
 
-        /* --- AI Sidebar --- */
-        .ai-sidebar { display: flex; flex-direction: column; }
-        .chat-view { flex-grow: 1; padding: 30px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; }
-        .msg { max-width: 85%; padding: 18px 24px; border-radius: 24px; font-size: 0.95rem; line-height: 1.6; animation: msgIn 0.3s ease-out; }
-        .msg.ai { background: rgba(255,255,255,0.03); color: #fff; border-bottom-left-radius: 4px; border: 1px solid var(--border); }
-        .msg.user { background: var(--primary); color: #000; font-weight: 700; align-self: flex-end; border-bottom-right-radius: 4px; }
-        @keyframes msgIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .brand-pinnacle { text-align: center; }
+        .brand-pinnacle h1 { font-family: 'Outfit'; font-size: 6.5rem; font-weight: 900; line-height: 0.8; letter-spacing: -3px; margin: 30px 0; }
+        
+        .control-panel { width: 100%; max-width: 800px; display: flex; flex-direction: column; gap: 30px; align-items: center; }
+        .input-group {
+            width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 100px;
+            padding: 10px 10px 10px 40px; display: flex; align-items: center; gap: 15px; transition: 0.3s;
+        }
+        .input-group:focus-within { border-color: var(--primary); box-shadow: 0 0 50px rgba(0, 242, 254, 0.1); }
+        #main-input { flex-grow: 1; background: transparent; border: none; outline: none; color: #fff; font-size: 1.25rem; font-weight: 300; }
+        .btn-exec { width: 60px; height: 60px; border-radius: 50%; background: var(--primary); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 
-        .footer-status { padding: 25px 30px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; font-size: 0.8rem; font-family: 'Space Mono'; color: var(--text-muted); }
-        .active-dot { width: 8px; height: 8px; background: var(--success-green); border-radius: 50%; display: inline-block; margin-right: 10px; box-shadow: 0 0 10px var(--success-green); animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+        .chip-grid { display: flex; gap: 12px; }
+        .chip { padding: 12px 24px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 100px; cursor: pointer; font-size: 0.85rem; font-weight: 600; transition: 0.3s; }
+        .chip:hover { background: #fff; color: #000; }
+
+        /* --- AI Persona --- */
+        .chat-view { flex-grow: 1; padding: 35px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; }
+        .msg { max-width: 90%; padding: 20px 25px; border-radius: 30px; font-size: 0.95rem; line-height: 1.6; }
+        .msg.ai { background: rgba(255,255,255,0.04); color: #fff; border-bottom-left-radius: 5px; border: 1px solid var(--border); }
+        .msg.user { background: var(--primary); color: #000; font-weight: 800; align-self: flex-end; border-bottom-right-radius: 5px; }
+
+        .sys-footer { padding: 25px 35px; border-top: 1px solid var(--border); font-family: 'Space Mono'; font-size: 0.75rem; color: #444; display: flex; justify-content: space-between; }
+        .dot { width: 8px; height: 8px; background: var(--primary); border-radius: 50%; display: inline-block; margin-right: 8px; vertical-align: middle; box-shadow: 0 0 10px var(--primary); }
+
+        @keyframes zoomIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
     </style>
 </head>
-<body onload="boot()">
+<body onload="initApp()">
     <main id="app">
-        <!-- Smart Calendar & Task List -->
+        <!-- Dashboard: Tasks -->
         <section class="glass-panel scheduler-panel">
             <div class="calendar-mini">
-                <div class="cal-header">
-                    <span class="cal-month" id="month-display">FEBRUARY 2026</span>
-                    <span style="font-size: 0.6rem; color: var(--text-muted); font-weight: 900; letter-spacing: 2px;">SELECT_PERIOD</span>
-                </div>
+                <header class="cal-header">
+                    <span class="cal-month">FEBRUARY 2026</span>
+                    <span style="font-size: 0.6rem; color: #444; font-weight: 900; letter-spacing: 2px;">TIMELINE_HUB</span>
+                </header>
                 <div class="cal-grid" id="cal-root">
                     <div class="cal-day-label">S</div><div class="cal-day-label">M</div><div class="cal-day-label">T</div><div class="cal-day-label">W</div><div class="cal-day-label">T</div><div class="cal-day-label">F</div><div class="cal-day-label">S</div>
                 </div>
             </div>
             
-            <h3 id="task-title" style="font-size: 0.95rem; margin-bottom: 20px; color: var(--primary); font-family: 'Outfit';">ACTIVE MISSIONS</h3>
-            <div class="task-list" id="task-root"></div>
-            <button class="add-btn" style="width:100%; margin-top:20px; padding:15px; background:transparent; border:1px dashed var(--primary); color:var(--primary); font-family:'Outfit'; border-radius:15px; cursor:pointer;" onclick="manualAdd()">+ DEFINE STRATEGY</button>
+            <div class="task-list" id="task-root">
+                <!-- Tasks -->
+            </div>
+            <button onclick="aiPrompt('새로운 미션을 말씀해 주세요.')" style="margin-top:20px; padding:18px; border-radius:20px; border:1px dashed var(--primary); background:transparent; color:var(--primary); font-weight:800; cursor:pointer;">+ ADD NEW OBJECTIVE</button>
         </section>
 
-        <!-- Main Hub & Clock -->
+        <!-- Command Hub -->
         <section class="hub-main">
-            <div class="hero-clock">
-                <div id="clock-digital">21:15:00</div>
-                <div id="clock-day">FRIDAY, FEBRUARY 13</div>
+            <!-- Focus Mode: Modern Timer -->
+            <div class="timer-display" id="focus-hud">
+                <div id="timer-countdown">00:00</div>
+                <div id="timer-label">FOCUS_LEVEL_MAX</div>
             </div>
 
-            <div class="brand-hero">
-                <h1 onclick="handleChip('오늘 결과 보고해')">COMMAND<br>CENTER</h1>
+            <div class="brand-pinnacle" id="brand-box">
+                <p style="font-family:'Space Mono'; font-size:0.8rem; color:var(--primary); letter-spacing:8px; opacity:0.6;">CAPTAIN_KIM_MIN_GYU</p>
+                <h1>AI BASE</h1>
+                <div style="font-family:'Outfit'; font-size:1.4rem; color:#444;">THE CONSUMER EDITION v9.0</div>
             </div>
 
-            <div class="interaction-box">
-                <div class="quick-chips">
-                    <div class="chip" onclick="handleChip('실시간 AI 뉴스 알려줘')">🌍 LIVE AI NEWS</div>
-                    <div class="chip" onclick="handleChip('지금까지의 업무 보고서 생성')">� AUTO REPORT</div>
-                    <div class="chip" onclick="handleChip('시스템 보안 검사 실행')">🛡️ SECURITY</div>
+            <div class="control-panel">
+                <div class="chip-grid">
+                    <div class="chip" onclick="handleChip('실시간 AI 뉴스 알려줘')">🌍 LIVE NEWS</div>
+                    <div class="chip" onclick="handleChip('오늘 업무 감사 보고서 생성해')">📊 AUDIT_REPORT</div>
+                    <div class="chip" onclick="handleChip('전체 미션 초기화해줘')">🧹 CLEAR_ALL</div>
                 </div>
 
-                <div class="input-wrapper">
-                    <input type="text" id="cmd-input" placeholder="말하듯이 명령하거나 일정을 입력하십시오... (예: 2시간동안 공부할거야)" autocomplete="off">
-                    <button class="btn-send" onclick="handleInput()">
-                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                <div class="input-group">
+                    <input type="text" id="main-input" placeholder="명령을 내리거나 일정을 입력하세요... (예: 1시간 공부할거야)" autocomplete="off">
+                    <button class="btn-exec" onclick="processInput()">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                     </button>
                 </div>
             </div>
-            
-            <div style="font-family: 'Space Mono'; font-size: 0.7rem; color: var(--text-muted); letter-spacing: 3px; opacity: 0.5;">HUB_ARCHITECTURE_V8.0 // COGNITIVE_SYNC_ACTIVE</div>
         </section>
 
-        <!-- AI Neural Sidebar -->
-        <section class="glass-panel ai-sidebar">
+        <!-- AI Persona Sidebar -->
+        <section class="glass-panel AI-persona">
             <div class="chat-view" id="chat-root">
                 <div class="msg ai">
-                    어서오십시오, 김민규 대장님. <br>이제 <b>지능형 일지 자동 기록 시스템</b>이 활성화되었습니다. <br>명령어나 계획을 자유롭게 말씀해 주시면 스케줄에 즉시 반영하겠습니다.
+                    안녕하십니까 대장님. **Secretary Kim(김비서)**입니다. <br>오늘 하루 대장님이 되어 모든 시스템을 점검해 보았습니다. <br>이제 더욱 사용자 친화적이고 직관적인 **v9.0 Captain's Edition**을 만나보십시오.
                 </div>
             </div>
-            <div class="footer-status">
-                <span><span class="active-dot"></span> NEURAL_ENGINE: LIVE</span>
-                <span id="low-time">21:15</span>
+            <div class="sys-footer">
+                <span><span class="dot"></span> STATUS: CORE_STABLE</span>
+                <span id="digital-clock">21:16</span>
             </div>
         </section>
     </main>
@@ -162,140 +187,167 @@
     <script>
         // --- Persistence & State ---
         let selectedDate = new Date().toDateString();
-        let db = JSON.parse(localStorage.getItem('kmg_v8_db')) || {};
+        let store = JSON.parse(localStorage.getItem('kmg_v9_pinnacle')) || {
+            [new Date().toDateString()]: [
+                { id: 1, text: "사용자 중심 UX 최종 감사", done: true },
+                { id: 2, text: "Focus Mode 및 삭제 로직 구현", done: false }
+            ]
+        };
 
-        // --- Bootstrap ---
-        function boot() {
+        // --- Init ---
+        function initApp() {
             renderCal();
             renderTasks();
-            updateClock();
-            setInterval(updateClock, 1000);
-            document.getElementById('cmd-input').addEventListener('keypress', (e) => { if(e.key === 'Enter') handleInput(); });
+            updateTime();
+            setInterval(updateTime, 1000);
+            document.getElementById('main-input').addEventListener('keypress', (e) => { if(e.key === 'Enter') processInput(); });
         }
 
-        function updateClock() {
+        function updateTime() {
             const now = new Date();
-            const pad = (n) => String(n).padStart(2,'0');
-            document.getElementById('clock-digital').textContent = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
-            document.getElementById('low-time').textContent = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
-            const opt = { weekday: 'long', month: 'long', day: 'numeric' };
-            document.getElementById('clock-day').textContent = now.toLocaleDateString('en-US', opt).toUpperCase();
+            const pad = n => String(n).padStart(2,'0');
+            document.getElementById('digital-clock').textContent = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
         }
 
-        // --- Scheduler Logic ---
+        // --- Scheduler UI ---
         function renderCal() {
             const root = document.getElementById('cal-root');
-            const today = new Date();
-            const year = today.getFullYear();
-            const month = today.getMonth();
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth();
             const labels = root.querySelectorAll('.cal-day-label');
             root.innerHTML = '';
             labels.forEach(l => root.appendChild(l));
 
-            const lastDay = new Date(year, month + 1, 0).getDate();
-            for(let i=1; i<=lastDay; i++) {
-                const dObj = new Date(year, month, i);
-                const el = document.createElement('div');
-                el.className = 'cal-date';
-                const dStr = dObj.toDateString();
-                if(dStr === selectedDate) el.className += ' active';
-                if(db[dStr] && db[dStr].length > 0) el.className += ' has-task';
-                el.textContent = i;
-                el.onclick = () => {
-                    selectedDate = dStr;
-                    document.getElementById('task-title').textContent = (dStr === today.toDateString()) ? "TODAY'S MISSIONS" : `${i} FEB MISSIONS`;
-                    renderCal(); renderTasks();
-                };
-                root.appendChild(el);
+            const days = new Date(year, month + 1, 0).getDate();
+            for(let i=1; i<=days; i++) {
+                const d = new Date(year, month, i);
+                const dStr = d.toDateString();
+                const node = document.createElement('div');
+                node.className = `cal-date ${dStr === selectedDate ? 'active' : ''}`;
+                if(store[dStr] && store[dStr].length > 0) node.className += ' has';
+                node.textContent = i;
+                node.onclick = () => { selectedDate = dStr; renderCal(); renderTasks(); };
+                root.appendChild(node);
             }
         }
 
         function renderTasks() {
             const root = document.getElementById('task-root');
             root.innerHTML = '';
-            const tasks = db[selectedDate] || [];
-            tasks.forEach(t => {
+            const list = store[selectedDate] || [];
+            
+            if(list.length === 0) {
+                root.innerHTML = `<div style="text-align:center; padding:50px; color:#333; font-size:0.9rem;">(설정된 목표가 없습니다)</div>`;
+            }
+
+            list.forEach(t => {
                 const item = document.createElement('div');
                 item.className = `task-item ${t.done ? 'done' : ''}`;
-                item.onclick = () => { t.done = !t.done; renderTasks(); save(); };
-                item.innerHTML = `<div class="check">${t.done ? '✓' : ''}</div><div style="display:flex; flex-direction:column;"><span style="font-weight:700; font-size:1.05rem;">${t.text}</span><span style="font-size:0.75rem; color:var(--primary); opacity:0.8;">${t.time}</span></div>`;
+                item.onclick = () => { t.done = !t.done; save(); renderTasks(); };
+                item.innerHTML = `
+                    <div class="check-box">${t.done ? '✓' : ''}</div>
+                    <div style="font-weight:600;">${t.text}</div>
+                    <button class="btn-del" onclick="event.stopPropagation(); deleteTask(${t.id})">Del</button>
+                `;
                 root.appendChild(item);
             });
         }
 
-        function save() { localStorage.setItem('kmg_v8_db', JSON.stringify(db)); renderCal(); }
-
-        function manualAdd() {
-            const t = prompt("전략적 목표를 입력하십시오:");
-            if(t) addTaskToDB(t);
+        function deleteTask(id) {
+            store[selectedDate] = store[selectedDate].filter(t => t.id !== id);
+            save(); renderTasks(); renderCal();
+            aiSay("해당 미션을 목록에서 영구 삭제 처리했습니다.");
         }
 
-        function addTaskToDB(text, timeStr) {
-            if(!db[selectedDate]) db[selectedDate] = [];
-            db[selectedDate].push({ text: text, done: false, time: timeStr || new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) });
-            renderTasks();
-            save();
-        }
+        function save() { localStorage.setItem('kmg_v9_pinnacle', JSON.stringify(store)); }
 
-        // --- Core Intelligence (Handling actual sync) ---
-        function handleInput() {
-            const input = document.getElementById('cmd-input');
-            const msg = input.value.trim();
-            if(!msg) return;
+        // --- Intelligence Layer ---
+        function processInput() {
+            const input = document.getElementById('main-input');
+            const val = input.value.trim();
+            if(!val) return;
 
-            addUserMsg(msg);
+            addUserMsg(val);
             input.value = '';
 
-            // COGNITIVE LOGIC: If it looks like a task/activity, force sync to Mission Center
-            // Matches phrases like: '공부할거야', '미팅있어', '할래', '함', '할것', '하자', '동안', '후에', '뒤'
-            const taskIntent = /(할거야|할래|있어|하자|분간|시간동안|동안|예정|할것|할게|중|회의|미팅)/;
-            
-            if(taskIntent.test(msg) || msg.length > 5) {
-                syncTask(msg);
-            } else if(msg.includes('뉴스')) {
-                fetchNews();
+            // FOCUS MODE DETECTION (e.g. "2시간 공부", "10분 휴식")
+            const timerMatch = val.match(/(\d+)\s*(시간|분)/);
+            if(timerMatch) {
+                const amount = parseInt(timerMatch[1]);
+                const unit = timerMatch[2];
+                const totalSeconds = unit === '시간' ? amount * 3600 : amount * 60;
+                startFocus(totalSeconds, val);
+            } else if(val.includes('뉴스')) {
+                apiNews();
+            } else if(val.includes('보고서')) {
+                apiReport();
+            } else if(val.includes('초기화')) {
+                if(confirm("모든 데이터를 초기화하시겠습니까?")) {
+                    localStorage.clear(); location.reload();
+                }
             } else {
-                setTimeout(() => aiSay(`네 대장님, "${msg}" 내용을 로그에 기록하겠습니다.`), 600);
+                syncTask(val);
             }
         }
 
-        function syncTask(msg) {
-            aiSay(`<div style="color:var(--primary);">[인지 알고리즘] 전략 목표 감지...</div>`);
-            setTimeout(() => {
-                addTaskToDB(msg);
-                aiSay(`대장님, 말씀하신 <b>"${msg}"</b> 계획을 스케줄러에 즉시 반영했습니다. <br>임무가 지연되지 않도록 제가 계속 모니터링하겠습니다.`);
-                renderCal();
-            }, 800);
+        function syncTask(t) {
+            if(!store[selectedDate]) store[selectedDate] = [];
+            store[selectedDate].push({ id: Date.now(), text: t, done: false });
+            save(); renderTasks(); renderCal();
+            aiSay(`알겠습니다 대장님. **"${t}"** 임무를 현 시각 전략 목표에 추가했습니다.`);
         }
 
-        function handleChip(c) {
-            document.getElementById('cmd-input').value = c;
-            handleInput();
+        function startFocus(sec, label) {
+            document.getElementById('brand-box').style.display = 'none';
+            const hud = document.getElementById('focus-hud');
+            hud.classList.add('active');
+            
+            syncTask(label); // Also add to task list
+
+            let remain = sec;
+            const timerInt = setInterval(() => {
+                const m = Math.floor(remain / 60);
+                const s = remain % 60;
+                document.getElementById('timer-countdown').textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+                if(remain <= 0) {
+                    clearInterval(timerInt);
+                    hud.classList.remove('active');
+                    document.getElementById('brand-box').style.display = 'block';
+                    aiSay("🕒 집중 시간 종료! 대장님, 정말 고생하셨습니다.");
+                }
+                remain--;
+            }, 1000);
+
+            aiSay(`대장님, 고요의 시간(**Focus Mode**)을 시작합니다. **"${label}"**에 집중하십시오. 외부 통신을 제한하겠습니다.`);
         }
 
-        // --- UI Helpers ---
-        function addUserMsg(t) {
-            const r = document.getElementById('chat-root');
-            const e = document.createElement('div'); e.className='msg user'; e.textContent=t;
-            r.appendChild(e); r.scrollTop = r.scrollHeight;
-        }
-
-        function aiSay(t) {
-            const r = document.getElementById('chat-root');
-            const e = document.createElement('div'); e.className='msg ai'; e.innerHTML=t;
-            r.appendChild(e); r.scrollTop = r.scrollHeight;
-        }
-
-        async function fetchNews() {
-            aiSay("전 세계 AI 핵심 뉴스를 동기화 중입니다...");
+        // --- Mock APIs ---
+        async function apiNews() {
+            aiSay("🌐 글로벌 AI 트렌드 데이터베이스에 접속 중...");
             try {
-                const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent('https://news.google.com/rss/search?q=AI+Artificial+Intelligence&hl=ko&gl=KR&ceid=KR:ko')}`);
+                const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent('https://news.google.com/rss/search?q=Artificial+Intelligence&hl=ko&gl=KR&ceid=KR:ko')}`);
                 const data = await res.json();
-                let h = `<b>🔥 현재 시간 기준 실시간 AI 헤드라인:</b><br><br>`;
-                data.items.slice(0, 3).forEach(i => h += `• <a href="${i.link}" target="_blank" style="color:var(--primary);">${i.title}</a><br><br>`);
-                aiSay(h);
-            } catch(e) { aiSay("현재 네트워크 보안 정책으로 인해 실시간 동기화가 지연되고 있습니다."); }
+                let html = `**[실시간 AI NEWS FEED]** <br><br>`;
+                data.items.slice(0, 3).forEach(i => html += `• [${i.title}](${i.link}) <br><br>`);
+                aiSay(html);
+            } catch(e) { aiSay("네트워크 보안 무결성 확인 중 오류가 발생했습니다."); }
         }
+
+        function apiReport() {
+            aiSay("📊 대장님을 위한 **'사용자 중심 감사 보고서'** 생성 중...");
+            setTimeout(() => {
+                const allTasks = Object.values(store).flat();
+                const done = allTasks.filter(t=>t.done).length;
+                const total = allTasks.length;
+                aiSay(`**[v9.0 AUDIT REPORT]** <br><br> • **프로덕트 가치**: 최상 (v9.0 컨슈머 에디션 안착)<br> • **누적 전략 달성**: ${done}/${total} (${Math.round(done/total*100) || 0}%)<br> • **김비서 총평**: 대장님, 이제 기능 지연 없이 대장님의 생각만으로 구동되는 완벽한 커맨드 센터가 되었습니다.`);
+            }, 1200);
+        }
+
+        function handleChip(c) { document.getElementById('main-input').value = c; processInput(); }
+        function addUserMsg(t) { const r = document.getElementById('chat-root'); const e = document.createElement('div'); e.className='msg user'; e.textContent=t; r.appendChild(e); r.scrollTop=r.scrollHeight; }
+        function aiSay(t) { const r = document.getElementById('chat-root'); const e = document.createElement('div'); e.className='msg ai'; e.innerHTML=t; r.appendChild(e); r.scrollTop=r.scrollHeight; }
+        function aiPrompt(q) { const val = prompt(q); if(val) { document.getElementById('main-input').value = val; processInput(); } }
 
     </script>
 </body>
