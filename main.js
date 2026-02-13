@@ -184,7 +184,7 @@ function renderPart1_Terms() {
                 </div>
 
                 <!-- RAG 카드 -->
-                <div class="term-card highlight">
+                <div class="term-card">
                     <div class="term-header">
                         <span class="term-name">RAG</span>
                         <span class="term-icon">📚</span>
