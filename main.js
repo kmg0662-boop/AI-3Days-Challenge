@@ -16,10 +16,16 @@ let completedParts = new Set();
  */
 function startChallenge() {
     // 암호 인증
-    const validPasswords = ['qkrtldncksqkqh', 'rlaalsrbWKdWKdaos', 'rlaalsrbWkdWkdaos', 'rlaalsrbWkdWKdaos', 'min9man9'];
     const userPassword = prompt('🔐 암호를 입력하세요:');
     
-    if (!userPassword || !validPasswords.includes(userPassword)) {
+    if (!userPassword) return;
+
+    const lowerPw = userPassword.toLowerCase();
+    const isValid = lowerPw === 'qkrtldncksqkqh' || 
+                    lowerPw === 'rlaalsrbwkdwkdaos' || 
+                    lowerPw === 'min9man9';
+    
+    if (!isValid) {
         alert('❌ 암호가 틀렸습니다!');
         return;
     }
