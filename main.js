@@ -1377,6 +1377,9 @@ function renderDay2Footer() {
                 <h3>🎉 DAY 2 완료!</h3>
                 <p>축하합니다! 이제 여러분은 AI 에이전트를 만들고 활용할 수 있습니다!</p>
                 <p>내일은 더 강력한 자동화 시스템을 만들어봅시다! 🚀</p>
+                <button class="next-day-btn" onclick="showDay3Password()" style="margin-top: 1rem;">
+                    👑 DAY 3 비밀번호 받기
+                </button>
             </div>
         </div>
     `;
@@ -1937,6 +1940,119 @@ function closeSpecialPopup() {
 }
 
 /**
+ * Day 3 비밀번호 공개 팝업
+ */
+function showDay3Password() {
+    const popup = document.createElement('div');
+    popup.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 10000;
+        animation: fadeIn 0.3s ease;
+    `;
+    
+    popup.innerHTML = `
+        <div style="
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 2px solid #a855f7;
+            border-radius: 20px;
+            padding: 3rem;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(168, 85, 247, 0.3);
+            animation: slideUp 0.5s ease;
+        ">
+            <h2 style="
+                font-size: 2rem;
+                color: #a855f7;
+                margin-bottom: 1rem;
+                text-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
+            ">👑 DAY 2 완료!</h2>
+            
+            <p style="
+                font-size: 1.2rem;
+                color: #e2e8f0;
+                margin-bottom: 2rem;
+                line-height: 1.6;
+            ">고생하셨습니다 대장님!<br>마지막 DAY 3 마스터 과정으로 이동하세요!</p>
+            
+            <div style="
+                background: rgba(168, 85, 247, 0.1);
+                border: 2px dashed #a855f7;
+                border-radius: 10px;
+                padding: 1.5rem;
+                margin-bottom: 2rem;
+            ">
+                <p style="
+                    font-size: 0.9rem;
+                    color: #94a3b8;
+                    margin-bottom: 0.5rem;
+                ">🔐 DAY 3 비밀번호</p>
+                <p style="
+                    font-size: 1.8rem;
+                    color: #a855f7;
+                    font-weight: bold;
+                    font-family: 'Courier New', monospace;
+                    letter-spacing: 3px;
+                    margin-bottom: 0.5rem;
+                ">chlrkdrlaalsrb</p>
+                <button onclick="copyDay3Password(this)" style="
+                    background: linear-gradient(135deg, #a855f7, #9333ea);
+                    color: white;
+                    border: none;
+                    padding: 0.5rem 1.5rem;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    font-size: 0.9rem;
+                    margin-top: 0.5rem;
+                    transition: all 0.3s ease;
+                ">📋 복사하기</button>
+            </div>
+            
+            <p style="
+                font-size: 0.9rem;
+                color: #94a3b8;
+                margin-bottom: 1.5rem;
+            ">좌측 사이드바에서 DAY 3를 클릭하고<br>이 비밀번호를 입력하세요!</p>
+            
+            <button onclick="closeDay2Popup()" style="
+                background: linear-gradient(135deg, #f472b6, #db2777);
+                color: white;
+                border: none;
+                padding: 1rem 2rem;
+                border-radius: 12px;
+                cursor: pointer;
+                font-size: 1.1rem;
+                font-weight: bold;
+                transition: all 0.3s ease;
+                box-shadow: 0 4px 15px rgba(244, 114, 182, 0.3);
+            ">마스터 과정으로! 🚀</button>
+        </div>
+    `;
+    
+    document.body.appendChild(popup);
+}
+
+/**
+ * Day 3 비밀번호 복사
+ */
+function copyDay3Password(btn) {
+    navigator.clipboard.writeText('chlrkdrlaalsrb').then(() => {
+        btn.textContent = '✅ 복사 완료!';
+        setTimeout(() => {
+            btn.textContent = '📋 복사하기';
+        }, 2000);
+    });
+}
+
+/**
  * Day 2 비밀번호 복사
  */
 function copyDay2Password(btn) {
@@ -1984,7 +2100,14 @@ function switchDay(dayNum) {
             document.body.scrollTop = 0;
         }, 50);
     } else if (dayNum === 2) {
-        // Day 2로 바로 이동
+        // Day 2 비밀번호 체크
+        const pw = prompt('🔐 DAY 2 비밀번호를 입력하세요:');
+        if (pw !== 'cjsworlaalsrb') {
+            alert('❌ 비밀번호가 틀렸습니다!');
+            return;
+        }
+
+        // Day 2로 이동
         content.innerHTML = renderDay2Content();
         // Day 2 active 표시
         const day2Nav = document.getElementById('nav-day2');
@@ -2001,6 +2124,13 @@ function switchDay(dayNum) {
             }
         }, 50);
     } else if (dayNum === 3) {
+        // Day 3 비밀번호 체크
+        const pw = prompt('🔐 DAY 3 비밀번호를 입력하세요:');
+        if (pw !== 'chlrkdrlaalsrb') {
+            alert('❌ 비밀번호가 틀렸습니다!');
+            return;
+        }
+
         // Day 3로 이동
         content.innerHTML = renderDay3Content();
         // Day 3 active 표시
