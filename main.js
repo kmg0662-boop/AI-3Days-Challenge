@@ -1650,6 +1650,16 @@ function markComplete(partNum) {
     if (progressText) {
         progressText.textContent = Math.round(progress) + '%';
     }
+
+    // 모든 파트 완료 시 자동 팝업 (Day 1: 1-5, Day 2: 6-10)
+    const day1Finished = [1, 2, 3, 4, 5].every(num => completedParts.has(num));
+    const day2Finished = [6, 7, 8, 9, 10].every(num => completedParts.has(num));
+
+    if (partNum <= 5 && day1Finished) {
+        showDay2Password();
+    } else if (partNum >= 6 && partNum <= 10 && day2Finished) {
+        showDay3Password();
+    }
 }
 
 /**
@@ -1786,7 +1796,7 @@ function showDay2Password() {
                     font-family: 'Courier New', monospace;
                     letter-spacing: 3px;
                     margin-bottom: 0.5rem;
-                ">cjsworlaalsrb</p>
+                ">천재김민규 / cjsworlaalsrb</p>
                 <button onclick="copyDay2Password(this)" style="
                     background: linear-gradient(135deg, #06b6d4, #0891b2);
                     color: white;
@@ -2009,7 +2019,7 @@ function showDay3Password() {
                     font-family: 'Courier New', monospace;
                     letter-spacing: 3px;
                     margin-bottom: 0.5rem;
-                ">chlrkdrlaalsrb</p>
+                ">최고김민규 / chlrhrlaalsrb</p>
                 <button onclick="copyDay3Password(this)" style="
                     background: linear-gradient(135deg, #a855f7, #9333ea);
                     color: white;
@@ -2051,7 +2061,7 @@ function showDay3Password() {
  * Day 3 비밀번호 복사
  */
 function copyDay3Password(btn) {
-    navigator.clipboard.writeText('chlrkdrlaalsrb').then(() => {
+    navigator.clipboard.writeText('chlrhrlaalsrb').then(() => {
         btn.textContent = '✅ 복사 완료!';
         setTimeout(() => {
             btn.textContent = '📋 복사하기';
@@ -2109,7 +2119,7 @@ function switchDay(dayNum) {
     } else if (dayNum === 2) {
         // Day 2 비밀번호 체크
         const pw = prompt('🔐 DAY 2 비밀번호를 입력하세요:');
-        if (pw !== 'cjsworlaalsrb') {
+        if (pw !== 'cjsworlaalsrb' && pw !== '천재김민규') {
             alert('❌ 비밀번호가 틀렸습니다!');
             return;
         }
@@ -2133,7 +2143,7 @@ function switchDay(dayNum) {
     } else if (dayNum === 3) {
         // Day 3 비밀번호 체크
         const pw = prompt('🔐 DAY 3 비밀번호를 입력하세요:');
-        if (pw !== 'chlrkdrlaalsrb') {
+        if (pw !== 'chlrhrlaalsrb' && pw !== '최고김민규') {
             alert('❌ 비밀번호가 틀렸습니다!');
             return;
         }
