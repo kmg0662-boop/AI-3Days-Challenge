@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KMG COMMAND CENTER | PROFESSIONAL SCRUM v11.0</title>
+    <title>KMG COMMAND CENTER | HIERARCHICAL SCRUM v12.0</title>
     <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@100;300;400;500;600;700;800;900&family=Outfit:wght@100;300;400;500;700;900&family=Space+Mono&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -11,11 +11,11 @@
             --accent: #8b5cf6;
             --danger: #ff4d4d;
             --warning: #fbbf24;
-            --bg: #050508;
-            --panel: rgba(15, 15, 20, 0.9);
+            --bg: #020205;
+            --panel: rgba(10, 10, 15, 0.85);
             --border: rgba(255, 255, 255, 0.08);
             --text: #f8fafc;
-            --text-muted: #64748b;
+            --text-muted: #475569;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Pretendard', sans-serif; }
@@ -25,413 +25,440 @@
             height: 100vh; 
             overflow: hidden; 
             display: flex;
-            background-image: 
-                radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(0, 242, 254, 0.05) 0%, transparent 40%);
-            transition: background 0.1s ease;
+            position: relative;
         }
+
+        /* --- Harry Potter Wand Effect --- */
+        .wand-light {
+            position: fixed;
+            top: 0; left: 0;
+            width: 400px; height: 400px;
+            background: radial-gradient(circle at center, rgba(0, 242, 254, 0.15) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            mix-blend-mode: screen;
+        }
+
+        .ambient-glow {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.02) 0%, rgba(0, 242, 254, 0.02) 100%);
+            z-index: -1;
+            animation: pulseGlow 10s infinite alternate;
+        }
+        @keyframes pulseGlow { from { opacity: 0.5; } to { opacity: 1; } }
 
         #app {
             display: grid;
-            grid-template-columns: 320px 1fr 350px;
+            grid-template-columns: 280px 1fr 320px;
             width: 100%;
             height: 100vh;
-            padding: 25px;
-            gap: 25px;
+            padding: 20px;
+            gap: 20px;
         }
 
         .glass-panel {
             background: var(--panel);
-            backdrop-filter: blur(40px);
+            backdrop-filter: blur(50px);
             border: 1px solid var(--border);
-            border-radius: 32px;
+            border-radius: 30px;
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
         }
 
-        /* --- Left Sidebar: Navigation & Timer --- */
-        .sidebar-left { gap: 20px; }
-        .nav-header { padding: 30px 25px; font-family: 'Outfit'; border-bottom: 1px solid var(--border); }
-        .nav-header h2 { font-size: 1.1rem; letter-spacing: 4px; color: var(--primary); }
-
+        /* --- Left Sidebar --- */
+        .sidebar-left { padding: 25px; gap: 15px; }
         .nav-btn {
-            margin: 10px 20px; padding: 16px 20px; border-radius: 16px; border: 1px solid transparent;
-            cursor: pointer; display: flex; align-items: center; gap: 12px; font-weight: 600; transition: 0.3s;
-            color: var(--text-muted);
+            padding: 14px 20px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; gap: 12px;
+            font-weight: 600; transition: 0.3s; color: var(--text-muted); font-size: 0.9rem;
         }
-        .nav-btn:hover { background: rgba(255,255,255,0.03); color: #fff; }
-        .nav-btn.active { background: rgba(0, 242, 254, 0.1); border-color: var(--primary); color: var(--primary); }
-        .nav-btn span { font-size: 1.2rem; }
+        .nav-btn.active { background: rgba(0, 242, 254, 0.1); border: 1px solid var(--primary); color: var(--primary); }
 
-        /* Timer Widget */
-        .timer-widget { margin: auto 20px 30px 20px; padding: 25px; background: rgba(255,255,255,0.02); border-radius: 24px; border: 1px solid var(--border); }
-        .timer-display { font-family: 'Space Mono'; font-size: 2.2rem; text-align: center; margin-bottom: 15px; color: var(--primary); }
-        .timer-controls { display: flex; gap: 8px; }
-        .t-btn { flex: 1; padding: 10px; border-radius: 10px; border: 1px solid var(--border); background: transparent; color: #fff; cursor: pointer; font-size: 0.7rem; font-weight: bold; }
-        .t-btn:hover { background: rgba(255,255,255,0.05); }
-        .t-btn.primary { background: var(--primary); color: #000; border: none; }
+        .timer-widget { margin-top: auto; padding: 20px; background: rgba(255,255,255,0.02); border-radius: 20px; border: 1px solid var(--border); }
+        .timer-val { font-family: 'Space Mono'; font-size: 1.8rem; text-align: center; color: var(--primary); margin-bottom: 10px; }
+        .timer-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+        .t-btn { padding: 8px; border-radius: 8px; border: 1px solid var(--border); background: transparent; color: #fff; cursor: pointer; font-size: 0.6rem; }
+        .timer-input { width: 100%; background: transparent; border: 1px solid var(--border); color: #fff; border-radius: 8px; padding: 5px; margin-top: 5px; text-align: center; font-size: 0.7rem; }
 
-        /* --- Main Content: Scrum Views --- */
-        .content-area { padding: 40px; }
-        .view-section { display: none; height: 100%; flex-direction: column; }
+        /* --- Main Area --- */
+        .main-content { padding: 30px; display: flex; flex-direction: column; overflow: hidden; }
+        .view-section { display: none; height: 100%; flex-direction: column; overflow: hidden; }
         .view-section.active { display: flex; }
 
-        .view-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-        .view-header h2 { font-family: 'Outfit'; font-size: 2.5rem; letter-spacing: -1px; }
+        .v-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; flex-shrink: 0; }
+        .v-header h2 { font-family: 'Outfit'; font-size: 2rem; }
 
-        .gen-report-btn { padding: 10px 20px; border-radius: 100px; background: var(--accent); border: none; color: #fff; font-weight: 700; cursor: pointer; transition: 0.3s; }
-        .gen-report-btn:hover { transform: scale(1.05); box-shadow: 0 0 20px var(--accent); }
+        /* Hierarchical List Styles */
+        .data-list { flex-grow: 1; overflow-y: auto; padding-right: 10px; display: flex; flex-direction: column; gap: 10px; }
+        .card { 
+            background: rgba(255,255,255,0.02); border: 1px solid var(--border); padding: 15px 20px; border-radius: 15px;
+            display: flex; align-items: center; gap: 15px; transition: 0.2s;
+        }
+        .card:hover { border-color: var(--primary); background: rgba(255,255,255,0.04); }
+        .card.done { opacity: 0.3; }
+        .card.done .c-text { text-decoration: line-through; }
+        .check-btn { width: 22px; height: 22px; border: 2px solid var(--border); border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .card.done .check-ring { background: var(--primary); border: none; }
+        
+        .c-parent { font-size: 0.65rem; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px; display: block; }
+        .c-text { font-weight: 500; font-size: 0.95rem; }
 
-        /* Daily Scrum View */
-        .daily-grid { display: grid; grid-template-columns: 1fr; gap: 20px; overflow-y: auto; flex-grow: 1; }
-        .time-log-row { display: grid; grid-template-columns: 120px 1fr 100px; gap: 15px; align-items: center; background: rgba(255,255,255,0.02); padding: 15px 25px; border-radius: 20px; border: 1px solid var(--border); }
-        .log-input { background: transparent; border: none; color: #fff; outline: none; font-size: 1rem; }
-        .time-input { color: var(--primary); font-family: 'Space Mono'; }
+        /* --- Monthly Calendar Specific (No Scroll) --- */
+        .calendar-grid { 
+            display: grid; grid-template-columns: repeat(7, 1fr); grid-template-rows: auto repeat(5, 1fr); 
+            gap: 8px; flex-grow: 1; height: 100%;
+        }
+        .cal-day-label { text-align: center; font-size: 0.7rem; color: var(--text-muted); font-weight: 800; padding: 5px; }
+        .cal-cell { 
+            border: 1px solid var(--border); border-radius: 12px; padding: 10px; font-size: 0.8rem;
+            display: flex; flex-direction: column; gap: 4px; overflow: hidden;
+        }
+        .cal-cell.today { border-color: var(--primary); background: rgba(0, 242, 254, 0.05); }
+        .cal-cell.holiday { color: var(--danger); }
+        .m-item { background: var(--accent); color: #fff; font-size: 0.6rem; padding: 2px 5px; border-radius: 4px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; cursor: pointer; }
+        .m-item.done { text-decoration: line-through; opacity: 0.5; }
 
-        /* Weekly Scrum View */
-        .weekly-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 15px; flex-grow: 1; overflow-y: auto; }
-        .week-day-box { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 18px; padding: 15px; display: flex; flex-direction: column; gap: 10px; }
-        .week-day-box h4 { font-size: 0.8rem; color: var(--text-muted); text-align: center; margin-bottom: 5px; }
-        .priority-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 5px; }
-        .p-high { background: var(--danger); }
-        .p-mid { background: var(--warning); }
-        .p-low { background: var(--primary); }
+        /* --- Inputs --- */
+        .input-row { display: flex; gap: 10px; margin-top: 20px; background: rgba(255,255,255,0.02); padding: 15px; border-radius: 15px; flex-shrink: 0; }
+        .v-input { background: rgba(0,0,0,0.2); border: 1px solid var(--border); color: #fff; padding: 10px 15px; border-radius: 10px; outline: none; font-size: 0.85rem; }
+        .v-select { background: rgba(0,0,0,0.2); border: 1px solid var(--border); color: #fff; border-radius: 10px; padding: 10px; outline: none; font-size: 0.85rem; }
+        .btn-add { background: var(--primary); color: #000; font-weight: 800; border: none; padding: 0 20px; border-radius: 10px; cursor: pointer; }
 
-        /* Monthly Scrum View (Calendar) */
-        .month-calendar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; flex-grow: 1; overflow-y: auto; }
-        .cal-cell { aspect-ratio: 1; border: 1px solid var(--border); border-radius: 12px; padding: 8px; font-size: 0.8rem; position: relative; }
-        .cal-cell.is-holiday { color: var(--danger); }
-        .cal-cell.is-holiday::after { content: attr(data-holiday); position: absolute; bottom: 4px; left: 4px; font-size: 0.55rem; color: var(--danger); }
-        .event-tag { background: var(--accent); font-size: 0.6rem; padding: 2px 4px; border-radius: 4px; margin-top: 2px; overflow: hidden; white-space: nowrap; }
+        /* --- Sidebar Right --- */
+        .sidebar-right { padding: 25px; gap: 20px; }
+        .brief-node { background: rgba(255,255,255,0.03); padding: 20px; border-radius: 20px; border: 1px solid var(--border); }
+        .brief-lbl { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 5px; display: block; }
+        .brief-val { font-weight: 700; color: var(--primary); font-size: 1rem; }
 
-        /* --- Right Sidebar: Briefing --- */
-        .sidebar-right { padding: 30px; }
-        .briefing-box { margin-bottom: 30px; padding: 20px; background: rgba(255,255,255,0.03); border-radius: 20px; border: 1px solid var(--border); }
-        .briefing-item { margin-bottom: 12px; }
-        .briefing-label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 4px; display: block; }
-        .briefing-val { font-weight: 600; color: var(--primary); }
-
-        .news-feed { flex-grow: 1; overflow-y: auto; }
-        .news-item { margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid var(--border); }
-        .news-title { font-size: 0.85rem; font-weight: 500; line-height: 1.4; color: #fff; text-decoration: none; display: block; }
-        .news-title:hover { color: var(--primary); }
-
-        /* Modals */
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(10px); }
-        .modal-card { background: #111; border: 1px solid var(--primary); padding: 40px; border-radius: 30px; width: 600px; max-height: 80vh; overflow-y: auto; }
+        /* Modal */
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; z-index: 10000; }
+        .modal-body { background: #0a0a0a; border: 1px solid var(--primary); border-radius: 30px; padding: 40px; width: 600px; }
 
     </style>
 </head>
 <body onmousemove="handleMouse(event)">
+    <div class="ambient-glow"></div>
+    <div class="wand-light" id="wand"></div>
+
     <main id="app">
-        <!-- Sidebar Navigation -->
         <section class="glass-panel sidebar-left">
-            <div class="nav-header">
-                <p style="font-size: 0.6rem; letter-spacing: 3px; color: var(--text-muted);">CAPTAIN MIN-GYU</p>
-                <h2>AI SCRUM</h2>
-            </div>
-            <nav>
-                <div class="nav-btn active" onclick="switchView('daily')"><span>📅</span> DAILY SCRUM</div>
-                <div class="nav-btn" onclick="switchView('weekly')"><span>📊</span> WEEKLY SCRUM</div>
-                <div class="nav-btn" onclick="switchView('monthly')"><span>🗓️</span> MONTHLY SCRUM</div>
-            </nav>
+            <h2 style="font-family:'Outfit'; font-size:1.2rem; color:var(--primary); margin-bottom:20px;">AI SCRUM v12</h2>
+            <div class="nav-btn active" onclick="switchTab('daily')"><span>📌</span> DAILY (소항목)</div>
+            <div class="nav-btn" onclick="switchTab('weekly')"><span>📊</span> WEEKLY (중항목)</div>
+            <div class="nav-btn" onclick="switchTab('monthly')"><span>🗓️</span> MONTHLY (대항목)</div>
 
             <div class="timer-widget">
-                <p style="font-size: 0.65rem; color: var(--text-muted); text-align: center; letter-spacing: 2px; margin-bottom: 5px;">FOCUS TIMER</p>
-                <div class="timer-display" id="timer-text">25:00</div>
-                <div class="timer-controls">
-                    <button class="t-btn primary" id="timer-toggle" onclick="toggleTimer()">START</button>
+                <div class="timer-val" id="timer-txt">25:00</div>
+                <input type="number" id="timer-set" class="timer-input" placeholder="분 설정 (예: 25)">
+                <div class="timer-btns" style="margin-top:10px;">
+                    <button class="t-btn" id="t-toggle" onclick="toggleTimer()">START</button>
                     <button class="t-btn" onclick="resetTimer()">RESET</button>
-                    <button class="t-btn" onclick="setTimer()">SET</button>
                 </div>
             </div>
         </section>
 
-        <!-- Main Workspace -->
-        <section class="glass-panel content-area">
-            <!-- DAILY VIEW -->
-            <div id="view-daily" class="view-section active">
-                <header class="view-header">
-                    <h2>Daily Workspace</h2>
-                    <button class="gen-report-btn" onclick="generateReport('daily')">GENERATE REPORT</button>
-                </header>
-                <div class="daily-grid" id="daily-log-root">
-                    <!-- Logs -->
+        <section class="glass-panel main-content">
+            <!-- DAILY -->
+            <div id="v-daily" class="view-section active">
+                <div class="v-header">
+                    <h2>Daily Task (소)</h2>
+                    <button class="btn-add" style="height:40px; background:var(--accent); color:#fff;" onclick="genReport('daily')">REPORT</button>
                 </div>
-                <div style="display: flex; gap: 10px; margin-top: 20px;">
-                    <input type="text" id="daily-time" class="log-input" style="width: 100px; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 12px;" placeholder="09:00">
-                    <input type="text" id="daily-task" class="log-input" style="flex-grow: 1; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 12px;" placeholder="오늘 어떤 작업을 완료하시겠습니까?">
-                    <button onclick="addDaily()" style="padding: 0 20px; background: var(--primary); border: none; border-radius: 12px; color: #000; font-weight: 800; cursor: pointer;">ADD</button>
+                <div class="data-list" id="daily-list"></div>
+                <div class="input-row">
+                    <input type="text" id="d-time" class="v-input" style="width:80px;" placeholder="09:00">
+                    <input type="text" id="d-txt" class="v-input" style="flex:1;" placeholder="소항목 작업 입력">
+                    <select id="d-parent" class="v-select" style="width:140px;"></select>
+                    <button class="btn-add" onclick="addDaily()">ADD</button>
                 </div>
             </div>
 
-            <!-- WEEKLY VIEW -->
-            <div id="view-weekly" class="view-section">
-                <header class="view-header">
-                    <h2>Weekly Progress</h2>
-                    <button class="gen-report-btn" onclick="generateReport('weekly')">GENERATE REPORT</button>
-                </header>
-                <div class="weekly-grid" id="weekly-grid-root">
-                    <!-- 7 columns for week -->
+            <!-- WEEKLY -->
+            <div id="v-weekly" class="view-section">
+                <div class="v-header">
+                    <h2>Weekly Objective (중)</h2>
+                    <button class="btn-add" style="height:40px; background:var(--accent); color:#fff;" onclick="genReport('weekly')">REPORT</button>
+                </div>
+                <div class="data-list" id="weekly-list"></div>
+                <div class="input-row" style="flex-wrap:wrap;">
+                    <select id="w-day" class="v-select"><option>Mon</option><option>Tue</option><option>Wed</option><option>Thu</option><option>Fri</option><option>Sat</option><option>Sun</option></select>
+                    <input type="text" id="w-txt" class="v-input" style="flex:1;" placeholder="중항목 목표 입력">
+                    <select id="w-prio" class="v-select"><option value="low">Low</option><option value="mid">Mid</option><option value="high">High</option></select>
+                    <select id="w-parent" class="v-select" style="width:120px;"></select>
+                    <button class="btn-add" onclick="addWeekly()">ADD</button>
                 </div>
             </div>
 
-            <!-- MONTHLY VIEW -->
-            <div id="view-monthly" class="view-section">
-                <header class="view-header">
-                    <h2>Monthly Calendar</h2>
-                    <button class="gen-report-btn" onclick="generateReport('monthly')">GENERATE REPORT</button>
-                </header>
-                <div class="month-calendar" id="monthly-grid-root">
-                    <!-- Calendar cells -->
+            <!-- MONTHLY -->
+            <div id="v-monthly" class="view-section">
+                <div class="v-header">
+                    <h2>Monthly Project (대)</h2>
+                    <button class="btn-add" style="height:40px; background:var(--accent); color:#fff;" onclick="genReport('monthly')">REPORT</button>
+                </div>
+                <div class="calendar-grid" id="cal-grid"></div>
+                <div class="input-row">
+                    <input type="date" id="m-date" class="v-input" style="width:140px;">
+                    <input type="text" id="m-txt" class="v-input" style="flex:1;" placeholder="대항목 프로젝트 입력">
+                    <button class="btn-add" onclick="addMonthly()">ADD</button>
                 </div>
             </div>
         </section>
 
-        <!-- Right Side: Briefing & News -->
         <section class="glass-panel sidebar-right">
-            <div class="briefing-box">
-                <div class="briefing-item">
-                    <span class="briefing-label">Current Date</span>
-                    <span class="briefing-val" id="b-date">2026.02.13</span>
-                </div>
-                <div class="briefing-item">
-                    <span class="briefing-label">Weather</span>
-                    <span class="briefing-val">Seoul: ☁️ 8°C (Syncing)</span>
-                </div>
-                <div class="briefing-item">
-                    <span class="briefing-label">Global Status</span>
-                    <span class="briefing-val" style="color: var(--warning);">High Activity</span>
+            <div class="brief-node">
+                <span class="brief-lbl">TIMELINE BRIEFING</span>
+                <p id="b-clock" style="font-family:'Space Mono'; font-size:1.8rem; margin:10px 0;">21:40</p>
+                <div style="display:flex; justify-content:space-between; font-size:0.75rem;">
+                    <span id="b-weather">Seoul: 🌦️ 6°C</span>
+                    <span id="b-date">Feb 13, Fri</span>
                 </div>
             </div>
 
-            <h3 style="font-family: 'Outfit'; font-size: 0.8rem; margin-bottom: 20px; letter-spacing: 2px;">LIVE AI NEWS</h3>
-            <div class="news-feed" id="news-root">
-                <p style="color: var(--text-muted); font-size: 0.8rem;">Fetching daily briefing...</p>
+            <div class="brief-node" style="flex-grow:1; overflow-y:auto;">
+                <span class="brief-lbl">LIVE AI NEWS</span>
+                <div id="news-root" style="display:flex; flex-direction:column; gap:10px;"></div>
             </div>
         </section>
     </main>
 
-    <!-- Report Modal -->
-    <div class="modal" id="report-modal">
-        <div class="modal-card">
-            <h3 id="report-title" style="color: var(--primary); margin-bottom: 20px;">REPORT</h3>
-            <div id="report-content" style="font-size: 0.95rem; line-height: 1.8; color: #ccc;"></div>
-            <button onclick="closeModal()" style="margin-top: 30px; width: 100%; padding: 15px; border-radius: 15px; background: var(--border); color: #fff; border: none; cursor: pointer;">CLOSE</button>
+    <div class="modal" id="modal">
+        <div class="modal-body">
+            <h2 id="m-title" style="color:var(--primary); margin-bottom:20px;">REPORT</h2>
+            <div id="m-content" style="line-height:1.7; color:#ccc;"></div>
+            <button onclick="document.getElementById('modal').style.display='none'" style="margin-top:30px; width:100%; padding:15px; border-radius:15px; background:var(--border); color:#fff; cursor:pointer;">CLOSE</button>
         </div>
     </div>
 
     <script>
-        // --- State Management ---
-        let state = JSON.parse(localStorage.getItem('kmg_scrum_state')) || {
-            daily: [
-                { time: "09:00", task: "안티그래비티 사령부 로직 설계" },
-                { time: "11:00", task: "Elite AI 마스터 클래스 컨텐츠 교안 작성" }
-            ],
-            weekly: {
-                "Mon": [{ text: "브랜드 아이덴티티 수립", priority: "high" }],
-                "Tue": [{ text: "스크럼 기능 고도화", priority: "mid" }],
-                "Wed": [], "Thu": [], "Fri": [], "Sat": [], "Sun": []
-            },
-            monthly: {
-                "2026-02-13": [{ text: "v11.0 배포" }],
-                "2026-02-09": [{ text: "프로젝트 킥오프" }]
-            }
+        // --- Persistence & State ---
+        let state = JSON.parse(localStorage.getItem('kmg_v12_state')) || {
+            monthly: [{ id: 1, text: "안티그래비티 상용화 프로젝트", date: "2026-02-13", done: false }],
+            weekly: [{ id: 101, text: "스크럼 대시보드 고도화", day: "Fri", parentId: 1, prio: "high", done: false }],
+            daily: [{ id: 1001, text: "계층형 데이터 로직 구현", time: "21:40", parentId: 101, done: false }]
         };
 
-        const holidays = {
-            "2026-02-16": "대보름",
-            "2026-02-17": "설날 연휴 (대체휴무 예상)",
-            "2026-03-01": "삼일절"
-        }; // Placeholder for KR holidays in 2026 Feb
-
-        // --- Core UI Logic ---
+        // --- Mouse Effect ---
         function handleMouse(e) {
-            const x = (e.clientX / window.innerWidth) * 100;
-            const y = (e.clientY / window.innerHeight) * 100;
-            document.body.style.setProperty('--mouse-x', x + '%');
-            document.body.style.setProperty('--mouse-y', y + '%');
+            const wand = document.getElementById('wand');
+            wand.style.left = e.clientX + 'px';
+            wand.style.top = e.clientY + 'px';
         }
 
-        function switchView(v) {
-            document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
+        // --- Tabs ---
+        function switchTab(t) {
+            document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(`view-${v}`).classList.add('active');
-            event.currentTarget.classList.add('active');
-            if(v === 'weekly') renderWeekly();
-            if(v === 'monthly') renderMonthly();
+            document.getElementById(`v-${t}`).className = 'view-section active';
+            event.currentTarget.className = 'nav-btn active';
+            if(t === 'daily') renderDaily();
+            if(t === 'weekly') renderWeekly();
+            if(t === 'monthly') renderMonthly();
         }
 
-        // --- Daily Logic ---
-        function renderDaily() {
-            const root = document.getElementById('daily-log-root');
+        // --- Monthly (대) ---
+        function renderMonthly() {
+            const grid = document.getElementById('cal-grid');
+            grid.innerHTML = '';
+            const labels = ["S","M","T","W","T","F","S"];
+            labels.forEach(l => grid.innerHTML += `<div class="cal-day-label">${l}</div>`);
+
+            const year=2026, month=1;
+            const days = new Date(year, month+1, 0).getDate();
+            const firstDay = new Date(year, month, 1).getDay();
+
+            const holidays = {"2026-02-17": "설날"};
+
+            for(let i=0; i<firstDay; i++) grid.innerHTML += `<div></div>`;
+            for(let i=1; i<=days; i++) {
+                const dateStr = `2026-02-${String(i).padStart(2,'0')}`;
+                const items = state.monthly.filter(m => m.date === dateStr);
+                const holiday = holidays[dateStr];
+                
+                let html = `<div class="cal-cell ${holiday ? 'holiday' : ''}"><b>${i}</b>${holiday ? '<span style="font-size:0.5rem;">'+holiday+'</span>':''}`;
+                items.forEach(item => {
+                    html += `<div class="m-item ${item.done?'done':''}" onclick="toggleMonthly(${item.id})">${item.text}</div>`;
+                });
+                html += `</div>`;
+                grid.innerHTML += html;
+            }
+            updateSelectors();
+            save();
+        }
+
+        function addMonthly() {
+            const date = document.getElementById('m-date').value;
+            const txt = document.getElementById('m-txt').value;
+            if(!date || !txt) return;
+            state.monthly.push({ id: Date.now(), text: txt, date, done: false });
+            renderMonthly();
+        }
+        function toggleMonthly(id) {
+            const item = state.monthly.find(m => m.id === id);
+            item.done = !item.done;
+            renderMonthly();
+        }
+
+        // --- Weekly (중) ---
+        function renderWeekly() {
+            const root = document.getElementById('weekly-list');
             root.innerHTML = '';
-            state.daily.forEach((log, idx) => {
+            state.weekly.forEach(w => {
+                const parent = state.monthly.find(m => m.id == w.parentId);
+                const parentText = parent ? parent.text : "ETC";
                 root.innerHTML += `
-                    <div class="time-log-row">
-                        <span class="time-input">${log.time}</span>
-                        <input type="text" class="log-input" value="${log.task}" onchange="updateDaily(${idx}, this.value)">
-                        <button onclick="delDaily(${idx})" style="background:transparent; border:none; color:var(--danger); cursor:pointer; font-size:0.75rem;">DELETE</button>
+                    <div class="card ${w.done?'done':''}">
+                        <div class="check-ring" onclick="toggleWeekly(${w.id})">${w.done?'✓':''}</div>
+                        <div style="flex:1;">
+                            <span class="c-parent">${w.day} | PARENT: ${parentText}</span>
+                            <span class="c-text">${w.text}</span>
+                        </div>
+                        <button onclick="delItem('weekly', ${w.id})" style="background:transparent; border:none; color:var(--danger); cursor:pointer;">✕</button>
+                    </div>
+                `;
+            });
+            updateSelectors();
+            save();
+        }
+        function addWeekly() {
+            const day = document.getElementById('w-day').value;
+            const txt = document.getElementById('w-txt').value;
+            const prio = document.getElementById('w-prio').value;
+            const parentId = document.getElementById('w-parent').value;
+            if(!txt) return;
+            state.weekly.push({ id: Date.now(), text: txt, day, parentId, prio, done: false });
+            renderWeekly();
+        }
+        function toggleWeekly(id) {
+            const item = state.weekly.find(w => w.id === id);
+            item.done = !item.done;
+            renderWeekly();
+        }
+
+        // --- Daily (소) ---
+        function renderDaily() {
+            const root = document.getElementById('daily-list');
+            root.innerHTML = '';
+            state.daily.forEach(d => {
+                const parent = state.weekly.find(w => w.id == d.parentId);
+                const parentText = parent ? parent.text : "ETC";
+                root.innerHTML += `
+                    <div class="card ${d.done?'done':''}">
+                        <div class="check-ring" onclick="toggleDaily(${d.id})">${d.done?'✓':''}</div>
+                        <div style="flex:1;">
+                            <span class="c-parent">${d.time} | PARENT: ${parentText}</span>
+                            <span class="c-text">${d.text}</span>
+                        </div>
+                        <button onclick="delItem('daily', ${d.id})" style="background:transparent; border:none; color:var(--danger); cursor:pointer;">✕</button>
                     </div>
                 `;
             });
             save();
         }
-
         function addDaily() {
-            const t = document.getElementById('daily-time').value;
-            const k = document.getElementById('daily-task').value;
-            if(!t || !k) return;
-            state.daily.push({ time: t, task: k });
-            document.getElementById('daily-task').value = '';
+            const time = document.getElementById('d-time').value;
+            const txt = document.getElementById('d-txt').value;
+            const parentId = document.getElementById('d-parent').value;
+            if(!txt) return;
+            state.daily.push({ id: Date.now(), text: txt, time, parentId, done: false });
+            renderDaily();
+        }
+        function toggleDaily(id) {
+            const item = state.daily.find(d => d.id === id);
+            item.done = !item.done;
             renderDaily();
         }
 
-        function updateDaily(idx, val) { state.daily[idx].task = val; save(); }
-        function delDaily(idx) { state.daily.splice(idx, 1); renderDaily(); }
-
-        // --- Weekly Logic ---
-        function renderWeekly() {
-            const root = document.getElementById('weekly-grid-root');
-            root.innerHTML = '';
-            const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-            days.forEach(d => {
-                let tasksHtml = '';
-                (state.weekly[d] || []).forEach(t => {
-                    tasksHtml += `<div style="font-size:0.75rem; border-bottom:1px solid #111; padding:5px 0;"><span class="priority-dot p-${t.priority}"></span> ${t.text}</div>`;
-                });
-                root.innerHTML += `
-                    <div class="week-day-box">
-                        <h4>${d}</h4>
-                        <div style="flex-grow:1;">${tasksHtml}</div>
-                        <button onclick="addWeeklyPrompt('${d}')" style="background:transparent; border:1px dashed #333; color:#444; font-size:0.6rem; cursor:pointer; padding:5px;">+ ADD</button>
-                    </div>
-                `;
-            });
-        }
-
-        function addWeeklyPrompt(day) {
-            const txt = prompt(`${day}의 업무를 입력하세요:`);
-            if(!txt) return;
-            const prio = prompt("중요도 (high, mid, low):") || "low";
-            state.weekly[day].push({ text: txt, priority: prio });
-            renderWeekly();
-            save();
-        }
-
-        // --- Monthly Logic ---
-        function renderMonthly() {
-            const root = document.getElementById('monthly-grid-root');
-            root.innerHTML = '';
-            const year = 2026, month = 1; // Feb (0-indexed)
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
-            
-            for(let i=1; i<=daysInMonth; i++) {
-                const dateStr = `2026-02-${String(i).padStart(2,'0')}`;
-                const isHoliday = holidays[dateStr];
-                let eventsHtml = '';
-                (state.monthly[dateStr] || []).forEach(e => {
-                    eventsHtml += `<div class="event-tag">${e.text}</div>`;
-                });
-
-                root.innerHTML += `
-                    <div class="cal-cell ${isHoliday ? 'is-holiday' : ''}" data-holiday="${isHoliday || ''}">
-                        <b>${i}</b>
-                        ${eventsHtml}
-                    </div>
-                `;
+        // --- Logic Engine ---
+        function delItem(type, id) {
+            state[type] = state[type].filter(i => i.id !== id);
+            if(type === 'monthly') {
+                state.weekly.forEach(w => { if(w.parentId == id) w.parentId = 'ETC'; });
             }
-        }
-
-        // --- Report Generator ---
-        function generateReport(type) {
-            const modal = document.getElementById('report-modal');
-            const title = document.getElementById('report-title');
-            const content = document.getElementById('report-content');
-            modal.style.display = 'flex';
-
-            if(type === 'daily') {
-                title.textContent = "DAILY SCRUM AUDIT REPORT";
-                let logs = state.daily.map(d => `• [${d.time}] ${d.task}`).join('<br>');
-                content.innerHTML = `대장님, 오늘의 타임라인 분석 결과입니다.<br><br>${logs}<br><br><b>분석</b>: 오전 집중도가 매우 높으며, 오후 일정 관리에 집중이 필요합니다.`;
-            } else if(type === 'weekly') {
-                title.textContent = "WEEKLY PERFORMANCE INSIGHT";
-                content.innerHTML = "이번 주 중요 업무(High Priority) 3건 중 1건이 완료되었습니다. 남은 기간 동안 '브랜드 아이덴티티' 작업에 리소스를 집중하십시오.";
-            } else {
-                title.textContent = "MONTHLY STRATEGIC OVERVIEW";
-                content.innerHTML = "2월은 안티그래비티 생태계 확장의 달입니다. 현재 12%의 프로젝트 공정률을 보이고 있습니다.";
+            if(type === 'weekly') {
+                state.daily.forEach(d => { if(d.parentId == id) d.parentId = 'ETC'; });
             }
+            if(type === 'daily') renderDaily();
+            if(type === 'weekly') renderWeekly();
+            if(type === 'monthly') renderMonthly();
         }
 
-        // --- Timer Logic ---
-        let timerSeconds = 1500;
-        let timerActive = false;
-        let timerInterval;
+        function updateSelectors() {
+            const wParent = document.getElementById('w-parent');
+            wParent.innerHTML = `<option value="ETC">ETC (상위없음)</option>`;
+            state.monthly.forEach(m => wParent.innerHTML += `<option value="${m.id}">${m.text}</option>`);
 
+            const dParent = document.getElementById('d-parent');
+            dParent.innerHTML = `<option value="ETC">ETC (상위없음)</option>`;
+            state.weekly.forEach(w => dParent.innerHTML += `<option value="${w.id}">${w.text}</option>`);
+        }
+
+        // --- Timer ---
+        let timerRem = 1500, timerOn = false, timerInt;
         function toggleTimer() {
-            const btn = document.getElementById('timer-toggle');
-            if(timerActive) {
-                clearInterval(timerInterval);
-                btn.textContent = "START";
-                btn.classList.add('primary');
-            } else {
-                timerInterval = setInterval(() => {
-                    timerSeconds--;
-                    updateTimerDisplay();
-                    if(timerSeconds <= 0) { clearInterval(timerInterval); alert("Focus End!"); }
+            const btn = document.getElementById('t-toggle');
+            if(timerOn) { clearInterval(timerInt); btn.textContent = 'START'; }
+            else {
+                timerInt = setInterval(() => {
+                    timerRem--;
+                    updateTimerUI();
+                    if(timerRem <= 0) { clearInterval(timerInt); alert("FOCUS END"); }
                 }, 1000);
-                btn.textContent = "PAUSE";
-                btn.classList.remove('primary');
+                btn.textContent = 'PAUSE';
             }
-            timerActive = !timerActive;
+            timerOn = !timerOn;
         }
-
         function resetTimer() {
-            clearInterval(timerInterval);
-            timerActive = false;
-            timerSeconds = 1500;
-            updateTimerDisplay();
-            document.getElementById('timer-toggle').textContent = "START";
+            clearInterval(timerInt); timerOn = false;
+            const set = document.getElementById('timer-set').value;
+            timerRem = set ? set * 60 : 1500;
+            updateTimerUI();
+            document.getElementById('t-toggle').textContent = 'START';
+        }
+        function updateTimerUI() {
+            const m = Math.floor(timerRem / 60); const s = timerRem % 60;
+            document.getElementById('timer-txt').textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
         }
 
-        function setTimer() {
-            const min = prompt("설정할 분(minutes)을 입력하세요:", "25");
-            if(min) {
-                timerSeconds = parseInt(min) * 60;
-                updateTimerDisplay();
-            }
+        // --- Utils ---
+        function save() { localStorage.setItem('kmg_v12_state', JSON.stringify(state)); }
+        function genReport(view) {
+            const m = document.getElementById('modal');
+            const mt = document.getElementById('m-title');
+            const mc = document.getElementById('m-content');
+            m.style.display = 'flex';
+            mt.textContent = `${view.toUpperCase()} SCRUM REPORT`;
+            
+            const list = state[view];
+            const done = list.filter(i => i.done).length;
+            mc.innerHTML = `현재 ${view} 단계의 진척도는 **${Math.round(done/list.length*100) || 0}%** 입니다.<br><br>`;
+            list.forEach(i => mc.innerHTML += `• [${i.done?'완료':'미완'}] ${i.text}<br>`);
         }
-
-        function updateTimerDisplay() {
-            const m = Math.floor(timerSeconds / 60);
-            const s = timerSeconds % 60;
-            document.getElementById('timer-text').textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
-        }
-
-        // --- Utilities ---
-        function save() { localStorage.setItem('kmg_scrum_state', JSON.stringify(state)); }
-        function closeModal() { document.getElementById('report-modal').style.display = 'none'; }
 
         async function fetchNews() {
-            const rssUrl = encodeURIComponent('https://news.google.com/rss/search?q=AI+Artificial+Intelligence&hl=ko&gl=KR&ceid=KR:ko');
             try {
-                const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${rssUrl}`);
+                const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent('https://news.google.com/rss/search?q=AI&hl=ko&gl=KR&ceid=KR:ko')}`);
                 const data = await res.json();
-                const feed = document.getElementById('news-root');
-                feed.innerHTML = '';
-                data.items.slice(0, 5).forEach(i => {
-                    feed.innerHTML += `<div class="news-item"><a href="${i.link}" target="_blank" class="news-title">${i.title}</a></div>`;
-                });
-            } catch(e) { console.log("News fetch failed"); }
+                const root = document.getElementById('news-root');
+                root.innerHTML = '';
+                data.items.slice(0, 5).forEach(i => root.innerHTML += `<a href="${i.link}" target="_blank" style="color:#eee; font-size:0.75rem; text-decoration:none;">• ${i.title}</a>`);
+            } catch(e) {}
+        }
+
+        function sync() {
+            const n = new Date();
+            document.getElementById('b-clock').textContent = `${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}`;
+            document.getElementById('b-date').textContent = n.toLocaleDateString('en-US', {month:'short', day:'numeric', weekday:'short'});
         }
 
         function init() {
             renderDaily();
+            updateSelectors();
+            setInterval(sync, 1000);
             fetchNews();
-            document.getElementById('b-date').textContent = new Date().toLocaleDateString();
         }
-
         init();
     </script>
 </body>
