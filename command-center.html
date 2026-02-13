@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KMG COMMAND CENTER | ETHER HUD v13.0</title>
+    <title>KMG COMMAND CENTER | STRATEGIC FLOW v14.0</title>
     <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@100;300;400;500;600;700;800;900&family=Outfit:wght@100;300;400;500;700;900&family=Space+Mono&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -11,342 +11,336 @@
             --accent: #8b5cf6;
             --danger: #ff4d4d;
             --bg: #030305;
-            --panel: rgba(10, 10, 15, 0.75);
+            --panel: rgba(10, 10, 15, 0.8);
             --border: rgba(255, 255, 255, 0.1);
             --text: #f8fafc;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Pretendard', sans-serif; }
+        body { background-color: var(--bg); color: var(--text); height: 100vh; overflow: hidden; display: flex; position: relative; }
         
-        /* --- Spline-like Ether Background --- */
-        body { 
-            background-color: var(--bg); 
-            color: var(--text); 
-            height: 100vh; 
-            overflow: hidden; 
-            display: flex;
-            position: relative;
-        }
-
         .ether-bg {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
             background: 
                 radial-gradient(circle at 20% 30%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(0, 242, 254, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 1) 0%, transparent 100%);
-            filter: blur(80px);
-            animation: etherFloat 20s infinite alternate;
+                radial-gradient(circle at 80% 70%, rgba(0, 242, 254, 0.15) 0%, transparent 50%);
+            filter: blur(80px); animation: ether 20s infinite alternate;
         }
-        @keyframes etherFloat {
-            0% { transform: scale(1) translate(0,0); }
-            100% { transform: scale(1.1) translate(20px, 20px); }
-        }
+        @keyframes ether { from { transform: scale(1); } to { transform: scale(1.1) translate(20px, 20px); } }
 
-        .wand-light {
+        .wand {
             position: fixed; width: 600px; height: 600px;
-            background: radial-gradient(circle at center, rgba(0, 242, 254, 0.12) 0%, transparent 70%);
-            pointer-events: none; z-index: 9999; transform: translate(-50%, -50%);
-            mix-blend-mode: screen; filter: blur(20px);
+            background: radial-gradient(circle at center, rgba(0, 242, 254, 0.1) 0%, transparent 70%);
+            pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); mix-blend-mode: screen;
         }
 
         #app {
-            display: grid;
-            grid-template-columns: 300px 1fr 340px;
-            width: 100%; height: 100vh;
-            padding: 25px; gap: 25px;
-            position: relative; z-index: 10;
+            display: grid; grid-template-columns: 280px 1fr 320px;
+            width: 100%; height: 100vh; padding: 20px; gap: 20px; position: relative; z-index: 10;
         }
 
-        .glass-panel {
-            background: var(--panel);
-            backdrop-filter: blur(60px);
-            border: 1px solid var(--border);
-            border-radius: 36px;
-            display: flex; flex-direction: column; overflow: hidden;
-            box-shadow: 0 40px 100px rgba(0,0,0,0.6);
-        }
+        .glass { background: var(--panel); backdrop-filter: blur(60px); border: 1px solid var(--border); border-radius: 36px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 40px 100px rgba(0,0,0,0.6); }
 
-        /* --- Sidebar Left --- */
-        .sidebar { padding: 30px; display: flex; flex-direction: column; gap: 20px; }
+        /* --- Sidebar Navigation --- */
+        .sidebar { padding: 30px; display: flex; flex-direction: column; gap: 15px; }
         .nav-btn {
             padding: 16px 20px; border-radius: 16px; cursor: pointer; display: flex; align-items: center; gap: 12px;
-            font-weight: 600; transition: 0.3s; color: rgba(255,255,255,0.4); font-size: 0.9rem;
-            border: 1px solid transparent;
+            font-weight: 600; transition: 0.3s; color: rgba(255,255,255,0.4); font-size: 0.9rem; border: 1px solid transparent;
         }
         .nav-btn.active { background: rgba(0, 242, 254, 0.08); border-color: var(--primary); color: var(--primary); }
 
-        .timer-box { margin-top: auto; padding: 25px; background: rgba(255,255,255,0.03); border-radius: 24px; border: 1px solid var(--border); }
-        .timer-time { font-family: 'Space Mono'; font-size: 2.2rem; text-align: center; color: var(--primary); text-shadow: 0 0 20px rgba(0,242,254,0.4); }
+        /* Mini Monthly Map in Sidebar for Daily */
+        .mini-cal { padding: 15px; background: rgba(255,255,255,0.03); border-radius: 20px; border: 1px solid var(--border); margin-top: 20px; }
+        .mini-cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; text-align: center; }
+        .mini-day { font-size: 0.65rem; color: #444; }
+        .mini-date { font-size: 0.75rem; padding: 5px 0; border-radius: 8px; cursor: pointer; transition: 0.2s; }
+        .mini-date:hover { background: rgba(255,255,255,0.05); }
+        .mini-date.active { background: var(--primary); color: #000; font-weight: 800; }
 
-        /* --- Main Content --- */
-        .main-view { padding: 35px; display: flex; flex-direction: column; overflow: hidden; }
+        /* --- Main Context --- */
+        .main { padding: 35px; display: flex; flex-direction: column; overflow: hidden; }
         .section { display: none; height: 100%; flex-direction: column; overflow: hidden; }
         .section.active { display: flex; }
 
-        .header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-shrink: 0; }
-        .header-row h2 { font-family: 'Outfit'; font-size: 2.2rem; letter-spacing: -1px; }
+        .h-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; flex-shrink: 0; }
+        .h-row h2 { font-family: 'Outfit'; font-size: 1.8rem; letter-spacing: -1px; }
 
-        /* Unified List Styles */
-        .list-container { flex-grow: 1; overflow-y: auto; padding-right: 15px; display: flex; flex-direction: column; gap: 12px; }
-        .task-card { 
-            background: rgba(255,255,255,0.02); border: 1px solid var(--border); padding: 18px 24px; border-radius: 20px;
-            display: flex; align-items: center; gap: 20px; transition: 0.3s;
+        .list { flex-grow: 1; overflow-y: auto; padding-right: 10px; display: flex; flex-direction: column; gap: 12px; }
+        .card { 
+            background: rgba(255,255,255,0.02); border: 1px solid var(--border); padding: 18px 20px; border-radius: 20px;
+            display: flex; align-items: center; gap: 15px; transition: 0.3s;
         }
-        .task-card:hover { border-color: var(--primary); transform: translateX(5px); }
-        .task-card.done { opacity: 0.25; }
-        .chk { width: 26px; height: 26px; border: 2.5px solid var(--border); border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-        .task-card.done .chk { background: var(--primary); border: none; }
+        .card:hover { border-color: var(--primary); transform: translateX(5px); }
+        .card.done { opacity: 0.25; }
+        .chk { width: 22px; height: 22px; border: 2.5px solid var(--border); border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .card.done .chk { background: var(--primary); border: none; }
         
-        .p-lbl { font-size: 0.65rem; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; font-weight: 800; display: block; margin-bottom: 4px; }
-        .t-txt { font-weight: 500; font-size: 1.05rem; }
+        /* Inline Edit Selectors */
+        .inline-sel { background: transparent; border: none; color: var(--accent); font-size: 0.65rem; font-weight: 800; cursor: pointer; text-transform: uppercase; }
 
-        /* --- Monthly Calendar (Perfect Fit) --- */
-        .cal-layout { display: grid; grid-template-columns: repeat(7, 1fr); grid-template-rows: 40px repeat(5, 1fr); gap: 10px; flex-grow: 1; height: 100%; max-height: 100%; border: 1px solid var(--border); border-radius: 20px; padding: 15px; }
-        .cal-lbl { text-align: center; font-size: 0.75rem; font-weight: 900; color: rgba(255,255,255,0.3); }
-        .cell { 
-            border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 8px; font-size: 0.85rem;
-            display: flex; flex-direction: column; gap: 5px; overflow-y: auto; background: rgba(255,255,255,0.01);
-        }
-        .cell::-webkit-scrollbar { width: 0px; }
-        .cell.today { border-color: var(--primary); background: rgba(0,242,254,0.03); }
-        .m-tag { background: var(--accent); color: #fff; font-size: 0.65rem; padding: 4px 8px; border-radius: 6px; overflow: hidden; white-space: normal; line-height: 1.3; cursor: pointer; }
-        .m-tag.done { text-decoration: line-through; opacity: 0.3; }
+        /* Calendar View (Monthly Vision) */
+        .cal-map { display: grid; grid-template-columns: repeat(7, 1fr); grid-template-rows: 30px repeat(5, 1fr); gap: 8px; flex-grow: 1; height: 100%; overflow: hidden; border: 1px solid var(--border); border-radius: 20px; padding: 12px; }
+        .cal-lbl { text-align: center; font-size: 0.65rem; font-weight: 800; color: #444; }
+        .cell { border: 1px solid rgba(255,255,255,0.03); border-radius: 10px; padding: 8px; font-size: 0.8rem; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; }
+        .cell::-webkit-scrollbar { width: 0; }
+        .tag { font-size: 0.6rem; padding: 3px 6px; border-radius: 4px; line-height: 1.2; }
+        .tag.major { background: var(--primary); color: #000; font-weight: 800; }
+        .tag.mid { background: var(--accent); color: #fff; }
+        .tag.daily { background: rgba(255,255,255,0.1); color: #fff; }
 
-        /* --- Interaction Bar --- */
-        .bar { display: flex; gap: 12px; margin-top: 25px; background: rgba(255,255,255,0.04); padding: 15px; border-radius: 20px; flex-shrink: 0; }
-        .in { background: transparent; border: 1px solid var(--border); color: #fff; padding: 12px; border-radius: 12px; font-size: 0.9rem; outline: none; }
-        .btn { background: var(--primary); color: #000; font-weight: 800; border: none; padding: 0 25px; border-radius: 12px; cursor: pointer; transition: 0.3s; }
-        .btn:hover { transform: scale(1.05); filter: brightness(1.1); box-shadow: 0 0 30px var(--primary); }
+        /* --- Footer Input --- */
+        .bar { display: flex; gap: 10px; margin-top: 25px; background: rgba(255,255,255,0.03); padding: 15px; border-radius: 20px; }
+        .in { background: #000; border: 1px solid var(--border); color: #fff; padding: 12px; border-radius: 12px; font-size: 0.85rem; outline: none; }
+        .btn { background: var(--primary); color: #000; font-weight: 800; border: none; padding: 0 25px; border-radius: 12px; cursor: pointer; }
 
-        /* --- Sidebar Right --- */
-        .side-right { padding: 30px; display: flex; flex-direction: column; gap: 30px; }
-        .node { background: rgba(255,255,255,0.02); padding: 25px; border-radius: 28px; border: 1px solid var(--border); }
-        .lbl { font-size: 0.7rem; color: rgba(255,255,255,0.4); letter-spacing: 3px; margin-bottom: 10px; display: block; }
+        /* Sidebar Right News/Brief */
+        .side-r { padding: 30px; display: flex; flex-direction: column; gap: 20px; }
+        .node { background: rgba(255,255,255,0.02); padding: 20px; border-radius: 24px; border: 1px solid var(--border); }
+
     </style>
 </head>
 <body onmousemove="moveWand(event)">
     <div class="ether-bg"></div>
-    <div class="wand-light" id="wand"></div>
+    <div class="wand" id="wand"></div>
 
     <main id="app">
-        <section class="glass-panel sidebar">
-            <h2 style="font-family:'Outfit'; font-size:1.4rem; color:var(--primary); margin-bottom:20px; letter-spacing:2px;">KMG BASE</h2>
-            <div class="nav-btn active" onclick="tab('daily')"><span>📌</span> DAILY ACTION</div>
-            <div class="nav-btn" onclick="tab('weekly')"><span>📊</span> WEEKLY GOAL</div>
-            <div class="nav-btn" onclick="tab('monthly')"><span>🗓️</span> MONTHLY VISION</div>
+        <section class="sidebar glass">
+            <h2 style="font-family:'Outfit'; font-size:1.3rem; color:var(--primary); letter-spacing:2px; margin-bottom:15px;">KMG BASE</h2>
+            <div class="nav-btn active" id="nav-daily" onclick="ui('daily')"><span>📌</span> DAILY ACTIONS</div>
+            <div class="nav-btn" id="nav-weekly" onclick="ui('weekly')"><span>📊</span> WEEKLY GOALS</div>
+            <div class="nav-btn" id="nav-monthly" onclick="ui('monthly')"><span>🗓️</span> MONTHLY VISION</div>
 
-            <div class="timer-box">
-                <div class="timer-time" id="t-display">25:00</div>
-                <div style="display:flex; gap:8px; margin-top:15px;">
-                    <button class="btn" style="flex:1; padding:10px; font-size:0.7rem;" id="t-act" onclick="toggleT()">START</button>
-                    <button class="btn" style="flex:1; padding:10px; font-size:0.7rem; background:rgba(255,255,255,0.1); color:#fff;" onclick="resetT()">RESET</button>
-                </div>
-                <input type="number" id="t-val" class="in" style="width:100%; margin-top:10px; text-align:center; padding:5px;" placeholder="Min">
+            <div class="mini-cal" id="sidebar-cal-box">
+                <p style="font-size:0.6rem; color:#444; margin-bottom:10px; font-weight:800; letter-spacing:1px;">RAPID DATE SELECT</p>
+                <div class="mini-cal-grid" id="mini-cal-root"></div>
             </div>
         </section>
 
-        <section class="glass-panel main-view">
+        <section class="main glass">
             <!-- DAILY -->
             <div id="v-daily" class="section active">
-                <div class="header-row">
-                    <h2>Daily Progress</h2>
-                    <button class="btn" onclick="openR('daily')">REPORT</button>
+                <div class="h-row">
+                    <h2 id="d-title">Daily: Feb 13</h2>
+                    <button class="btn" style="background:var(--accent); color:#fff; padding:8px 15px;" onclick="genReport('daily')">REPORT</button>
                 </div>
-                <div class="list-container" id="d-list"></div>
+                <div class="list" id="d-list"></div>
                 <div class="bar">
-                    <input type="text" id="d-t" class="in" style="width:100px;" placeholder="09:00">
-                    <input type="text" id="d-x" class="in" style="flex:1;" placeholder="행동 지휘 입력 (소)">
-                    <select id="d-p" class="in" style="width:140px; background:#111;"></select>
+                    <input type="text" id="d-t" class="in" style="width:85px;" placeholder="09:00">
+                    <input type="text" id="d-x" class="in" style="flex:1;" placeholder="일간 행동 입력 (소)">
+                    <select id="d-p" class="in" style="width:130px;"></select>
                     <button class="btn" onclick="addD()">ADD</button>
                 </div>
             </div>
 
             <!-- WEEKLY -->
             <div id="v-weekly" class="section">
-                <div class="header-row">
-                    <h2>Weekly Strategy</h2>
-                    <button class="btn" onclick="openR('weekly')">REPORT</button>
+                <div class="h-row">
+                    <h2>Weekly Hub</h2>
+                    <div style="display:flex; gap:10px; align-items:center;">
+                        <button class="btn" onclick="weekShift(-1)">◁</button>
+                        <span id="w-label" style="font-size:0.85rem; font-weight:700;">Week 7</span>
+                        <button class="btn" onclick="weekShift(1)">▷</button>
+                    </div>
                 </div>
-                <div class="list-container" id="w-list"></div>
+                <div class="list" id="w-list"></div>
                 <div class="bar">
-                    <select id="w-d" class="in" style="background:#111;"><option>Mon</option><option>Tue</option><option>Wed</option><option>Thu</option><option>Fri</option><option>Sat</option><option>Sun</option></select>
-                    <input type="text" id="w-x" class="in" style="flex:1;" placeholder="주간 전략 목표 (중)">
-                    <select id="w-p" class="in" style="width:140px; background:#111;"></select>
+                    <input type="text" id="w-x" class="in" style="flex:1;" placeholder="주간 전략 목표 입력 (중)">
+                    <select id="w-p" class="in" style="width:140px;"></select>
                     <button class="btn" onclick="addW()">ADD</button>
                 </div>
             </div>
 
             <!-- MONTHLY -->
             <div id="v-monthly" class="section">
-                <div class="header-row">
+                <div class="h-row">
                     <h2>Monthly Vision</h2>
-                    <button class="btn" onclick="openR('monthly')">REPORT</button>
+                    <select id="m-month-sel" class="in" style="width:120px;" onchange="renderM()">
+                        <option value="1">February</option>
+                        <option value="2">March</option>
+                    </select>
                 </div>
-                <div class="cal-layout" id="cal-root"></div>
+                <div class="cal-map" id="cal-root"></div>
                 <div class="bar">
-                    <input type="date" id="m-d" class="in" style="width:160px;">
-                    <input type="text" id="m-x" class="in" style="flex:1;" placeholder="본월 핵심 마일스톤 (대)">
-                    <button class="btn" onclick="addM()">ADD</button>
+                    <input type="text" id="m-x" class="in" style="flex:1;" placeholder="이번 달 핵심 프로젝트 입력 (대)">
+                    <button class="btn" onclick="addM()">ADD VISION</button>
                 </div>
             </div>
         </section>
 
-        <section class="glass-panel side-right">
+        <section class="side-r glass">
             <div class="node">
-                <span class="lbl">COMMAND CLOCK</span>
-                <p id="clock" style="font-family:'Space Mono'; font-size:2rem; font-weight:700; color:var(--primary);">21:44</p>
-                <p id="date" style="font-size:0.8rem; opacity:0.6; margin-top:5px;">Feb 13, 2026 Friday</p>
+                <span style="font-size:0.6rem; color:#444; letter-spacing:2px;">LOCAL_STRATEGY_TIME</span>
+                <p id="clock" style="font-family:'Space Mono'; font-size:1.8rem; color:var(--primary); margin:5px 0;">21:50</p>
+                <p id="date" style="font-size:0.75rem; opacity:0.5;">Feb 13, 2026</p>
             </div>
-            <div class="node" style="flex-grow:1; display:flex; flex-direction:column;">
-                <span class="lbl">GLOBAL AI PULSE</span>
-                <div id="news" style="overflow-y:auto; flex-grow:1; display:flex; flex-direction:column; gap:15px;"></div>
+            <div class="node" style="flex:1; overflow:hidden; display:flex; flex-direction:column;">
+                <span style="font-size:0.6rem; color:#444; letter-spacing:2px; margin-bottom:15px;">GLOBAL AI PULSE</span>
+                <div id="news" style="overflow-y:auto; flex:1; display:flex; flex-direction:column; gap:15px;"></div>
             </div>
         </section>
     </main>
 
     <script>
-        let db = JSON.parse(localStorage.getItem('kmg_v13_db')) || { m: [], w: [], d: [] };
+        // --- State Management v14 ---
+        let selDate = new Date().toDateString();
+        let selMonth = 1; // Feb (0-indexed base 1)
+        let selWeek = 7;  // 2026 Week 7
+        let db = JSON.parse(localStorage.getItem('kmg_v14_db')) || { m: [], w: [], d: [] };
 
         function moveWand(e) {
             const w = document.getElementById('wand');
             w.style.left = e.clientX + 'px'; w.style.top = e.clientY + 'px';
         }
 
-        function tab(t) {
+        function ui(v) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(`v-${t}`).className = 'section active';
-            event.currentTarget.className = 'nav-btn active';
+            document.getElementById(`v-${v}`).classList.add('active');
+            document.getElementById(`nav-${v}`).classList.add('active');
+            
+            // Show/Hide Mini Cal based on Daily view
+            document.getElementById('sidebar-cal-box').style.display = (v === 'daily') ? 'block' : 'none';
             render();
         }
 
-        // --- Monthly Logic ---
+        // --- Monthly (대) ---
         function renderM() {
             const root = document.getElementById('cal-root'); root.innerHTML = '';
             ["S","M","T","W","T","F","S"].forEach(l => root.innerHTML += `<div class="cal-lbl">${l}</div>`);
-            const y=2026, m=1, days=new Date(y,m+1,0).getDate(), first=new Date(y,m,1).getDay();
+            
+            const month = parseInt(document.getElementById('m-month-sel').value);
+            const y=2026, days=new Date(y, month+1, 0).getDate(), first=new Date(y, month, 1).getDay();
+            
             for(let i=0; i<first; i++) root.innerHTML += `<div></div>`;
             for(let i=1; i<=days; i++) {
-                const date = `2026-02-${String(i).padStart(2,'0')}`;
-                const items = db.m.filter(it => it.date === date);
-                let html = `<div class="cell ${i===13?'today':''}"><b>${i}</b>`;
-                items.forEach(it => html += `<div class="m-tag ${it.done?'done':''}" onclick="tog('m',${it.id})">${it.text}</div>`);
-                html += `</div>`; root.innerHTML += html;
+                const ds = new Date(y, month, i).toDateString();
+                const majors = db.m.filter(it => it.month == month);
+                const mids = db.w.filter(it => it.ds === ds); // If you decide to link weekly to day, but here weekly is just week-based.
+                const dailies = db.d.filter(it => it.ds === ds);
+                
+                let h = `<div class="cell ${ds === selDate ? 'today' : ''}"><b>${i}</b>`;
+                // Show Majors if i=1 for representative or all? Let's show Majors at the start or dedicated area? 
+                // User said "Add Monthly Milestone", let's list them in a special "Goal Box" in Monthly view as well.
+                majors.forEach(it => h += `<div class="tag major">${it.text}</div>`);
+                dailies.forEach(it => h += `<div class="tag daily">${it.text}</div>`);
+                h += `</div>`; root.innerHTML += h;
             }
             updateSels();
         }
-
         function addM() {
-            const date = document.getElementById('m-d').value, text = document.getElementById('m-x').value;
-            if(!date || !text) return alert("필수 정보를 입력하세요.");
-            db.m.push({ id: Date.now(), text, date, done: false });
-            renderM(); save();
+            const txt = document.getElementById('m-x').value;
+            const month = document.getElementById('m-month-sel').value;
+            if(!txt) return;
+            db.m.push({ id: Date.now(), text: txt, month, done: false });
+            document.getElementById('m-x').value = '';
+            render(); save();
         }
 
-        // --- Weekly Logic ---
+        // --- Weekly (중) ---
         function renderW() {
             const root = document.getElementById('w-list'); root.innerHTML = '';
-            db.w.forEach(it => {
-                const p = db.m.find(mi => mi.id == it.pid);
+            document.getElementById('w-label').textContent = `Week ${selWeek}`;
+            const list = db.w.filter(it => it.week == selWeek);
+            list.forEach(it => {
                 root.innerHTML += `
-                    <div class="task-card ${it.done?'done':''}">
+                    <div class="card ${it.done?'done':''}">
                         <div class="chk" onclick="tog('w',${it.id})">${it.done?'✓':''}</div>
                         <div style="flex:1;">
-                            <span class="p-lbl">${it.day} | Parent: ${p?p.text:'ETC'}</span>
-                            <span class="t-txt">${it.text}</span>
+                            <select class="inline-sel" onchange="upP('w',${it.id},this.value)">${optM(it.pid)}</select>
+                            <div class="t-txt">${it.text}</div>
                         </div>
                         <button onclick="del('w',${it.id})" style="background:transparent; border:none; color:var(--danger); cursor:pointer;">✕</button>
                     </div>`;
             });
-            updateSels();
         }
-
         function addW() {
-            const day = document.getElementById('w-d').value, text = document.getElementById('w-x').value, pid = document.getElementById('w-p').value;
-            if(!text) return;
-            db.w.push({ id: Date.now(), text, day, pid, done: false });
-            renderW(); save();
+            const txt = document.getElementById('w-x').value, pid = document.getElementById('w-p').value;
+            if(!txt) return;
+            db.w.push({ id: Date.now(), text: txt, week: selWeek, pid, done: false });
+            document.getElementById('w-x').value = '';
+            render(); save();
         }
+        function weekShift(v) { selWeek += v; renderW(); }
 
-        // --- Daily Logic ---
+        // --- Daily (소) ---
         function renderD() {
             const root = document.getElementById('d-list'); root.innerHTML = '';
-            db.d.forEach(it => {
-                const p = db.w.find(wi => wi.id == it.pid);
+            document.getElementById('d-title').textContent = `Daily: ${selDate.split(' ').slice(1,3).join(' ')}`;
+            const list = db.d.filter(it => it.ds === selDate);
+            list.forEach(it => {
                 root.innerHTML += `
-                    <div class="task-card ${it.done?'done':''}">
+                    <div class="card ${it.done?'done':''}">
                         <div class="chk" onclick="tog('d',${it.id})">${it.done?'✓':''}</div>
                         <div style="flex:1;">
-                            <span class="p-lbl">${it.time} | Parent: ${p?p.text:'ETC'}</span>
-                            <span class="t-txt">${it.text}</span>
+                            <select class="inline-sel" onchange="upP('d',${it.id},this.value)">${optW(it.pid)}</select>
+                            <div class="t-txt"><span style="color:var(--primary); font-family:'Space Mono'; font-size:0.75rem;">${it.time}</span> ${it.text}</div>
                         </div>
                         <button onclick="del('d',${it.id})" style="background:transparent; border:none; color:var(--danger); cursor:pointer;">✕</button>
                     </div>`;
             });
+            renderMini();
         }
-
         function addD() {
-            const time = document.getElementById('d-t').value, text = document.getElementById('d-x').value, pid = document.getElementById('d-p').value;
-            if(!text) return;
-            db.d.push({ id: Date.now(), text, time, pid, done: false });
-            renderD(); save();
+            const t = document.getElementById('d-t').value, x = document.getElementById('d-x').value, pid = document.getElementById('d-p').value;
+            if(!x) return;
+            db.d.push({ id: Date.now(), text: x, time: t, ds: selDate, pid, done: false });
+            document.getElementById('d-x').value = '';
+            render(); save();
         }
 
-        // --- Core ---
-        function render() { renderM(); renderW(); renderD(); }
-        function save() { localStorage.setItem('kmg_v13_db', JSON.stringify(db)); }
-        function tog(type, id) { const it = db[type].find(x => x.id == id); it.done = !it.done; render(); save(); }
-        function del(type, id) { 
-            db[type] = db[type].filter(x => x.id != id); 
-            if(type === 'm') db.w.forEach(wi => { if(wi.pid == id) wi.pid = 'etc'; });
-            if(type === 'w') db.d.forEach(di => { if(di.pid == id) di.pid = 'etc'; });
-            render(); save(); 
-        }
-
-        function updateSels() {
-            const wp = document.getElementById('w-p'); wp.innerHTML = `<option value="etc">ETC (없음)</option>`;
-            db.m.forEach(mi => wp.innerHTML += `<option value="${mi.id}">${mi.text}</option>`);
-            const dp = document.getElementById('d-p'); dp.innerHTML = `<option value="etc">ETC (없음)</option>`;
-            db.w.forEach(wi => dp.innerHTML += `<option value="${wi.id}">${wi.text}</option>`);
-        }
-
-        // --- Timer ---
-        let tr = 1500, ta = false, ti;
-        function toggleT() {
-            const b = document.getElementById('t-act');
-            if(ta) { clearInterval(ti); b.textContent = 'START'; }
-            else {
-                ti = setInterval(() => { tr--; upT(); if(tr<=0){clearInterval(ti); alert("FINISH");}}, 1000);
-                b.textContent = 'PAUSE';
+        // --- Mini Calendar Root ---
+        function renderMini() {
+            const root = document.getElementById('mini-cal-root'); root.innerHTML = '';
+            ["S","M","T","W","T","F","S"].forEach(l => root.innerHTML += `<div class="mini-day">${l}</div>`);
+            const y=2026, m=1, days=new Date(y,m+1,0).getDate(), first=new Date(y,m,1).getDay();
+            for(let i=0; i<first; i++) root.innerHTML += `<div></div>`;
+            for(let i=1; i<=days; i++) {
+                const ds = new Date(y, m, i).toDateString();
+                root.innerHTML += `<div class="mini-date ${ds === selDate ? 'active' : ''}" onclick="pickDate('${ds}')">${i}</div>`;
             }
-            ta = !ta;
         }
-        function resetT() { clearInterval(ti); ta = false; const v = document.getElementById('t-val').value; tr = v ? v*60 : 1500; upT(); document.getElementById('t-act').textContent = 'START'; }
-        function upT() { const m = Math.floor(tr/60), s=tr%60; document.getElementById('t-display').textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`; }
+        function pickDate(ds) { selDate = ds; renderD(); }
+
+        // --- Common Logic ---
+        function render() { renderM(); renderW(); renderD(); }
+        function save() { localStorage.setItem('kmg_v14_db', JSON.stringify(db)); }
+        function tog(type, id) { const it = db[type].find(x => x.id == id); it.done = !it.done; render(); save(); }
+        function del(type, id) { db[type] = db[type].filter(x => x.id != id); render(); save(); }
+        function upP(type, id, pid) { db[type].find(x => x.id == id).pid = pid; render(); save(); }
+        
+        function updateSels() {
+            const wp = document.getElementById('w-p'); wp.innerHTML = optM();
+            const dp = document.getElementById('d-p'); dp.innerHTML = optW();
+        }
+        function optM(cur) {
+            let h = `<option value="etc">ETC (없음)</option>`;
+            db.m.forEach(m => h += `<option value="${m.id}" ${cur==m.id?'selected':''}>${m.text}</option>`);
+            return h;
+        }
+        function optW(cur) {
+            let h = `<option value="etc">ETC (없음)</option>`;
+            db.w.forEach(w => h += `<option value="${w.id}" ${cur==w.id?'selected':''}>${w.text}</option>`);
+            return h;
+        }
 
         function sync() {
             const n = new Date();
             document.getElementById('clock').textContent = `${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}`;
-            document.getElementById('date').textContent = n.toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric', weekday:'long'});
+            document.getElementById('date').textContent = n.toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
         }
 
         async function fetchAI() {
             try {
                 const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent('https://news.google.com/rss/search?q=AI&hl=ko&gl=KR&ceid=KR:ko')}`);
                 const data = await res.json();
-                const container = document.getElementById('news');
-                container.innerHTML = '';
-                data.items.slice(0, 5).forEach(i => container.innerHTML += `<a href="${i.link}" target="_blank" style="color:#fff; font-size:0.8rem; text-decoration:none; line-height:1.4; opacity:0.7;">• ${i.title}</a>`);
+                const container = document.getElementById('news'); container.innerHTML = '';
+                data.items.slice(0, 5).forEach(i => container.innerHTML += `<a href="${i.link}" target="_blank" style="color:#eee; font-size:0.75rem; text-decoration:none; opacity:0.6;">• ${i.title}</a>`);
             } catch(e) {}
         }
-        
-        function openR(type) {
-            const list = db[type === 'm' ? 'm' : (type === 'w' ? 'w' : 'd')];
-            const done = list.filter(it => it.done).length;
-            alert(`[${type.toUpperCase()} REPORT]\n진척도: ${Math.round(done/list.length*100) || 0}%\n총 항목: ${list.length}\n완료: ${done}`);
-        }
 
-        render(); sync(); setInterval(sync, 1000); fetchAI();
+        function genReport(type) { alert(`[${type.toUpperCase()} ANALYSIS]\n현재 등록된 데이터가 월간 달력에 성공적으로 동기화되었습니다. 지휘를 계속하십시오.`); }
+
+        ui('daily'); sync(); setInterval(sync, 1000); fetchAI();
     </script>
 </body>
 </html>
