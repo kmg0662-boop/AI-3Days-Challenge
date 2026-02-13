@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KMG COMMAND CENTER | ELITE AI HUB</title>
+    <title>KMG COMMAND CENTER | ELITE AI HUB v2.0</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -15,6 +15,7 @@
             --bg-deep: #050505;
             --glass: rgba(255, 255, 255, 0.03);
             --border: rgba(255, 255, 255, 0.1);
+            --text-muted: #64748b;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -76,6 +77,12 @@
             padding: 20px;
             display: flex;
             flex-direction: column;
+            transition: all 0.3s ease;
+        }
+
+        .panel:hover {
+            border-color: rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.05);
         }
 
         .panel-header {
@@ -99,6 +106,8 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
+            overflow-y: auto;
+            padding-right: 5px;
         }
 
         .schedule-item {
@@ -109,12 +118,22 @@
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            cursor: pointer;
         }
 
         .schedule-item:hover {
             border-color: var(--primary-cyan);
             background: rgba(0, 242, 254, 0.05);
             transform: translateX(5px);
+        }
+
+        .schedule-item.completed {
+            opacity: 0.4;
+            filter: grayscale(1);
+        }
+
+        .schedule-item.completed .schedule-title {
+            text-decoration: line-through;
         }
 
         .schedule-time {
@@ -134,6 +153,24 @@
             position: absolute;
             right: 0; top: 0; height: 100%; width: 4px;
             background: var(--primary-blue);
+        }
+
+        .add-task-btn {
+            margin-top: 15px;
+            background: transparent;
+            border: 1px dashed var(--primary-cyan);
+            color: var(--primary-cyan);
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-family: 'Space Mono';
+            transition: all 0.3s ease;
+        }
+
+        .add-task-btn:hover {
+            background: rgba(0, 242, 254, 0.1);
+            border-style: solid;
         }
 
         /* --- Center Hub: Main Branding & HUD --- */
@@ -191,7 +228,68 @@
             font-style: italic;
             font-size: 0.9rem;
             color: var(--primary-cyan);
-            animation: fadeIn 2s ease;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* --- AI Command Input --- */
+        .command-area {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .command-bar {
+            width: 100%;
+            height: 60px;
+            max-width: 800px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            padding: 0 25px;
+            gap: 15px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            transition: all 0.3s ease;
+        }
+
+        .command-bar:focus-within {
+            border-color: var(--primary-cyan);
+            background: rgba(255,255,255,0.08);
+            box-shadow: 0 0 40px rgba(0, 242, 254, 0.15);
+        }
+
+        .command-input {
+            flex-grow: 1;
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1rem;
+            outline: none;
+        }
+
+        .btn-send {
+            background: var(--primary-cyan);
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: 900;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Orbitron';
+            font-size: 0.8rem;
+        }
+
+        .btn-send:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px var(--primary-cyan);
         }
 
         /* --- Right Side: AI Agent Status & Terminal --- */
@@ -214,6 +312,12 @@
             padding: 15px;
             border-radius: 12px;
             text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            background: rgba(255,255,255,0.05);
+            border-color: var(--primary-blue);
         }
 
         .stat-val {
@@ -232,7 +336,7 @@
 
         .terminal {
             flex-grow: 1;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.6);
             border: 1px solid var(--border);
             border-radius: 15px;
             font-family: 'Space Mono', monospace;
@@ -241,6 +345,8 @@
             color: #10b981;
             overflow-y: auto;
             position: relative;
+            display: flex;
+            flex-direction: column;
         }
 
         .terminal-header {
@@ -248,50 +354,19 @@
             margin-bottom: 10px;
             border-bottom: 1px solid var(--border);
             padding-bottom: 5px;
-        }
-
-        .log-entry { margin-bottom: 5px; }
-        .log-entry span { color: #f43f5e; }
-
-        /* --- Footer: Command Controls --- */
-        .command-bar {
-            width: 100%;
-            height: 60px;
-            max-width: 800px;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid var(--border);
-            border-radius: 50px;
             display: flex;
-            align-items: center;
-            padding: 0 20px;
-            gap: 15px;
+            justify-content: space-between;
         }
 
-        .command-input {
+        .log-container {
             flex-grow: 1;
-            background: transparent;
-            border: none;
-            color: #fff;
-            font-family: 'Outfit', sans-serif;
-            font-size: 1rem;
-            outline: none;
+            overflow-y: auto;
         }
 
-        .btn-send {
-            background: var(--primary-cyan);
-            color: #000;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-weight: 900;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .btn-send:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 15px var(--primary-cyan);
-        }
+        .log-entry { margin-bottom: 5px; line-height: 1.4; }
+        .log-entry span.sys { color: #f43f5e; font-weight: bold; }
+        .log-entry span.ai { color: #0ea5e9; font-weight: bold; }
+        .log-entry span.user { color: #8b5cf6; font-weight: bold; }
 
         /* --- Animations --- */
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -303,6 +378,7 @@
             background: linear-gradient(to bottom, transparent, rgba(0, 242, 254, 0.1), transparent);
             animation: scan 4s linear infinite;
             pointer-events: none;
+            z-index: 10;
         }
 
         @keyframes scan {
@@ -331,6 +407,62 @@
             color: var(--text-muted);
             text-transform: uppercase;
         }
+        
+        /* Modal for adding task */
+        .modal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background: var(--bg-deep);
+            border: 1px solid var(--primary-cyan);
+            padding: 40px;
+            border-radius: 20px;
+            width: 400px;
+            box-shadow: 0 0 50px rgba(0, 242, 254, 0.2);
+        }
+        
+        .modal-content h4 {
+            font-family: 'Orbitron';
+            color: var(--primary-cyan);
+            margin-bottom: 20px;
+        }
+        
+        .modal-input {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: #fff;
+            margin-bottom: 15px;
+            outline: none;
+        }
+        
+        .modal-btns {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn-modal {
+            flex: 1;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .btn-confirm { background: var(--primary-cyan); color: #000; }
+        .btn-cancel { background: transparent; border: 1px solid var(--border); color: #64748b; }
+
     </style>
 </head>
 <body>
@@ -340,44 +472,26 @@
     <main id="app">
         <!-- Left: Captain's HQ -->
         <section class="sidebar-left">
-            <div class="panel" style="flex: 1;">
+            <div class="panel" style="flex: 1; overflow: hidden;">
                 <header class="panel-header">
                     <h3>CAPTAIN'S SCHEDULE</h3>
-                    <span style="font-size: 0.7rem; color: #64748b;">TOTAL: 4</span>
+                    <span id="task-count" style="font-size: 0.7rem; color: #64748b;">TOTAL: 0</span>
                 </header>
-                <div class="schedule-list" id="schedule">
-                    <li class="schedule-item">
-                        <span class="schedule-time">09:00 - 10:30</span>
-                        <p class="schedule-title">안티그래비티 신규 워크플로우 설계</p>
-                        <div class="item-status" style="background: var(--accent-purple);"></div>
-                    </li>
-                    <li class="schedule-item">
-                        <span class="schedule-time">11:00 - 12:30</span>
-                        <p class="schedule-title">Elite AI 마스터 클래스 라이브 강의</p>
-                        <div class="item-status"></div>
-                    </li>
-                    <li class="schedule-item">
-                        <span class="schedule-time">14:00 - 16:00</span>
-                        <p class="schedule-title">Projects/The_Command_Center 고도화</p>
-                        <div class="item-status"></div>
-                    </li>
-                    <li class="schedule-item">
-                        <span class="schedule-time">17:00 - 18:30</span>
-                        <p class="schedule-title">커뮤니티 회고 및 다음 미션 공지</p>
-                        <div class="item-status" style="background: #64748b; opacity: 0.3;"></div>
-                    </li>
+                <div class="schedule-list" id="schedule-container">
+                    <!-- Tasks will be injected here -->
                 </div>
+                <button class="add-task-btn" onclick="openAddTaskModal()">+ NEW MISSION</button>
             </div>
 
             <div class="panel" style="height: 180px;">
                 <header class="panel-header">
                     <h3>ELITE MISSION</h3>
                 </header>
-                <p style="font-size: 0.9rem; color: #e2e8f0; line-height: 1.6;">
+                <p id="elite-mission-text" style="font-size: 0.9rem; color: #e2e8f0; line-height: 1.6; cursor: pointer;" title="Click to edit">
                     "대한민국 최고의 AI 에어전트 팀을 구축하라. 코딩은 도구일 뿐, 핵심은 설계다."
                 </p>
                 <div style="margin-top: auto; font-size: 0.75rem; color: var(--primary-cyan); font-weight: bold;">
-                    READY FOR DEPLOYMENT >
+                    LAST UPDATE: <span id="mission-date">2026.02.13</span>
                 </div>
             </div>
         </section>
@@ -386,8 +500,8 @@
         <section class="main-hub">
             <div class="top-status">
                 <span>COORD: 37.5665 N, 126.9780 E</span>
-                <span id="digital-clock">20:41:12</span>
-                <span>SYSTEM: STABLE</span>
+                <span id="digital-clock">00:00:00</span>
+                <span id="sys-status">SYSTEM: STABLE</span>
             </div>
 
             <div class="hero-branding">
@@ -396,10 +510,15 @@
                 <div class="motive-box" id="motive">"진정한 혁신은 실행력에서 나온다."</div>
             </div>
 
-            <div class="command-bar">
-                <span style="color: var(--primary-cyan); font-family: 'Space Mono'; opacity: 0.7;">$</span>
-                <input type="text" class="command-input" placeholder="에이전트에게 명령을 내리세요...">
-                <button class="btn-send">EXECUTE</button>
+            <div class="command-area">
+                <div class="command-bar">
+                    <span style="color: var(--primary-cyan); font-family: 'Space Mono'; opacity: 0.7;">$</span>
+                    <input type="text" id="cmd-input" class="command-input" placeholder="에이전트에게 명령을 내리세요..." autocomplete="off">
+                    <button class="btn-send" onclick="handleCommand()">EXECUTE</button>
+                </div>
+                <div style="font-size: 0.7rem; color: var(--text-muted); font-family: 'Space Mono'; opacity: 0.5;">
+                    TRY: /time, /hello, /clear, /todo [msg]
+                </div>
             </div>
         </section>
 
@@ -411,15 +530,15 @@
                 </header>
                 <div class="hud-stats">
                     <div class="stat-card">
-                        <span class="stat-val">98%</span>
+                        <span class="stat-val" id="stat-eff">98%</span>
                         <span class="stat-label">Efficiency</span>
                     </div>
                     <div class="stat-card">
-                        <span class="stat-val">1.2k</span>
+                        <span class="stat-val" id="stat-token">1.2k</span>
                         <span class="stat-label">Token/Sec</span>
                     </div>
                     <div class="stat-card">
-                        <span class="stat-val">Active</span>
+                        <span class="stat-val" style="color: var(--success-green);">Online</span>
                         <span class="stat-label">Neural Link</span>
                     </div>
                     <div class="stat-card">
@@ -429,56 +548,212 @@
                 </div>
             </div>
 
-            <div class="terminal" id="terminal-logs">
+            <div class="terminal">
                 <div class="scanner"></div>
-                <div class="terminal-header">KMG-AI LOG CONSOLE</div>
-                <div class="log-entry"><span>[SYS]</span> Initializing core processors...</div>
-                <div class="log-entry"><span>[AI]</span> Neural link established with Captain.</div>
-                <div class="log-entry"><span>[SYS]</span> Waiting for input...</div>
+                <div class="terminal-header">
+                    <span>KMG-AI LOG CONSOLE</span>
+                    <span id="terminal-status" style="color: #10b981;">● ACTIVE</span>
+                </div>
+                <div class="log-container" id="terminal-logs">
+                    <!-- Logs will be injected here -->
+                </div>
             </div>
         </section>
     </main>
 
-    <div class="branding-sig">
-        <div class="kmg-logo">ANTIGRAVITY SYSTEMS</div>
-        <div class="sig-text">Custom Built by BI-SEO Team</div>
+    <!-- Modal: Add Task -->
+    <div class="modal" id="add-task-modal">
+        <div class="modal-content">
+            <h4>NEW MISSION</h4>
+            <input type="text" id="new-task-title" class="modal-input" placeholder="미션 내용을 입력하세요...">
+            <input type="text" id="new-task-time" class="modal-input" placeholder="시간 (예: 14:00 - 15:30)">
+            <div class="modal-btns">
+                <button class="btn-modal btn-cancel" onclick="closeAddTaskModal()">CANCEL</button>
+                <button class="btn-modal btn-confirm" onclick="addTask()">CONFIRM</button>
+            </div>
+        </div>
     </div>
 
-    <script>
-        // Real-time Clock
-        function updateClock() {
-            const now = new Date();
-            const time = now.toTimeString().split(' ')[0];
-            document.getElementById('digital-clock').textContent = time;
-        }
-        setInterval(updateClock, 1000);
-        updateClock();
+    <div class="branding-sig">
+        <div class="kmg-logo">ANTIGRAVITY SYSTEMS</div>
+        <div class="sig-text">Custom Built by BI-SEO Team v2.0</div>
+    </div>
 
-        // Dynamic Terminal Logs
-        const logs = [
-            "Analyzing project repository...",
-            "Updating workflow components...",
-            "Optimizing token expenditure...",
-            "Scanning for potential bottlenecks...",
-            "Neural pattern detected: 'Innovation'",
-            "Syncing with cloud-base 'Horizon'...",
-            "Captain's efficiency is increasing.",
-            "Generating weekly report draft..."
+    <audio id="sound-click" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3" preload="auto"></audio>
+    <audio id="sound-error" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview. mp3" preload="auto"></audio>
+
+    <script>
+        // --- State Management ---
+        let tasks = JSON.parse(localStorage.getItem('kmg_tasks')) || [
+            { id: 1, time: "09:00 - 10:30", title: "안티그래비티 신규 워크플로우 설계", completed: true, color: "var(--accent-purple)" },
+            { id: 2, time: "11:00 - 12:30", title: "Elite AI 마스터 클래스 라이브 강의", completed: false, color: "var(--primary-blue)" },
+            { id: 3, time: "14:00 - 16:00", title: "The_Command_Center 인터랙션 고도화", completed: false, color: "var(--primary-cyan)" }
         ];
 
-        const terminal = document.getElementById('terminal-logs');
-        function addLog() {
+        let missionText = localStorage.getItem('kmg_mission') || "\"대한민국 최고의 AI 에어전트 팀을 구축하라. 코딩은 도구일 뿐, 핵심은 설계다.\"";
+
+        // --- Core Functions ---
+        function init() {
+            renderTasks();
+            updateClock();
+            setInterval(updateClock, 1000);
+            document.getElementById('elite-mission-text').textContent = missionText;
+            addLog("system", "Initializing core processors...");
+            addLog("ai", "Neural link established with Captain Min-Gyu.");
+            addLog("system", "Welcome back, Captain. All systems operative.");
+            
+            // Random Stat Fluctuation
+            setInterval(fluctuateStats, 3000);
+        }
+
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('digital-clock').textContent = now.toTimeString().split(' ')[0];
+        }
+
+        function fluctuateStats() {
+            const eff = 95 + Math.random() * 4;
+            const token = 1.1 + Math.random() * 0.4;
+            document.getElementById('stat-eff').textContent = eff.toFixed(1) + "%";
+            document.getElementById('stat-token').textContent = token.toFixed(1) + "k";
+        }
+
+        // --- Schedule Functions ---
+        function renderTasks() {
+            const container = document.getElementById('schedule-container');
+            container.innerHTML = '';
+            tasks.forEach(task => {
+                const item = document.createElement('li');
+                item.className = `schedule-item ${task.completed ? 'completed' : ''}`;
+                item.onclick = () => toggleTask(task.id);
+                item.innerHTML = `
+                    <span class="schedule-time">${task.time}</span>
+                    <p class="schedule-title">${task.title}</p>
+                    <div class="item-status" style="background: ${task.color || 'var(--primary-blue)'}"></div>
+                `;
+                container.appendChild(item);
+            });
+            document.getElementById('task-count').textContent = `TOTAL: ${tasks.length}`;
+            localStorage.setItem('kmg_tasks', JSON.stringify(tasks));
+        }
+
+        function toggleTask(id) {
+            tasks = tasks.map(t => t.id === id ? { ...t, completed: !t.completed } : t);
+            playSound('sound-click');
+            renderTasks();
+            addLog("ai", "Task status updated in schedule.");
+        }
+
+        function openAddTaskModal() {
+            document.getElementById('add-task-modal').style.display = 'flex';
+        }
+
+        function closeAddTaskModal() {
+            document.getElementById('add-task-modal').style.display = 'none';
+        }
+
+        function addTask() {
+            const title = document.getElementById('new-task-title').value;
+            const time = document.getElementById('new-task-time').value || "ASAP";
+            if (!title) return;
+            
+            const newTask = {
+                id: Date.now(),
+                time: time,
+                title: title,
+                completed: false,
+                color: "var(--primary-cyan)"
+            };
+            tasks.push(newTask);
+            document.getElementById('new-task-title').value = '';
+            document.getElementById('new-task-time').value = '';
+            closeAddTaskModal();
+            renderTasks();
+            addLog("ai", `New mission assigned: ${title}`);
+        }
+
+        // --- Terminal Functions ---
+        function addLog(type, msg) {
+            const container = document.getElementById('terminal-logs');
             const entry = document.createElement('div');
             entry.className = 'log-entry';
-            const randomLog = logs[Math.floor(Math.random() * logs.length)];
-            entry.innerHTML = `<span>[AI]</span> ${randomLog}`;
-            terminal.appendChild(entry);
-            terminal.scrollTop = terminal.scrollHeight;
-            if (terminal.childNodes.length > 30) terminal.removeChild(terminal.childNodes[2]);
-        }
-        setInterval(addLog, 4000);
+            const time = new Date().toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            
+            let label = "";
+            if (type === "system") label = '<span class="sys">[SYS]</span>';
+            else if (type === "ai") label = '<span class="ai">[AI]</span>';
+            else if (type === "user") label = '<span class="user">[USER]</span>';
 
-        // Motive Toggle
+            entry.innerHTML = `<span style="color:#444">${time}</span> ${label} ${msg}`;
+            container.appendChild(entry);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function handleCommand() {
+            const input = document.getElementById('cmd-input');
+            const cmd = input.value.trim();
+            if (!cmd) return;
+
+            addLog("user", cmd);
+            input.value = '';
+            playSound('sound-click');
+
+            // Simple Command Logic
+            const lowercaseCmd = cmd.toLowerCase();
+            
+            if (lowercaseCmd.startsWith('/todo ')) {
+                const todoMsg = cmd.substring(6);
+                tasks.push({ id: Date.now(), time: "SYNCED", title: todoMsg, completed: false, color: "var(--accent-purple)" });
+                renderTasks();
+                addLog("ai", `Got it. Added "${todoMsg}" to your schedule.`);
+            } 
+            else if (lowercaseCmd === '/clear') {
+                document.getElementById('terminal-logs').innerHTML = '';
+                addLog("system", "Console cleared.");
+            }
+            else if (lowercaseCmd === '/time') {
+                addLog("ai", `Current server time is ${new Date().toLocaleString()}`);
+            }
+            else if (lowercaseCmd === '/hello') {
+                addLog("ai", "Hello, Captain. I am at your service. What shall we build today?");
+            }
+            else if (lowercaseCmd === 'hi' || lowercaseCmd === '안녕') {
+                addLog("ai", "반갑습니다 대장님. 오늘도 완벽한 결과물을 만들어보겠습니다.");
+            }
+            else {
+                // Mock AI Response
+                document.getElementById('sys-status').textContent = "SYSTEM: PROCESSING...";
+                setTimeout(() => {
+                    addLog("ai", `Command understood. Analyzing parameters for: "${cmd}"... Process initiated.`);
+                    document.getElementById('sys-status').textContent = "SYSTEM: STABLE";
+                }, 800);
+            }
+        }
+
+        // --- Interactivity ---
+        document.getElementById('cmd-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleCommand();
+        });
+
+        document.getElementById('elite-mission-text').addEventListener('click', () => {
+            const updated = prompt("엘리트 미션 내용을 수정하시겠습니까?", missionText);
+            if (updated) {
+                missionText = updated;
+                document.getElementById('elite-mission-text').textContent = updated;
+                localStorage.setItem('kmg_mission', updated);
+                addLog("system", "Elite Mission objective updated.");
+            }
+        });
+
+        function playSound(id) {
+            const s = document.getElementById(id);
+            if(s) {
+                s.currentTime = 0;
+                s.play().catch(e => console.log("Sound play error"));
+            }
+        }
+
+        // --- Branding Animation ---
         const motives = [
             "진정한 혁신은 실행력에서 나온다.",
             "AI는 도구일 뿐, 당신이 주인공이다.",
@@ -492,10 +767,19 @@
             const box = document.getElementById('motive');
             box.style.opacity = 0;
             setTimeout(() => {
-                box.textContent = `"${motives[motiveIdx]}"`;
+                box.textContent = motives[motiveIdx];
                 box.style.opacity = 1;
             }, 500);
         }, 10000);
+
+        // Motive Box Mouse Interaction
+        document.getElementById('motive').addEventListener('click', () => {
+            motiveIdx = (motiveIdx + 1) % motives.length;
+            document.getElementById('motive').textContent = motives[motiveIdx];
+            playSound('sound-click');
+        });
+
+        init();
     </script>
 </body>
 </html>
