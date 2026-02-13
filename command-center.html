@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KMG COMMAND CENTER | ELITE AI HUB</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-cyan: #00f2fe;
+            --primary-blue: #0ea5e9;
+            --accent-purple: #8b5cf6;
+            --danger-red: #ef4444;
+            --success-green: #10b981;
+            --bg-deep: #050505;
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+
+        body {
+            background-color: var(--bg-deep);
+            color: #fff;
+            font-family: 'Outfit', sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+        }
+
+        /* --- Background / Ambience --- */
+        .ambient-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(139, 92, 246, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(14, 165, 233, 0.05) 0%, transparent 50%);
+            z-index: -1;
+        }
+
+        .grid-plane {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
+            background-size: 50px 50px;
+            opacity: 0.1;
+            z-index: -1;
+            mask-image: radial-gradient(circle at center, black 0%, transparent 80%);
+        }
+
+        /* --- Global Layout --- */
+        #app {
+            display: grid;
+            grid-template-columns: 350px 1fr 350px;
+            width: 100%;
+            height: 100vh;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        /* --- Left Side: Captain's Schedule & Mission --- */
+        .sidebar-left {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .panel {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--primary-cyan);
+            padding-left: 15px;
+        }
+
+        .panel-header h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            color: var(--primary-cyan);
+        }
+
+        .schedule-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .schedule-item {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--border);
+            padding: 15px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .schedule-item:hover {
+            border-color: var(--primary-cyan);
+            background: rgba(0, 242, 254, 0.05);
+            transform: translateX(5px);
+        }
+
+        .schedule-time {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--primary-cyan);
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .schedule-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .item-status {
+            position: absolute;
+            right: 0; top: 0; height: 100%; width: 4px;
+            background: var(--primary-blue);
+        }
+
+        /* --- Center Hub: Main Branding & HUD --- */
+        .main-hub {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 30px;
+        }
+
+        .top-status {
+            display: flex;
+            width: 100%;
+            justify-content: space-between;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .hero-branding {
+            text-align: center;
+            margin-top: -50px;
+        }
+
+        .captain-tag {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            background: linear-gradient(to right, var(--primary-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 900;
+            display: block;
+            margin-bottom: -10px;
+            letter-spacing: 5px;
+        }
+
+        .main-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 5.5rem;
+            font-weight: 900;
+            line-height: 1;
+            margin-bottom: 20px;
+            background: linear-gradient(to bottom, #fff, var(--primary-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 30px rgba(14, 165, 233, 0.4));
+        }
+
+        .motive-box {
+            background: rgba(255,255,255,0.03);
+            border-radius: 50px;
+            padding: 10px 30px;
+            border: 1px solid var(--border);
+            font-style: italic;
+            font-size: 0.9rem;
+            color: var(--primary-cyan);
+            animation: fadeIn 2s ease;
+        }
+
+        /* --- Right Side: AI Agent Status & Terminal --- */
+        .sidebar-right {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .hud-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--border);
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-val {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--primary-cyan);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .terminal {
+            flex-grow: 1;
+            background: rgba(0,0,0,0.5);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            padding: 15px;
+            color: #10b981;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .terminal-header {
+            color: #64748b;
+            margin-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 5px;
+        }
+
+        .log-entry { margin-bottom: 5px; }
+        .log-entry span { color: #f43f5e; }
+
+        /* --- Footer: Command Controls --- */
+        .command-bar {
+            width: 100%;
+            height: 60px;
+            max-width: 800px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            gap: 15px;
+        }
+
+        .command-input {
+            flex-grow: 1;
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .btn-send {
+            background: var(--primary-cyan);
+            color: #000;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: 900;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-send:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px var(--primary-cyan);
+        }
+
+        /* --- Animations --- */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        .scanner {
+            position: absolute;
+            top: 0; left: 0; width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent, rgba(0, 242, 254, 0.1), transparent);
+            animation: scan 4s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes scan {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+
+        /* --- Special Signature Branding --- */
+        .branding-sig {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            text-align: right;
+            opacity: 0.5;
+        }
+
+        .kmg-logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.8rem;
+            color: #fff;
+            letter-spacing: 2px;
+        }
+
+        .sig-text {
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <div class="ambient-bg"></div>
+    <div class="grid-plane"></div>
+
+    <main id="app">
+        <!-- Left: Captain's HQ -->
+        <section class="sidebar-left">
+            <div class="panel" style="flex: 1;">
+                <header class="panel-header">
+                    <h3>CAPTAIN'S SCHEDULE</h3>
+                    <span style="font-size: 0.7rem; color: #64748b;">TOTAL: 4</span>
+                </header>
+                <div class="schedule-list" id="schedule">
+                    <li class="schedule-item">
+                        <span class="schedule-time">09:00 - 10:30</span>
+                        <p class="schedule-title">안티그래비티 신규 워크플로우 설계</p>
+                        <div class="item-status" style="background: var(--accent-purple);"></div>
+                    </li>
+                    <li class="schedule-item">
+                        <span class="schedule-time">11:00 - 12:30</span>
+                        <p class="schedule-title">Elite AI 마스터 클래스 라이브 강의</p>
+                        <div class="item-status"></div>
+                    </li>
+                    <li class="schedule-item">
+                        <span class="schedule-time">14:00 - 16:00</span>
+                        <p class="schedule-title">Projects/The_Command_Center 고도화</p>
+                        <div class="item-status"></div>
+                    </li>
+                    <li class="schedule-item">
+                        <span class="schedule-time">17:00 - 18:30</span>
+                        <p class="schedule-title">커뮤니티 회고 및 다음 미션 공지</p>
+                        <div class="item-status" style="background: #64748b; opacity: 0.3;"></div>
+                    </li>
+                </div>
+            </div>
+
+            <div class="panel" style="height: 180px;">
+                <header class="panel-header">
+                    <h3>ELITE MISSION</h3>
+                </header>
+                <p style="font-size: 0.9rem; color: #e2e8f0; line-height: 1.6;">
+                    "대한민국 최고의 AI 에어전트 팀을 구축하라. 코딩은 도구일 뿐, 핵심은 설계다."
+                </p>
+                <div style="margin-top: auto; font-size: 0.75rem; color: var(--primary-cyan); font-weight: bold;">
+                    READY FOR DEPLOYMENT >
+                </div>
+            </div>
+        </section>
+
+        <!-- Center: Core Interface -->
+        <section class="main-hub">
+            <div class="top-status">
+                <span>COORD: 37.5665 N, 126.9780 E</span>
+                <span id="digital-clock">20:41:12</span>
+                <span>SYSTEM: STABLE</span>
+            </div>
+
+            <div class="hero-branding">
+                <span class="captain-tag">CAPTAIN MIN-GYU</span>
+                <h1 class="main-title">AI BASE<br>ONLINE</h1>
+                <div class="motive-box" id="motive">"진정한 혁신은 실행력에서 나온다."</div>
+            </div>
+
+            <div class="command-bar">
+                <span style="color: var(--primary-cyan); font-family: 'Space Mono'; opacity: 0.7;">$</span>
+                <input type="text" class="command-input" placeholder="에이전트에게 명령을 내리세요...">
+                <button class="btn-send">EXECUTE</button>
+            </div>
+        </section>
+
+        <!-- Right: AI Intelligence -->
+        <section class="sidebar-right">
+            <div class="panel">
+                <header class="panel-header">
+                    <h3>AGENT STATUS</h3>
+                </header>
+                <div class="hud-stats">
+                    <div class="stat-card">
+                        <span class="stat-val">98%</span>
+                        <span class="stat-label">Efficiency</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-val">1.2k</span>
+                        <span class="stat-label">Token/Sec</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-val">Active</span>
+                        <span class="stat-label">Neural Link</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-val">ELITE</span>
+                        <span class="stat-label">Mode</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="terminal" id="terminal-logs">
+                <div class="scanner"></div>
+                <div class="terminal-header">KMG-AI LOG CONSOLE</div>
+                <div class="log-entry"><span>[SYS]</span> Initializing core processors...</div>
+                <div class="log-entry"><span>[AI]</span> Neural link established with Captain.</div>
+                <div class="log-entry"><span>[SYS]</span> Waiting for input...</div>
+            </div>
+        </section>
+    </main>
+
+    <div class="branding-sig">
+        <div class="kmg-logo">ANTIGRAVITY SYSTEMS</div>
+        <div class="sig-text">Custom Built by BI-SEO Team</div>
+    </div>
+
+    <script>
+        // Real-time Clock
+        function updateClock() {
+            const now = new Date();
+            const time = now.toTimeString().split(' ')[0];
+            document.getElementById('digital-clock').textContent = time;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // Dynamic Terminal Logs
+        const logs = [
+            "Analyzing project repository...",
+            "Updating workflow components...",
+            "Optimizing token expenditure...",
+            "Scanning for potential bottlenecks...",
+            "Neural pattern detected: 'Innovation'",
+            "Syncing with cloud-base 'Horizon'...",
+            "Captain's efficiency is increasing.",
+            "Generating weekly report draft..."
+        ];
+
+        const terminal = document.getElementById('terminal-logs');
+        function addLog() {
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            const randomLog = logs[Math.floor(Math.random() * logs.length)];
+            entry.innerHTML = `<span>[AI]</span> ${randomLog}`;
+            terminal.appendChild(entry);
+            terminal.scrollTop = terminal.scrollHeight;
+            if (terminal.childNodes.length > 30) terminal.removeChild(terminal.childNodes[2]);
+        }
+        setInterval(addLog, 4000);
+
+        // Motive Toggle
+        const motives = [
+            "진정한 혁신은 실행력에서 나온다.",
+            "AI는 도구일 뿐, 당신이 주인공이다.",
+            "완벽보다 완수가 중요하다.",
+            "오늘의 코딩이 내일의 시스템이 된다.",
+            "김민규 대장님의 AI 특급 열차, 출발합니다."
+        ];
+        let motiveIdx = 0;
+        setInterval(() => {
+            motiveIdx = (motiveIdx + 1) % motives.length;
+            const box = document.getElementById('motive');
+            box.style.opacity = 0;
+            setTimeout(() => {
+                box.textContent = `"${motives[motiveIdx]}"`;
+                box.style.opacity = 1;
+            }, 500);
+        }, 10000);
+    </script>
+</body>
+</html>
