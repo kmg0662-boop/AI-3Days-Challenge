@@ -23,7 +23,8 @@ function startChallenge() {
     const lowerPw = userPassword.toLowerCase();
     const isValid = lowerPw === 'qkrtldncksqkqh' || 
                     lowerPw === 'rlaalsrbwkdwkdaos' || 
-                    lowerPw === 'min9man9';
+                    lowerPw === 'min9man9' ||
+                    userPassword === '김민규짱짱맨';
     
     if (!isValid) {
         alert('❌ 암호가 틀렸습니다!');
