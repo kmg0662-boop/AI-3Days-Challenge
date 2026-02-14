@@ -20,11 +20,13 @@ function startChallenge() {
     
     if (!userPassword) return;
 
-    const lowerPw = userPassword.toLowerCase();
+    const lowerPw = userPassword.trim().toLowerCase();
     const isValid = lowerPw === 'qkrtldncksqkqh' || 
                     lowerPw === 'rlaalsrbwkdwkdaos' || 
                     lowerPw === 'min9man9' ||
-                    userPassword === '김민규짱짱맨';
+                    lowerPw === 'mingcom' ||
+                    userPassword.trim() === '김민규짱짱맨' ||
+                    userPassword.trim() === '밍컴';
     
     if (!isValid) {
         alert('❌ 암호가 틀렸습니다!');
@@ -1327,8 +1329,8 @@ function renderDay2Footer() {
                 <h3>🎉 DAY 2 완료!</h3>
                 <p>축하합니다! 이제 여러분은 AI 에이전트를 만들고 활용할 수 있습니다!</p>
                 <p>내일은 더 강력한 자동화 시스템을 만들어봅시다! 🚀</p>
-                <button class="next-day-btn" onclick="showDay3Password()" style="margin-top: 1rem;">
-                    👑 DAY 3 비밀번호 받기
+                <button class="next-day-btn" onclick="switchDay(3)" style="margin-top: 1rem;">
+                    👑 DAY 3 마스터 과정 바로 시작하기
                 </button>
             </div>
         </div>
@@ -1603,25 +1605,25 @@ function renderDay3Part3_CommandCenter() {
                 <!-- 왼쪽: 상태 모니터 & 맵 -->
                 <div class="status-panel">
                     <div class="monitor-header">
-                        <span class="monitor-title">SYSTEM STATUS: OPTIMAL</span>
+                        <span class="monitor-title">MINGCOM SYSTEM STATUS: OPTIMAL</span>
                         <div class="live-indicator">
                             <div class="dot-pulsing"></div>
-                            LIVE FEED
+                            EMPIRE LIVE FEED
                         </div>
                     </div>
                     
                     <div class="stats-grid">
                         <div class="stat-item">
                             <span class="stat-value">25</span>
-                            <span class="stat-label">DRIVE (Mkt)</span>
+                            <span class="stat-label">MING-DRIVE</span>
                         </div>
                         <div class="stat-item">
                             <span class="stat-value">30</span>
-                            <span class="stat-label">TECH (Dev)</span>
+                            <span class="stat-label">MING-TECH</span>
                         </div>
                         <div class="stat-item">
                             <span class="stat-value">15</span>
-                            <span class="stat-label">BRAIN (Intel)</span>
+                            <span class="stat-label">MING-BRAIN</span>
                         </div>
                     </div>
                     
@@ -1632,45 +1634,45 @@ function renderDay3Part3_CommandCenter() {
                         <div class="agent-node" style="top: 60%; left: 45%;"></div>
                         <div class="agent-node" style="top: 75%; left: 20%;"></div>
                         <div class="agent-node" style="top: 80%; left: 80%;"></div>
-                        <p style="color: rgba(6, 182, 212, 0.4); font-size: 0.8rem; z-index: 1;">[ HOLOGRAPHIC MAP LOADED ]</p>
+                        <p style="color: rgba(6, 182, 212, 0.4); font-size: 0.8rem; z-index: 1;">[ MINGCOM HOLOGRAPHIC MAP ]</p>
                     </div>
                 </div>
                 
                 <!-- 오른쪽: 실시간 작업 로그 -->
                 <div class="log-panel">
                     <div class="monitor-header">
-                        <span class="monitor-title">AGENT ACTIVITY LOG</span>
+                        <span class="monitor-title">MINGCOM ACTIVITY LOG</span>
                     </div>
                     <div class="log-content">
                         <div class="log-entry">
-                            <span class="log-time">[12:21:04]</span>
-                            <span class="log-agent">DRIVE_07:</span>
-                            <span class="log-msg">광주전라제주권역 키워드 분석 완료.</span>
+                            <span class="log-time">[12:28:04]</span>
+                            <span class="log-agent">MING-DRIVE_07:</span>
+                            <span class="log-msg">수익화 모델 분석 및 타겟팅 완료.</span>
                         </div>
                         <div class="log-entry">
-                            <span class="log-time">[12:21:45]</span>
-                            <span class="log-agent">TECH_12:</span>
-                            <span class="log-msg">제안서 서식 자동 렌더링 엔진 가동 중.</span>
+                            <span class="log-time">[12:28:45]</span>
+                            <span class="log-agent">MING-TECH_12:</span>
+                            <span class="log-msg">법인 자동화 시스템 (주)밍컴 라이프사이클 설계 중.</span>
                         </div>
                         <div class="log-entry">
-                            <span class="log-time">[12:22:12]</span>
-                            <span class="log-agent">BRAIN_03:</span>
-                            <span class="log-msg">과거 낙찰 사례 127건 자산 데이터 추출 성공.</span>
+                            <span class="log-time">[12:29:12]</span>
+                            <span class="log-agent">MING-BRAIN_03:</span>
+                            <span class="log-msg">제국 자산 포트폴리오 최적화 성공.</span>
                         </div>
                         <div class="log-entry">
-                            <span class="log-time">[12:23:01]</span>
+                            <span class="log-time">[12:29:55]</span>
                             <span class="log-agent">COO_SIWOO:</span>
-                            <span class="log-msg">대장님 승인 대기 중...</span>
+                            <span class="log-msg">민규 대장님, 밍컴 창립 보고 준비 완료!</span>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="mission-box" style="margin-top: 2rem; border-color: var(--accent-purple);">
-                <h4 style="color: var(--accent-purple);">🎯 최종 지휘: 100인 군단 동시 가동</h4>
-                <p>에이전트에게 제국을 다스리는 첫 번째 명령을 내리세요:</p>
+                <h4 style="color: var(--accent-purple);">🎯 밍컴(MINGCOM) 제국 선포</h4>
+                <p>에이전트에게 밍컴 소속으로서의 첫 번째 수익화 명령을 내리세요:</p>
                 <div class="command-box">
-                    <code>"현재 구축된 100인 에이전트 시스템을 총동원해서, '소셜벤더 입찰 제안서'의 초안과 디자인 에셋을 10분 내로 완성해줘."</code>
+                    <code>"현재 구축된 100인 에이전트 시스템을 총동원해서, '밍컴'의 첫 번째 수익화 프로젝트인 AI 제안서 자동화 서비스의 MVP를 설계해줘."</code>
                     <button class="copy-btn" onclick="copyCommand()">📋 복사</button>
                 </div>
             </div>
@@ -2144,7 +2146,8 @@ function showDay3Password() {
                     font-family: 'Courier New', monospace;
                     letter-spacing: 3px;
                     margin-bottom: 0.5rem;
-                ">최고김민규 / chlrhrlaalsrb</p>
+                ">밍컴 / mingcom</p>
+                <p style="font-size: 0.8rem; color: #64748b;">(또는 기존: 최고김민규)</p>
                 <button onclick="copyDay3Password(this)" style="
                     background: linear-gradient(135deg, #a855f7, #9333ea);
                     color: white;
@@ -2242,13 +2245,6 @@ function switchDay(dayNum) {
             document.body.scrollTop = 0;
         }, 50);
     } else if (dayNum === 2) {
-        // Day 2 비밀번호 체크
-        const pw = prompt('🔐 DAY 2 비밀번호를 입력하세요:');
-        if (pw !== 'cjsworlaalsrb' && pw !== '천재김민규') {
-            alert('❌ 비밀번호가 틀렸습니다!');
-            return;
-        }
-
         // Day 2로 이동
         content.innerHTML = renderDay2Content();
         // Day 2 active 표시
@@ -2266,13 +2262,6 @@ function switchDay(dayNum) {
             }
         }, 50);
     } else if (dayNum === 3) {
-        // Day 3 비밀번호 체크
-        const pw = prompt('🔐 DAY 3 비밀번호를 입력하세요:');
-        if (pw !== 'chlrhrlaalsrb' && pw !== '최고김민규') {
-            alert('❌ 비밀번호가 틀렸습니다!');
-            return;
-        }
-
         // Day 3로 이동
         content.innerHTML = renderDay3Content();
         // Day 3 active 표시
