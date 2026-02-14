@@ -1595,86 +1595,110 @@ function renderDay3Part2_7_GoldenPrompts() {
 function renderDay3Part3_CommandCenter() {
     return `
         <section class="lesson-section">
-            <h3>3. [실전] THE COMMAND CENTER 완공 (⏱️ 40분)</h3>
-            <p class="section-intro">3일간 배운 모든 기술을 집약한 '나만의 AI 집무실'을 완성합니다. 100인의 에이전트 군단을 한눈에 지휘하세요.</p>
+            <h3>3. [실전] 나만의 AI 컨트롤 센터 만들기 (⏱️ 40분)</h3>
+            <p class="section-intro">3일간 배운 모든 기술을 집약하여, 여러 에이전트를 효율적으로 관리하고 지휘할 수 있는 시스템을 구축합니다.</p>
+            
+            <div class="concept-box" style="background: rgba(59, 130, 246, 0.1); border-left: 4px solid var(--primary-blue); padding: 1.5rem; margin: 2rem 0; border-radius: 8px;">
+                <h4 style="color: var(--primary-blue); margin-bottom: 1rem;">💡 핵심 개념: 에이전트 확장 전략</h4>
+                <p style="margin-bottom: 1rem;">AI 에이전트 시스템은 단계적으로 확장하는 것이 효과적입니다:</p>
+                <div style="display: grid; gap: 1rem; margin-top: 1rem;">
+                    <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px;">
+                        <strong style="color: var(--primary-cyan);">1단계: 개인 비서 (1~3명)</strong>
+                        <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem;">일정 관리, 이메일 작성, 간단한 리서치를 담당하는 기본 에이전트</p>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px;">
+                        <strong style="color: var(--primary-cyan);">2단계: 전문 팀 (5~10명)</strong>
+                        <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem;">마케팅, 개발, 디자인 등 분야별 전문 에이전트로 구성된 소규모 팀</p>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px;">
+                        <strong style="color: var(--primary-cyan);">3단계: 조직 시스템 (20명 이상)</strong>
+                        <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem;">여러 팀이 협업하는 복잡한 프로젝트를 수행할 수 있는 본격적인 AI 조직</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="example-box" style="margin-top: 2rem;">
+                <h4>📊 예시: 소규모 AI 팀 대시보드</h4>
+                <p style="margin-bottom: 1rem;">다음은 5명의 전문 에이전트로 구성된 팀의 실시간 모니터링 예시입니다:</p>
+            </div>
             
             <div class="command-center-ui">
                 <!-- 왼쪽: 상태 모니터 & 맵 -->
                 <div class="status-panel">
                     <div class="monitor-header">
-                        <span class="monitor-title">MINGCOM SYSTEM STATUS: OPTIMAL</span>
+                        <span class="monitor-title">AI TEAM STATUS: ACTIVE</span>
                         <div class="live-indicator">
                             <div class="dot-pulsing"></div>
-                            EMPIRE LIVE FEED
+                            LIVE MONITORING
                         </div>
                     </div>
                     
                     <div class="stats-grid">
                         <div class="stat-item">
-                            <span class="stat-value">25</span>
-                            <span class="stat-label">MING-DRIVE</span>
+                            <span class="stat-value">2</span>
+                            <span class="stat-label">리서치팀</span>
                         </div>
                         <div class="stat-item">
-                            <span class="stat-value">30</span>
-                            <span class="stat-label">MING-TECH</span>
+                            <span class="stat-value">2</span>
+                            <span class="stat-label">콘텐츠팀</span>
                         </div>
                         <div class="stat-item">
-                            <span class="stat-value">15</span>
-                            <span class="stat-label">MING-BRAIN</span>
+                            <span class="stat-value">1</span>
+                            <span class="stat-label">매니저</span>
                         </div>
                     </div>
                     
                     <div class="hologram-map">
-                        <div class="agent-node" style="top: 20%; left: 50%;"></div>
-                        <div class="agent-node" style="top: 40%; left: 30%;"></div>
-                        <div class="agent-node" style="top: 45%; left: 70%;"></div>
-                        <div class="agent-node" style="top: 60%; left: 45%;"></div>
-                        <div class="agent-node" style="top: 75%; left: 20%;"></div>
-                        <div class="agent-node" style="top: 80%; left: 80%;"></div>
-                        <p style="color: rgba(6, 182, 212, 0.4); font-size: 0.8rem; z-index: 1;">[ MINGCOM HOLOGRAPHIC MAP ]</p>
+                        <div class="agent-node" style="top: 30%; left: 50%;"></div>
+                        <div class="agent-node" style="top: 50%; left: 30%;"></div>
+                        <div class="agent-node" style="top: 50%; left: 70%;"></div>
+                        <div class="agent-node" style="top: 70%; left: 40%;"></div>
+                        <div class="agent-node" style="top: 70%; left: 60%;"></div>
+                        <p style="color: rgba(6, 182, 212, 0.4); font-size: 0.8rem; z-index: 1;">[ TEAM NETWORK MAP ]</p>
                     </div>
                 </div>
                 
                 <!-- 오른쪽: 실시간 작업 로그 -->
                 <div class="log-panel">
                     <div class="monitor-header">
-                        <span class="monitor-title">MINGCOM ACTIVITY LOG</span>
+                        <span class="monitor-title">ACTIVITY LOG</span>
                     </div>
                     <div class="log-content">
                         <div class="log-entry">
-                            <span class="log-time">[12:28:04]</span>
-                            <span class="log-agent">MING-DRIVE_07:</span>
-                            <span class="log-msg">수익화 모델 분석 및 타겟팅 완료.</span>
+                            <span class="log-time">[14:23:15]</span>
+                            <span class="log-agent">Research_Agent_01:</span>
+                            <span class="log-msg">시장 조사 데이터 수집 완료.</span>
                         </div>
                         <div class="log-entry">
-                            <span class="log-time">[12:28:45]</span>
-                            <span class="log-agent">MING-TECH_12:</span>
-                            <span class="log-msg">법인 자동화 시스템 (주)밍컴 라이프사이클 설계 중.</span>
+                            <span class="log-time">[14:24:32]</span>
+                            <span class="log-agent">Content_Agent_01:</span>
+                            <span class="log-msg">블로그 포스트 초안 작성 중...</span>
                         </div>
                         <div class="log-entry">
-                            <span class="log-time">[12:29:12]</span>
-                            <span class="log-agent">MING-BRAIN_03:</span>
-                            <span class="log-msg">제국 자산 포트폴리오 최적화 성공.</span>
+                            <span class="log-time">[14:25:48]</span>
+                            <span class="log-agent">Research_Agent_02:</span>
+                            <span class="log-msg">경쟁사 분석 리포트 생성 완료.</span>
                         </div>
                         <div class="log-entry">
-                            <span class="log-time">[12:29:55]</span>
-                            <span class="log-agent">COO_SIWOO:</span>
-                            <span class="log-msg">민규 대장님, 밍컴 창립 보고 준비 완료!</span>
+                            <span class="log-time">[14:26:19]</span>
+                            <span class="log-agent">Manager_Agent:</span>
+                            <span class="log-msg">주간 업무 요약 준비 완료!</span>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="mission-box" style="margin-top: 2rem; border-color: var(--accent-purple);">
-                <h4 style="color: var(--accent-purple);">🎯 밍컴(MINGCOM) 제국 선포</h4>
-                <p>에이전트에게 밍컴 소속으로서의 첫 번째 수익화 명령을 내리세요:</p>
+                <h4 style="color: var(--accent-purple);">🎯 실습 미션: 나만의 AI 팀 설계하기</h4>
+                <p>에이전트에게 다음과 같이 요청하여 여러분만의 AI 팀을 설계해보세요:</p>
                 <div class="command-box">
-                    <code>"현재 구축된 100인 에이전트 시스템을 총동원해서, '밍컴'의 첫 번째 수익화 프로젝트인 AI 제안서 자동화 서비스의 MVP를 설계해줘."</code>
+                    <code>"내가 운영하는 [업종/분야]를 위한 5명의 AI 에이전트 팀을 설계해줘. 각 에이전트의 역할, 담당 업무, 그리고 서로 어떻게 협업하는지 구체적으로 설명해줘."</code>
                     <button class="copy-btn" onclick="copyCommand()">📋 복사</button>
                 </div>
+                <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--text-muted);">💡 팁: [업종/분야] 부분을 여러분의 실제 업무나 관심 분야로 바꿔보세요. (예: 온라인 쇼핑몰, 유튜브 채널, 스타트업 등)</p>
             </div>
             
-            <button class="check-btn" onclick="markComplete(15)">✅ 모든 과정 수료 완료</button>
+            <button class="check-btn" onclick="markComplete(15)">✅ Part 3 완료</button>
         </section>
     `;
 }
