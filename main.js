@@ -1417,41 +1417,41 @@ function renderDay3Content() {
                 <p class="section-intro">AI가 한 명의 전문가를 넘어 하나의 조직으로 작동하는 실제 모델을 분석합니다.</p>
                 
                 <div class="mermaid-box">
-                    <h5>🎨 안티그래비티 조직도 (11개 에이전트 팀)</h5>
+                    <h5>🎨 안티그래비티 조직도 (11개 AI 에이전트 팀)</h5>
                     <div class="mermaid">
 graph TD
-    %% Decision Making & Management
-    Boss((Representative)) --- HQ[Central HQ]
-    HQ --- COO[김비서 - AI PM Master]
-    COO --- PM[Project Manager Agent]
+    %% 의사결정 및 관리
+    Boss((대표 - 전략 지휘)) --- HQ[중앙 본부]
+    HQ --- COO[김비서 - AI 총괄 매니저]
+    COO --- PM[프로젝트 매니저 에이전트]
 
-    %% Layers
-    subgraph "Knowledge & IP (Brain)"
-        COO --> KA[Knowledge Architect]
-        KA --> Repo[(Knowledge Base)]
+    %% 레이어별 설명
+    subgraph "지식 & IP 자산화 (Brain)"
+        COO --> KA[지식 아키렉트]
+        KA --> Repo[(지식 저장소 - 자산화)]
     end
 
-    subgraph "Strategy & Planning (Heart)"
-        COO --> PT[Planning Team]
-        PT --- CP[Campaign Planner]
-        PT --- IR[Investment Reviewer]
+    subgraph "전략 & 기획 (Heart)"
+        COO --> PT[기획 전략팀]
+        PT --- CP[캠페인 기획자]
+        PT --- IR[투자/수익 검토]
     end
 
-    subgraph "Creative & Branding (Face)"
-        COO --> DS[Design Strategist]
-        DS --- BC[Brand Copier]
+    subgraph "디자인 & 브랜딩 (Face)"
+        COO --> DS[디자인 전략가]
+        DS --- BC[브랜드 카피라이터]
     end
 
-    subgraph "Tech & Development (Muscle)"
-        COO --> SO[Special Ops Team]
-        SO --- WT[Web Dev Team]
+    subgraph "기술 & 실행 (Muscle)"
+        COO --> SO[특수 작전팀]
+        SO --- WT[웹 개발팀]
     end
 
-    subgraph "Real-time Interface (Voice)"
-        COO <--> CE[Communication Engineer]
-        CE <--> TG[Telegram]
-        CE <--> KK[Kakao]
-        CE <--> Web[Command Center]
+    subgraph "실시간 소통 (Voice)"
+        COO <--> CE[커뮤니케이션 엔진]
+        CE <--> TG[텔레그램]
+        CE <--> KK[카카오톡]
+        CE <--> Web[커맨드 센터 - 상황실]
     end
                     </div>
                 </div>
@@ -1460,27 +1460,27 @@ graph TD
                     <h5>🔄 안티그래비티 지휘-실행 워크플로우</h5>
                     <div class="mermaid">
 graph LR
-    Step1(1. Directing) --> Step2(2. Strategy)
-    Step2 --> Step3(3. Execution)
-    Step3 --> Step4(4. Feedback)
-    Step4 -.-> |Learning| Step1
+    Step1(1. 지휘 - 의사결정) --> Step2(2. 전략 - 자원배분)
+    Step2 --> Step3(3. 실행 - 업무처리)
+    Step3 --> Step4(4. 환류 - 결과보고)
+    Step4 -.-> |경험치 누적| Step1
 
-    subgraph "Directing"
-        Boss1[Representative] --> COO1[김비서]
+    subgraph "지휘 (Directing)"
+        Boss1[대표/대장] --> COO1[김비서]
     end
 
-    subgraph "Strategy"
-        COO1 --> PM1[Project Manager]
-        PM1 --> Strategy_Teams[Planning / Design]
+    subgraph "전략 (Strategy)"
+        COO1 --> PM1[프로젝트 매니저]
+        PM1 --> Strategy_Teams[기획 / 디자인팀]
     end
 
-    subgraph "Execution"
-        Strategy_Teams --> Execution_Teams[Web / Spec Ops]
-        Execution_Teams --> Artifacts[Product / IP Asset]
+    subgraph "실행 (Execution)"
+        Strategy_Teams --> Execution_Teams[웹개발 / 특수작전]
+        Execution_Teams --> Artifacts[결과물 / 디지털 자산]
     end
 
-    subgraph "Feedback"
-        Artifacts --> CC1[The Command Center]
+    subgraph "환류 (Feedback)"
+        Artifacts --> CC1[커맨드 센터 - 실시간 모니터링]
         CC1 --> Boss1
     end
                     </div>
