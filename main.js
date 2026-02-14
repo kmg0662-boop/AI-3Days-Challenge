@@ -1597,18 +1597,85 @@ function renderDay3Part3_CommandCenter() {
     return `
         <section class="lesson-section">
             <h3>3. [실전] THE COMMAND CENTER 완공 (⏱️ 40분)</h3>
-            <p class="section-intro">3일간 배운 모든 기술을 집약한 '나만의 AI 집무실'을 완성합니다.</p>
+            <p class="section-intro">3일간 배운 모든 기술을 집약한 '나만의 AI 집무실'을 완성합니다. 100인의 에이전트 군단을 한눈에 지휘하세요.</p>
             
-            <div class="mission-box">
-                <h4>🎯 최종 미션: 통합 대시보드 구축</h4>
-                <p>에이전트에게 다음 명령을 내리세요:</p>
+            <div class="command-center-ui">
+                <!-- 왼쪽: 상태 모니터 & 맵 -->
+                <div class="status-panel">
+                    <div class="monitor-header">
+                        <span class="monitor-title">SYSTEM STATUS: OPTIMAL</span>
+                        <div class="live-indicator">
+                            <div class="dot-pulsing"></div>
+                            LIVE FEED
+                        </div>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <span class="stat-value">25</span>
+                            <span class="stat-label">DRIVE (Mkt)</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">30</span>
+                            <span class="stat-label">TECH (Dev)</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">15</span>
+                            <span class="stat-label">BRAIN (Intel)</span>
+                        </div>
+                    </div>
+                    
+                    <div class="hologram-map">
+                        <div class="agent-node" style="top: 20%; left: 50%;"></div>
+                        <div class="agent-node" style="top: 40%; left: 30%;"></div>
+                        <div class="agent-node" style="top: 45%; left: 70%;"></div>
+                        <div class="agent-node" style="top: 60%; left: 45%;"></div>
+                        <div class="agent-node" style="top: 75%; left: 20%;"></div>
+                        <div class="agent-node" style="top: 80%; left: 80%;"></div>
+                        <p style="color: rgba(6, 182, 212, 0.4); font-size: 0.8rem; z-index: 1;">[ HOLOGRAPHIC MAP LOADED ]</p>
+                    </div>
+                </div>
+                
+                <!-- 오른쪽: 실시간 작업 로그 -->
+                <div class="log-panel">
+                    <div class="monitor-header">
+                        <span class="monitor-title">AGENT ACTIVITY LOG</span>
+                    </div>
+                    <div class="log-content">
+                        <div class="log-entry">
+                            <span class="log-time">[12:21:04]</span>
+                            <span class="log-agent">DRIVE_07:</span>
+                            <span class="log-msg">광주전라제주권역 키워드 분석 완료.</span>
+                        </div>
+                        <div class="log-entry">
+                            <span class="log-time">[12:21:45]</span>
+                            <span class="log-agent">TECH_12:</span>
+                            <span class="log-msg">제안서 서식 자동 렌더링 엔진 가동 중.</span>
+                        </div>
+                        <div class="log-entry">
+                            <span class="log-time">[12:22:12]</span>
+                            <span class="log-agent">BRAIN_03:</span>
+                            <span class="log-msg">과거 낙찰 사례 127건 자산 데이터 추출 성공.</span>
+                        </div>
+                        <div class="log-entry">
+                            <span class="log-time">[12:23:01]</span>
+                            <span class="log-agent">COO_SIWOO:</span>
+                            <span class="log-msg">대장님 승인 대기 중...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mission-box" style="margin-top: 2rem; border-color: var(--accent-purple);">
+                <h4 style="color: var(--accent-purple);">🎯 최종 지휘: 100인 군단 동시 가동</h4>
+                <p>에이전트에게 제국을 다스리는 첫 번째 명령을 내리세요:</p>
                 <div class="command-box">
-                    <code>"현재 구축된 웹 대시대시보드에 '오늘의 업무 스케줄러' 섹션을 추가하고, 매주 월요일마다 자동으로 주간 보고서 초안을 생성하는 기능을 구현해줘."</code>
+                    <code>"현재 구축된 100인 에이전트 시스템을 총동원해서, '소셜벤더 입찰 제안서'의 초안과 디자인 에셋을 10분 내로 완성해줘."</code>
                     <button class="copy-btn" onclick="copyCommand()">📋 복사</button>
                 </div>
             </div>
             
-            <button class="check-btn" onclick="markComplete(15)">✅ Part 3 완료</button>
+            <button class="check-btn" onclick="markComplete(15)">✅ 모든 과정 수료 완료</button>
         </section>
     `;
 }

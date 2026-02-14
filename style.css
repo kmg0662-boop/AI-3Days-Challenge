@@ -1372,3 +1372,163 @@ h3 {
   transform: translateY(-3px);
   box-shadow: 0 15px 40px rgba(6, 182, 212, 0.5);
 }
+
+/* Command Center UI - Cosmic Command Style */
+.command-center-ui {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1.5rem;
+  margin: 2rem 0;
+  height: 500px;
+}
+
+@media (max-width: 1000px) {
+  .command-center-ui {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+}
+
+/* Status Monitor */
+.status-panel {
+  background: rgba(10, 10, 12, 0.6);
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  border-radius: 20px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  backdrop-filter: blur(20px);
+}
+
+.monitor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.monitor-title {
+  font-family: 'Orbitron', sans-serif;
+  color: var(--primary-cyan);
+  font-weight: 700;
+  letter-spacing: 2px;
+  font-size: 0.9rem;
+}
+
+.live-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: #10b981;
+}
+
+.dot-pulsing {
+  width: 8px;
+  height: 8px;
+  background: #10b981;
+  border-radius: 50%;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.5); opacity: 0.5; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.stat-item {
+  background: rgba(255, 255, 255, 0.03);
+  padding: 1rem;
+  border-radius: 12px;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.stat-value {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.2rem;
+}
+
+.stat-label {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+
+/* Map Placeholder */
+.hologram-map {
+  flex: 1;
+  background: radial-gradient(circle at center, rgba(6, 182, 212, 0.1) 0%, transparent 70%);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 12px;
+  min-height: 200px;
+}
+
+.hologram-map::before {
+  content: '';
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  background-image: 
+    linear-gradient(rgba(6, 182, 212, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(6, 182, 212, 0.1) 1px, transparent 1px);
+  background-size: 40px 40px;
+  transform: rotateX(60deg) translateY(-50%);
+  opacity: 0.2;
+}
+
+.agent-node {
+  width: 12px;
+  height: 12px;
+  background: var(--primary-cyan);
+  border-radius: 50%;
+  box-shadow: 0 0 15px var(--primary-cyan);
+  position: absolute;
+}
+
+/* Agent Log */
+.log-panel {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  backdrop-filter: blur(10px);
+}
+
+.log-content {
+  flex: 1;
+  font-family: 'Courier New', monospace;
+  font-size: 0.8rem;
+  color: #94a3b8;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
+.log-entry {
+  margin-bottom: 0.8rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.05);
+}
+
+.log-time { color: var(--primary-cyan); margin-right: 0.5rem; }
+.log-agent { color: var(--accent-purple); font-weight: bold; }
+.log-msg { color: #fff; }
