@@ -1078,3 +1078,47 @@ h3 {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(6, 182, 212, 0.5);
 }
+
+/* Mermaid Box Styling */
+.mermaid-box {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 2rem;
+  margin-top: 1.5rem;
+  overflow-x: auto;
+  backdrop-filter: var(--glass-effect);
+  -webkit-backdrop-filter: var(--glass-effect);
+  transition: all 0.3s ease;
+}
+
+.mermaid-box:hover {
+  border-color: var(--primary-cyan);
+  box-shadow: 0 10px 30px rgba(6, 182, 212, 0.1);
+}
+
+.mermaid-box h5 {
+  color: var(--primary-cyan);
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.mermaid {
+  background: transparent !important;
+  display: flex;
+  justify-content: center;
+}
+
+/* Day 3 Case Study Section Extra Polish */
+.case-study-section {
+  border-left: 4px solid var(--primary-cyan);
+  background: linear-gradient(
+    to bottom right,
+    rgba(6, 182, 212, 0.05),
+    rgba(5, 5, 5, 0.3)
+  );
+}

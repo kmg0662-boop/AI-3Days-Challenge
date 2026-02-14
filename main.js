@@ -1410,6 +1410,83 @@ function renderDay3Content() {
             ${renderDay3Part1_Workflow()}
             ${renderDay3Part1_5_SkillPersona()}
             ${renderDay3Part2_MultiAgent()}
+            
+            <!-- Antigravity Case Study -->
+            <section class="lesson-section case-study-section">
+                <h3>🏛️ [Special Case Study] Antigravity AI Organization</h3>
+                <p class="section-intro">AI가 한 명의 전문가를 넘어 하나의 조직으로 작동하는 실제 모델을 분석합니다.</p>
+                
+                <div class="mermaid-box">
+                    <h5>🎨 안티그래비티 조직도 (11개 에이전트 팀)</h5>
+                    <div class="mermaid">
+graph TD
+    %% Decision Making & Management
+    Boss((Representative)) --- HQ[Central HQ]
+    HQ --- COO[김비서 - AI PM Master]
+    COO --- PM[Project Manager Agent]
+
+    %% Layers
+    subgraph "Knowledge & IP (Brain)"
+        COO --> KA[Knowledge Architect]
+        KA --> Repo[(Knowledge Base)]
+    end
+
+    subgraph "Strategy & Planning (Heart)"
+        COO --> PT[Planning Team]
+        PT --- CP[Campaign Planner]
+        PT --- IR[Investment Reviewer]
+    end
+
+    subgraph "Creative & Branding (Face)"
+        COO --> DS[Design Strategist]
+        DS --- BC[Brand Copier]
+    end
+
+    subgraph "Tech & Development (Muscle)"
+        COO --> SO[Special Ops Team]
+        SO --- WT[Web Dev Team]
+    end
+
+    subgraph "Real-time Interface (Voice)"
+        COO <--> CE[Communication Engineer]
+        CE <--> TG[Telegram]
+        CE <--> KK[Kakao]
+        CE <--> Web[Command Center]
+    end
+                    </div>
+                </div>
+
+                <div class="mermaid-box" style="margin-top: 3rem;">
+                    <h5>🔄 안티그래비티 지휘-실행 워크플로우</h5>
+                    <div class="mermaid">
+graph LR
+    Step1(1. Directing) --> Step2(2. Strategy)
+    Step2 --> Step3(3. Execution)
+    Step3 --> Step4(4. Feedback)
+    Step4 -.-> |Learning| Step1
+
+    subgraph "Directing"
+        Boss1[Representative] --> COO1[김비서]
+    end
+
+    subgraph "Strategy"
+        COO1 --> PM1[Project Manager]
+        PM1 --> Strategy_Teams[Planning / Design]
+    end
+
+    subgraph "Execution"
+        Strategy_Teams --> Execution_Teams[Web / Spec Ops]
+        Execution_Teams --> Artifacts[Product / IP Asset]
+    end
+
+    subgraph "Feedback"
+        Artifacts --> CC1[The Command Center]
+        CC1 --> Boss1
+    end
+                    </div>
+                </div>
+            </section>
+
             ${renderDay3Part3_CommandCenter()}
             ${renderDay3Part4_Deployment()}
             ${renderDay3Footer()}
@@ -2159,6 +2236,11 @@ function switchDay(dayNum) {
         // Day 3 active 표시
         const day3Nav = document.getElementById('nav-day3');
         if (day3Nav) day3Nav.classList.add('active');
+        
+        // Mermaid 렌더링 초기화
+        if (window.mermaid) {
+            mermaid.init(undefined, document.querySelectorAll(".mermaid"));
+        }
         
         setTimeout(() => {
             window.scrollTo(0, 0);
