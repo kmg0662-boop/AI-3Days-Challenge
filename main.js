@@ -1347,17 +1347,14 @@ function renderDay3Content() {
             <p class="day-intro">드디어 마지막 날입니다. 오늘은 단일 에이전트를 넘어, 스스로 작동하는 워크플로우와 다중 에이전트 협업 체계를 배워봅니다.</p>
             
             ${renderDay3Part1_Workflow()}
-            ${renderDay3Part1_5_SkillPersona()}
-            ${renderDay3Part2_MultiAgent()}
-            ${renderDay3Part2_7_GoldenPrompts()}
             
             <!-- Antigravity Case Study -->
             <section class="lesson-section case-study-section">
-                <h3>🏛️ [Special Case Study] Antigravity AI Organization</h3>
+                <h3>🏛️ [Special Case Study] MINGCOM AI Organization</h3>
                 <p class="section-intro">AI가 한 명의 전문가를 넘어 하나의 조직으로 작동하는 실제 모델을 분석합니다.</p>
                 
                 <div class="mermaid-box">
-                    <h5>🎨 안티그래비티 조직도 (11개 AI 에이전트 팀)</h5>
+                    <h5>🎨 밍컴 조직도 (100인 AI 에이전트 군단)</h5>
                     <div class="mermaid">
 graph TD
     %% 의사결정 및 관리
@@ -1397,7 +1394,7 @@ graph TD
                 </div>
 
                 <div class="mermaid-box" style="margin-top: 3rem;">
-                    <h5>🔄 안티그래비티 지휘-실행 워크플로우</h5>
+                    <h5>🔄 밍컴 지휘-실행 워크플로우</h5>
                     <div class="mermaid">
 graph LR
     Step1(1. 지휘 - 의사결정) --> Step2(2. 전략 - 자원배분)
