@@ -1341,12 +1341,13 @@ function renderDay2Part4_Mission() {
             </div>
             
             <div class="troubleshooting">
-                <h5>🆘 문제 해결 가이드</h5>
+                <h5>🆘 김비서의 위기 탈출 가이드</h5>
                 <ul>
-                    <li><strong>에이전트가 웹 접근을 못 할 때:</strong> "브라우저를 열어서 직접 검색해줘"</li>
-                    <li><strong>요약이 너무 길 때:</strong> "각 요약을 50자 이내로 줄여줘"</li>
-                    <li><strong>파일 저장 위치를 모를 때:</strong> "현재 폴더에 저장해줘"</li>
+                    <li><strong>에이전트가 말을 안 들을 때:</strong> "당황하지 말고 에러 메시지를 통째로 복사해서 저(김비서)에게 던지세요!"</li>
+                    <li><strong>엉뚱한 파일을 만들 때:</strong> "내 의도는 ~였어. 이 파일은 지우고 다시 생성해줘"라고 명확히 지시하세요.</li>
+                    <li><strong>무한 루프에 빠진 것 같을 때:</strong> 터미널에서 Ctrl+C를 눌러 중단시키고, "단계별로 다시 생각해보자"라고 제안하세요.</li>
                 </ul>
+                <p style="margin-top: 1rem; font-size: 0.9rem; color: #94a3b8;">💡 <strong>팁:</strong> AI도 가끔 실수를 합니다. 그럴 땐 '너는 유능한 비서야, 다시 한번 차분하게 분석해봐'라고 격려해주면 효과가 좋습니다. 😊</p>
             </div>
             
             <button class="check-btn" onclick="markComplete(9)">✅ Part 4 완료</button>
@@ -1410,6 +1411,7 @@ function renderDay3Content() {
             ${renderDay3Part1_Workflow()}
             ${renderDay3Part1_5_SkillPersona()}
             ${renderDay3Part2_MultiAgent()}
+            ${renderDay3Part2_7_GoldenPrompts()}
             
             <!-- Antigravity Case Study -->
             <section class="lesson-section case-study-section">
@@ -1585,40 +1587,69 @@ description: 업무는 완벽하게, 태도는 단호하게! 맑은 눈의 광�
 }
 
 /**
- * Part 2: 다중 에이전트 협업
+ * Part 2.7: 안티그래비티 골든 프롬프트 핸드북
  */
-function renderDay3Part2_MultiAgent() {
+function renderDay3Part2_7_GoldenPrompts() {
     return `
         <section class="lesson-section">
-            <h3>2. 다중 에이전트 협업: AI 팀 만들기 (⏱️ 30분)</h3>
-            <p class="section-intro">전문가 AI들이 서로 대화하며 문제를 해결하는 팀 플레이를 설계합니다.</p>
+            <h3>2.7. 📒 Antigravity Golden Prompts (⏱️ 20분)</h3>
+            <p class="section-intro">안티그래비티 11개 팀이 실제로 사용하는 프롬프트의 '구조'와 '예시'입니다.</p>
             
-            <div class="comparison-box">
-                <div class="compare-item">
-                    <h4>🙋‍♂️ 1인 에이전트</h4>
-                    <p>혼자서 모든 일을 처리</p>
-                    <p><strong>한계:</strong> 복잡한 작업 시 오류 가능성이 높아짐</p>
+            <div class="prompt-grid">
+                <!-- Unit 1: Strategic HQ -->
+                <div class="prompt-card">
+                    <h5>♟️ 기획 전략팀 (Planning Team)</h5>
+                    <div class="prompt-structure">
+                        <p><strong>[구조]</strong></p>
+                        <code>"[아이디어]를 바탕으로, [대상 고객]의 문제를 해결하는 [비즈니스 모델] 3가지를 제안해줘. 각 모델에는 예상 수익 구조와 초기 실행 로드맵이 포함되어야 해."</code>
+                    </div>
+                    <div class="example-box">
+                        <p><strong>예시:</strong> "개인 비서 AI 아이디어를 바탕으로, 바쁜 직장인의 일정을 관리해주는 구독형 모델 3가지를 제안해줘."</p>
+                        <button class="copy-btn" onclick="copyText('개인 비서 AI 아이디어를 바탕으로, 바쁜 직장인의 일정을 관리해주는 구독형 모델 3가지를 제안해줘.')">📋 예시 복사</button>
+                    </div>
                 </div>
-                <div class="vs-divider">VS</div>
-                <div class="compare-item">
-                    <h4>👥 다중 에이전트</h4>
-                    <p>분야별 전문가들이 협업</p>
-                    <p><strong>장점:</strong> 높은 품질과 정교한 검증 가능</p>
+
+                <!-- Unit 2: Management -->
+                <div class="prompt-card">
+                    <h5>📋 프로젝트 매니저 (PM Agent)</h5>
+                    <div class="prompt-structure">
+                        <p><strong>[구조]</strong></p>
+                        <code>"최종 목표인 [프로젝트 목표]를 달성하기 위해 필요한 [세부 업무]를 5단계로 리스트업해줘. 각 단계별로 [필요한 에이전트 역할]과 [산출물]도 정의해줘."</code>
+                    </div>
+                    <div class="example-box">
+                        <p><strong>예시:</strong> "3일 완성 AI 교육 웹사이트 제작을 목표로, 기획부터 배포까지 5단계 업무를 짜줘."</p>
+                        <button class="copy-btn" onclick="copyText('3일 완성 AI 교육 웹사이트 제작을 목표로, 기획부터 배포까지 5단계 업무를 짜줘.')">📋 예시 복사</button>
+                    </div>
+                </div>
+
+                <!-- Unit 3: Development -->
+                <div class="prompt-card">
+                    <h5>💻 웹 개발팀 (Web Dev Team)</h5>
+                    <div class="prompt-structure">
+                        <p><strong>[구조]</strong></p>
+                        <code>"[기술 스택]을 사용하여 [주요 기능]이 포함된 웹페이지를 만들어줘. 코드는 [스타일 가이드]를 준수하고, 전체 소스 코드를 파일로 생성해줘."</code>
+                    </div>
+                    <div class="example-box">
+                        <p><strong>예시:</strong> "Vite+React를 사용하여 대시보드 화면을 만들어줘. 배경은 검정색 글래스모피즘 스타일이어야 해."</p>
+                        <button class="copy-btn" onclick="copyText('Vite+React를 사용하여 대시보드 화면을 만들어줘. 배경은 검정색 글래스모피즘 스타일이어야 해.')">📋 예시 복사</button>
+                    </div>
+                </div>
+
+                <!-- Unit 4: Data/Knowledge -->
+                <div class="prompt-card">
+                    <h5>🧠 지식 아키텍트 (Knowledge Architect)</h5>
+                    <div class="prompt-structure">
+                        <p><strong>[구조]</strong></p>
+                        <code>"다음 [텍스트 정보]에서 핵심 키워드 5개를 추출하고, [카테고리]별로 분류해서 마크다운 표 형식으로 정리해줘. 미래 지향적인 인사이트 1줄도 추가해."</code>
+                    </div>
+                    <div class="example-box">
+                        <p><strong>예시:</strong> "최근 1주일간의 AI 트렌드 기사들에서 핵심 키워드를 뽑고, 기술/비즈니스 카테고리로 분류해줘."</p>
+                        <button class="copy-btn" onclick="copyText('최근 1주일간의 AI 트렌드 기사들에서 핵심 키워드를 뽑고, 기술/비즈니스 카테고리로 분류해줘.')">📋 예시 복사</button>
+                    </div>
                 </div>
             </div>
-            
-            <div class="example-box">
-                <h4>🚀 AI 팀원 구성 예시</h4>
-                <ul>
-                    <li><strong>기획자 (Manager):</strong> 전체 일정과 전략 수립</li>
-                    <li><strong>조사관 (Researcher):</strong> 팩트 체크 및 자료 수집</li>
-                    <li><strong>작가 (Writer):</strong> 초안 작성 및 문서화</li>
-                    <li><strong>검토자 (Reviewer):</strong> 최종 검수 및 수정</li>
-                </ul>
-                <p><strong>💡 팁:</strong> "너희들은 이제부터 AI 프로젝트 팀이야. 기획자, 조사관, 작가로 역할을 나눠서 이 과제를 해결해줘"라고 명령해보세요.</p>
-            </div>
-            
-            <button class="check-btn" onclick="markComplete(14)">✅ Part 2 완료</button>
+
+            <button class="check-btn" onclick="markComplete(17)">✅ Part 2.7 완료</button>
         </section>
     `;
 }
@@ -1778,6 +1809,14 @@ function checkAnswer(qNum, correctAnswer) {
         result.textContent = '❌ 다시 생각해보세요';
         result.style.color = '#ef4444';
     }
+}
+
+/**
+ * 텍스트 직접 복사
+ */
+function copyText(text) {
+    navigator.clipboard.writeText(text);
+    alert('프롬프트가 복사되었습니다! 📋');
 }
 
 /**

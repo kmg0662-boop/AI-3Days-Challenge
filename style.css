@@ -1122,3 +1122,60 @@ h3 {
     rgba(5, 5, 5, 0.3)
   );
 }
+
+/* Prompt Grid & Cards */
+.prompt-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+@media (max-width: 900px) {
+  .prompt-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.prompt-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 2rem;
+  transition: all 0.3s ease;
+}
+
+.prompt-card:hover {
+  border-color: var(--accent-purple);
+  background: rgba(139, 92, 246, 0.05);
+  transform: translateY(-5px);
+}
+
+.prompt-card h5 {
+  color: var(--primary-cyan);
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 1rem;
+}
+
+.prompt-structure {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+}
+
+.prompt-structure code {
+  display: block;
+  color: #10b981;
+  font-family: "Courier New", monospace;
+  line-height: 1.6;
+  margin-top: 0.5rem;
+}
+
+.prompt-card .example-box {
+  margin: 0;
+  border-left-color: var(--accent-purple);
+  background: rgba(139, 92, 246, 0.05);
+}
